@@ -16,7 +16,7 @@ const links = [
       { name: "About Us", href: "/about-us" },
       { name: "Our Jewellers", href: "/our-jewellers" },
       { name: "Our Technology", href: "/our-technology" },
-      { name: "Blog", href: "/blogs" },
+      { name: "Blog", href: "/" },
     ],
   },
   { name: "For Jewellers", href: "/for-jewellers" },
@@ -52,7 +52,7 @@ const links = [
                       class="transition-transform duration-300 rotate-180 group-hover:rotate-0"
                     />
                   </button>
-                  <div class="absolute -left-8 mt-2 w-40 max-w-[146px] bg-white border border-[#F0F1F5] rounded-2xl p-2 flex flex-col items-center gap-2 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all">
+                  <div class="z-[99999] absolute -left-8 mt-2 w-40 max-w-[146px] bg-white border border-[#F0F1F5] rounded-2xl p-2 flex flex-col items-center gap-2 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all">
                     {link.dropdown.map((sublink) => (
                       <a
                         href={sublink.href}
