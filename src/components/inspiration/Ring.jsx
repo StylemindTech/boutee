@@ -116,7 +116,7 @@ export default function RingModal() {
   <div className="w-1/2 sm:w-auto flex items-center gap-2 py-2 px-3 bg-cardColor rounded-[12px] text-[16px] leading-[20px]">
     <span className="text-textSecondary">Budget:</span>
     <div className="relative flex-1">
-      <select className="w-full appearance-none bg-transparent outline-none pr-6">
+      <select className="cursor-pointer w-full appearance-none bg-transparent outline-none pr-6">
         <option value="" className="!text-textPrimary !font-medium">
           Any
         </option>
@@ -155,7 +155,7 @@ export default function RingModal() {
                         <button
                             key={f}
                             onClick={() => toggleFilter(f)}
-                            className={`filter-btn flex items-center py-[7px] px-[12px] text-[16px] leading-[20px] text-textPrimary border border-borderOutline rounded-full font-figtree ${activeFilters.includes(f) ? "bg-[#D6F99A]" : ""
+                            className={`cursor-pointer filter-btn flex items-center py-[7px] px-[12px] text-[16px] leading-[20px] text-textPrimary border border-borderOutline rounded-full font-figtree ${activeFilters.includes(f) ? "bg-[#D6F99A]" : ""
                                 }`}
                         >
                             {f}
@@ -212,7 +212,7 @@ export default function RingModal() {
                         <button
                             key={i + 1}
                             onClick={() => setCurrentPage(i + 1)}
-                            className={`px-3 py-1 font-figtree rounded-[8px] w-[36px] h-[36px] ${currentPage === i + 1 ? "bg-[#D6F99A] font-bold w-[36px] h-[36px]" : ""
+                            className={`cursor-pointer px-3 py-1 font-figtree rounded-[8px] w-[36px] h-[36px] ${currentPage === i + 1 ? "bg-[#D6F99A] font-bold w-[36px] h-[36px]" : ""
                                 }`}
                         >
                             {i + 1}
