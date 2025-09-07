@@ -1,23 +1,22 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay, A11y } from "swiper/modules";
-
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import imgNext from '../../assets/icons/next-arrow.svg';
+import rating from '../../assets/icons/rating.svg'
 
-function TestimonialCard({ img, review, name, location, userImage = '' }) {
+function TestimonialCard({  review, name, location, userImage = '' }) {
   return (
     <div className="bg-white rounded-[32px] shadow-[0px_4px_24px_0px_#1617190F,0px_4px_8px_0px_#00000008] lg:p-[32px] p-[24px] h-full flex flex-col justify-between">
       <img
-        src={img}
+        src={rating?.src}
         alt="stars"
         className="w-[152px]"
       />
 
 
       <p className="lg:text-[18px] mt-[20px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary font-figtree mb-[20px]">
-        “{review}”
+        {review}
       </p>
 
       <div className="mt-auto flex items-center gap-[8px]">
