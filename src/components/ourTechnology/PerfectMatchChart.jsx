@@ -214,7 +214,7 @@ export default function CustomerJewellerMatch() {
                 className="xl:w-[124px]  w-full xl:h-[124px] h-[100px] xl:rounded-tl-[24px] xl:rounded-bl-[24px] rounded-tl-[16px] rounded-tr-[16px] xl:rounded-tr-[0px]  object-cover"
               />
               <div className="flex flex-col gap-[4px] px-[4px] xl:px-0 pb-[8px] xl:pb-[0px]">
-                <h4 className="font-figtree font-bold xl:text-[20px] text-[12px] text-center xl:text-start xl:leading-[24px] leading-[16px] text-textPrimary">{c.name}fffff</h4>
+                <h4 className="font-figtree font-bold xl:text-[20px] text-[12px] text-center xl:text-start xl:leading-[24px] leading-[16px] text-textPrimary">{c.name}</h4>
                 <p className="font-figtree font-normal xl:text-[16px] text-[12px] text-center xl:text-start xl:leading-[20px] leading-[14px] text-textSecondary">{c.need}</p>
               </div>
             </div>
