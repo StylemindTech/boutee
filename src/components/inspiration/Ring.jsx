@@ -5,22 +5,37 @@ import { Navigation, Pagination, Autoplay, A11y } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import arrowDown from '/public/arrow-down.svg';
+import arrowDown from '../../assets/icons/dropdown-arrow.svg';
+import img1 from '../../assets/Image/ins1.png'
+import img2 from '../../assets/Image/ins2.png'
+import img3 from '../../assets/Image/ins3.png'
+import img4 from '../../assets/Image/ins4.png'
+import img5 from '../../assets/Image/ins5.png'
+import img6 from '../../assets/Image/ins6.png'
+import img7 from '../../assets/Image/ins7.jpg'
+import img8 from '../../assets/Image/ins8.png'
+import img9 from '../../assets/Image/ins9.png'
+import img10 from '../../assets/Image/ins10.png'
+import img11 from '../../assets/Image/ins11.png'
+import img12 from '../../assets/Image/ins12.png'
+import closeIcon from '../../assets/icons/close-icon.svg'
+import nextIcon from '../../assets/icons/next-arrow.svg'
+import preIcon from '../../assets/icons/pre-arrow.svg'
 
 const data = [
-    { id: 1, title: "Oval Tanzanite Engagement Ring", images: ["/src/assets/Image/ins1.png", "/src/assets/Image/ins2.png"], price: 1200, type: "Yellow gold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
-    { id: 2, title: "Emerald Cut Diamond Ring", images: ["/src/assets/Image/ins2.png", "/src/assets/Image/ins3.png"], price: 1100, type: "Classic", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
-    { id: 3, title: "Emerald Cut Diamond Ring", images: ["/src/assets/Image/ins3.png", "/src/assets/Image/ins4.png"], price: 1100, type: "Classic", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
-    { id: 4, title: "Round Brilliant Engagement Ring", images: ["/src/assets/Image/ins4.png", "/src/assets/Image/ins5.png"], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
-    { id: 5, title: "Round Brilliant Engagement Ring", images: ["/src/assets/Image/ins5.png", "/src/assets/Image/ins6.png"], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
-    { id: 6, title: "Round Brilliant Engagement Ring", images: ["/src/assets/Image/ins6.png", "/src/assets/Image/ins7.png"], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
-    { id: 7, title: "Round Brilliant Engagement Ring", images: ["/src/assets/Image/ins4.png", "/src/assets/Image/ins8.png"], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
-    { id: 8, title: "Round Brilliant Engagement Ring", images: ["/src/assets/Image/ins8.png", "/src/assets/Image/ins10.png"], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
-    { id: 9, title: "Round Brilliant Engagement Ring", images: ["/src/assets/Image/ins9.png", "/src/assets/Image/ins11.png"], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
-    { id: 10, title: "Round Brilliant Engagement Ring", images: ["/src/assets/Image/ins10.png", "/src/assets/Image/ins12.png"], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
-    { id: 11, title: "Round Brilliant Engagement Ring", images: ["/src/assets/Image/ins11.png", "/src/assets/Image/ins3.png"], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
-    { id: 12, title: "Round Brilliant Engagement Ring", images: ["/src/assets/Image/ins12.png", "/src/assets/Image/ins5.png"], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
-    { id: 13, title: "Round Brilliant Engagement Ring", images: ["/src/assets/Image/ins12.png", "/src/assets/Image/ins5.png"], price: 3300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
+    { id: 1, title: "Oval Tanzanite Engagement Ring", images: [img1, img1], price: 1200, type: "Yellow gold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
+    { id: 2, title: "Emerald Cut Diamond Ring", images: [img2, img2], price: 1100, type: "Classic", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
+    { id: 3, title: "Emerald Cut Diamond Ring", images: [img3, img3], price: 1100, type: "Classic", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
+    { id: 4, title: "Round Brilliant Engagement Ring", images: [img4, img4], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
+    { id: 5, title: "Round Brilliant Engagement Ring", images: [img5, img5], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
+    { id: 6, title: "Round Brilliant Engagement Ring", images: [img6, img6], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
+    { id: 7, title: "Round Brilliant Engagement Ring", images: [img7, img7], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
+    { id: 8, title: "Round Brilliant Engagement Ring", images: [img8, img8], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
+    { id: 9, title: "Round Brilliant Engagement Ring", images: [img9, img9], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
+    { id: 10, title: "Round Brilliant Engagement Ring", images: [img10, img10], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
+    { id: 11, title: "Round Brilliant Engagement Ring", images: [img11, img11], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
+    { id: 12, title: "Round Brilliant Engagement Ring", images: [img12, img12], price: 1300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
+    { id: 13, title: "Round Brilliant Engagement Ring", images: [img1, img1], price: 3300, type: "Bold", description: "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. " },
 ];
 
 const filters = ["Yellow gold", "Classic", "Bold", "Colorful", "Organic", "Rose gold"];
@@ -107,14 +122,14 @@ export default function RingModal() {
         </option>
       </select>
       <img
-        src="/src/assets/icons/dropdown-arrow.svg"
+        src={arrowDown.src}
         alt="arrow icons"
         className="absolute right-1 top-1/2 -translate-y-1/2 pb-[5px] pointer-events-none rotate-180 w-[12px]"
       />
     </div>
   </div>
 
-  <div className="w-1/2 relative sm:w-auto flex items-center font-figtree gap-2 py-[8px] px-[12px] bg-cardColor rounded-[12px] text-[16px] leading-[20px] text-textSecondary lg:hidden relative">
+  <div className="w-1/2 sm:w-auto flex items-center font-figtree gap-2 py-[8px] px-[12px] bg-cardColor rounded-[12px] text-[16px] leading-[20px] text-textSecondary lg:hidden relative">
     <span className="text-textPrimary">Filters</span>
     {activeFilters.length > 0 && (
       <div className="text-[12px] w-[20px] h-[20px] flex items-center justify-center bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] text-textPrimary font-medium rounded-full">
@@ -153,7 +168,7 @@ export default function RingModal() {
                                     }}
                                 >
                                     <img
-                                        src='/src/assets/icons/close-icon.svg'
+                                        src={closeIcon.src}
                                         alt="arrow icons"
                                         className=""
                                     />
@@ -171,7 +186,7 @@ export default function RingModal() {
                         onClick={() => setSelectedItem(item)}
                         className="cursor-pointer hover:border md:rounded-[32px] rounded-[24px]"
                     >
-                        <img src={item.images[0]} alt={item.title} className="w-full h-auto md:rounded-[32px] rounded-[24px]" />
+                        <img src={item.images[0].src} alt={item.title} className="w-full h-auto md:rounded-[32px] rounded-[24px]" />
                     </div>
                 ))}
             </div>
@@ -187,7 +202,7 @@ export default function RingModal() {
                             }`}
                     >
                         <img
-                            src='/src/assets/icons/pre-arrow.svg'
+                            src={preIcon.src}
                             alt="arrow icons"
                             className="cursor-pointer"
                         />
@@ -213,7 +228,7 @@ export default function RingModal() {
                             }`}
                     >
                         <img
-                            src='/src/assets/icons/next-arrow.svg'
+                            src={nextIcon.src}
                             alt="arrow icons"
                             className="cursor-pointer"
                         />
@@ -236,7 +251,7 @@ export default function RingModal() {
                             </h5>
                             <button onClick={() => setSelectedItem(null)}>
                                 <img
-                                    src="/src/assets/icons/close-icon.svg"
+                                    src={closeIcon.src}
                                     alt="arrow icons"
                                     className="w-[16.96px] h-[16.96px] cursor-pointer"
                                 />
@@ -255,7 +270,7 @@ export default function RingModal() {
                         >
                             {selectedItem.images.map((it, i) => (
                                 <SwiperSlide key={i}>
-                                    <img src={it} alt="ring" className="w-full h-auto md:max-h-[520px] max-h-[375px] object-cover" />
+                                    <img src={it.src} alt="ring" className="w-full h-auto md:max-h-[520px] max-h-[375px] object-cover" />
                                 </SwiperSlide>
                             ))}
                         </Swiper>
