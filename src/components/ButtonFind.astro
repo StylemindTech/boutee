@@ -1,8 +1,0 @@
----
-const { text, icon, className = '', type = 'button' } = Astro.props;
-import { Image } from "astro:assets";
----
-<button type={type} class={`cursor-pointer flex items-center justify-center gap-3 px-6 py-3.5 rounded-full bg-button-primary text-white min-w-52 ${className}`} >
-  {icon && <Image src={icon} alt="icon" class="w-5 h-5" />}
-  <span class="text-white font-medium text-base leading-5 font-figtree">{text}</span>
-</button>
