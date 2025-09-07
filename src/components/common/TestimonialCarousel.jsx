@@ -4,6 +4,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import rating from '../../assets/icons/rating.svg'
+import userImage1 from '../../assets/Image/img-test.png'
 
 function TestimonialCard({  review, name, location, userImage = '' }) {
   return (
@@ -23,7 +24,7 @@ function TestimonialCard({  review, name, location, userImage = '' }) {
         {userImage && 
           <div>
           <img
-            src={userImage}
+            src={userImage1.src}
             alt="user"
             className="w-[40px] h-[40px] rounded-full"
           />
