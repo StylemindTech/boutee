@@ -1,9 +1,13 @@
 import React, { useState } from "react";
+import ring1 from '../../assets/Image/tech-1.png'
+import ring2 from '../../assets/Image/tech-8.png'
+import ring3 from '../../assets/Image/tech-5.png'
+import ring4 from '../../assets/Image/tech-4.png'
 
 const rings = [
   {
     id: 1,
-    image: "/src/assets/Image/tech-1.png",
+    image: ring1,
     attributes: {
       classic: 30,
       bold: 90,
@@ -13,7 +17,7 @@ const rings = [
   },
   {
     id: 2,
-    image: "/src/assets/Image/tech-8.png",
+    image: ring2,
     attributes: {
       classic: 70,
       bold: 10,
@@ -23,7 +27,7 @@ const rings = [
   },
   {
     id: 3,
-    image: "/src/assets/Image/tech-5.png",
+    image: ring3,
     attributes: {
       classic: 50,
       bold: 45,
@@ -33,7 +37,7 @@ const rings = [
   },
   {
     id: 4,
-    image: "/src/assets/Image/tech-4.png",
+    image: ring4,
     attributes: {
       classic: 40,
       bold: 70,
@@ -63,7 +67,7 @@ export default function RingSelector() {
         {rings.map((ring) => (
           <img
             key={ring.id}
-            src={ring.image}
+            src={ring.image.src}
             alt={`Ring ${ring.id}`}
             className={`aspect-[144/144] object-cover border-1  rounded-[12px] cursor-pointer ${
               selectedRing.id === ring.id

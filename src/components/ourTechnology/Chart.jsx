@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Radar } from "react-chartjs-2";
+import tech1 from '../../assets/Image/tech-1.png'
+import tech2 from '../../assets/Image/tech-2.png'
+import tech3 from '../../assets/Image/tech-3.png'
+import tech4 from '../../assets/Image/tech-4.png'
+import tech5 from '../../assets/Image/tech-5.png'
+import tech6 from '../../assets/Image/tech-6.png'
+import tech7 from '../../assets/Image/tech-7.png'
+import tech8 from '../../assets/Image/tech-8.png'
 import {
     Chart as ChartJS,
     RadialLinearScale,
@@ -41,16 +49,7 @@ const ringDataVectors = [
     [75, 50, 78, 64, 62, 55, 60, 71],
 ];
 
-const ringImages = [
-    "/src/assets/Image/tech-1.png",
-    "/src/assets/Image/tech-2.png",
-    "/src/assets/Image/tech-3.png",
-    "/src/assets/Image/tech-4.png",
-    "/src/assets/Image/tech-5.png",
-    "/src/assets/Image/tech-6.png",
-    "/src/assets/Image/tech-7.png",
-    "/src/assets/Image/tech-8.png",
-];
+const ringImages = [ tech1,tech2,tech3, tech4,tech5,tech6, tech7,tech8];
 
 const RingStyleAnalyzer = () => {
     const [chartData, setChartData] = useState(ringDataVectors[0]);
@@ -219,7 +218,7 @@ useEffect(() => {
                                 justifyContent: "center",
                             }}
                         >
-                            <img src={img} alt={`Ring ${index + 1}`} width="68" height="68" className="rounded-[12px]" />
+                            <img src={img?.src} alt={`Ring ${index + 1}`} width="68" height="68" className="rounded-[12px]" />
                         </div>
                     ))}
                 </div>
