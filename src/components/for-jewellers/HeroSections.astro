@@ -1,0 +1,57 @@
+---
+import { Image } from "astro:assets";
+import heroImg from "../../assets/Image/for-jws-hero.png";
+import heroImgMobile from "../../assets/Image/for-jws-hero-mobile.png";
+import userJewellers from "../../assets/Image/user-jewellers.svg";
+import btnIcon from "../../assets/icons/btn-icon.svg";
+import heroRating from "../../assets/icons/hero-rating.svg";
+---
+
+<section class="md:py-[112px] pt-[36px] pb-[24px]">
+  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+    <div class="grid lg:grid-cols-2 md:gap-20 gap-[60px] items-center">
+      <div>
+        <div class="flex md:flex-row flex-col items-center gap-2 ">
+          <div>
+            <Image src={userJewellers} alt="" />
+          </div>
+          <p class="md:text-base text-textPrimary  text-[14px] font-figtree">100+ jewellers on the platform</p>
+        </div>
+
+        <h1
+          class="md:text-[80px] mt-[36px] md:mt-0 text-[48px] lg:max-w-[599px] text-center md:text-start leading-[42px] text-textPrimary md:font-black md:leading-[84px] font-figtree md:mb-6 mb-[16px]"
+        >
+       Connect with customers who are looking for you
+        </h1>
+
+        <p class="md:text-xl text-[16px] text-center md:text-start leading-[20px] md:leading-[24px] text-textSecondary font-figtree md:mb-[48px] mb-[32px]">
+         Boutee is a matchmaking service dedicated to introducing discerning clients to Britain's best independent jewellers.
+We are not a crowded marketplace. Our focus is on quality over quantity, using our technology to bring you style-matched clients so you can spend less time finding work and more time creating it.
+        </p>
+       <div class="flex md:gap-[16px] gap-[8px] items-center">
+        
+ <button
+          type="button"
+          class="bg-btnPrimary text-white text-base leading-5 py-2 min-h-[56px] min-w-[167px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+        >
+          <Image src={btnIcon} class="w-5 h-5" alt="image" />
+        Join Boutee
+        </button>
+         <button
+          type="button"
+          class="bg-transparent border border-borderOutline text-text-textPrimary text-base leading-5 py-2 mx-auto md:ml-0 min-h-[56px] min-w-[152px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+        >
+        Jeweller Login
+        </button>
+       </div>
+
+    
+      </div>
+
+      <div class="flex justify-center lg:justify-end">
+        <Image src={heroImg} class="w-full h-full md:block hidden max-h-[600px] object-cover" alt="hero-image" />
+        <Image src={heroImgMobile} class="w-full h-full md:hidden" alt="hero-image" />
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,43 @@
+---
+import { Image } from "astro:assets";
+import whoImg from "../../assets/Image/who-img.png";
+import walletImg from "../../assets/icons/Wallet.svg";
+import clockImg from "../../assets/icons/Clock.svg";
+---
+
+<section class="lg:py-[112px] py-[48px]">
+    <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+        <div
+            class="bg-cardColor rounded-[40px] grid md:grid-cols-2 lg:gap-[80px] 2xl:gap-[40px] md:gap-[20px] gap-[8px] overflow-hidden"
+        >
+            <div class="order-2 md:order-1">
+                <Image
+                    src={whoImg}
+                    alt="Ring"
+                    class="w-full md:h-auto lg:max-h-none max-h-[261px] object-cover rounded-[40px]"
+                />
+            </div>
+
+            <div
+                class="flex flex-col justify-center md:py-[0px] pl-[24px] pr-[24px] py-[48px] md:pl-0 order-1 md:order-2"
+            >
+                <!-- <div
+                class="flex flex-col justify-center pr-[24px] order-1 md:order-2"
+            > -->
+                <h2
+                    class="lg:text-[52px] text-[32px] md:text-[28px] leading-[36px] lg:leading-[56px] font-black text-center md:text-start text-textPrimary font-figtree"
+                >
+                  Building your style profile
+                </h2>
+                <p
+                    class="text-textPrimary text-[18px] leading-[22px] font-figtree text-center md:text-start mt-[24px]"
+                >
+                   When you 'like' rings in the Boutee app, we don't just see a collection of images. We see a pattern. Our system combines the unique DNA of each of your choices to build a single, nuanced Style Profile that is completely unique to you.
+                </p>
+
+             
+          
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,105 @@
+---
+import { Image } from "astro:assets";
+import whoImg from "../../assets/Image/who-img.png";
+import walletImg from "../../assets/icons/Wallet.svg";
+import clockImg from "../../assets/icons/Clock.svg";
+---
+
+<section class="lg:py-[112px] py-[48px]">
+    <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+        <div
+            class="bg-cardColor rounded-[40px] grid md:grid-cols-2 lg:gap-[80px] md:gap-[10px] gap-[8px] overflow-hidden"
+        >
+            <div class="order-2 md:order-1">
+                <Image
+                    src={whoImg}
+                    alt="Ring"
+                    class="max-w-full md:h-auto lg:max-h-none max-h-[261px] object-cover rounded-[40px]"
+                />
+            </div>
+
+            <div
+                class="flex flex-col justify-center lg:py-[0px] p-[24px] lg:px-0 order-1 md:order-2"
+            >
+                <h2
+                    class="lg:text-[52px] text-[32px] md:text-[28px] leading-[36px] lg:leading-[56px] lg:font-black font-normal text-textPrimary font-figtree"
+                >
+                    Considering bespoke?
+                </h2>
+                <p
+                    class="text-textSecondary text-[20px] leading-[24px] font-figtree lg:mt-[16px] mt-[8px] lg:mb-[64px] mb-[32px]"
+                >
+                    You’ll need:
+                </p>
+
+             
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
+                    <div class="w-full">
+                        <div class="flex items-start gap-[16px] lg:mb-[17px] mb-[10px]">
+                            <div
+                                class="bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] lg:rounded-[20px] rounded-[16px]
+lg:rounded-[20px] rounded-[16px] lg:w-[64px] w-[52px] lg:h-[64px] h-[52px] flex items-center justify-center font-bold"
+                            >
+                                <Image
+                                    src={walletImg}
+                                    alt="wallet"
+                                    class="w-[27.35px] h-auto rounded-[40px]"
+                                />
+                            </div>
+                            <div>
+                                <p
+                                    class="lg:text-[32px] text-[22px] lg:leading-[36px] leading-[26px] font-black text-textPrimary font-figtree"
+                                >
+                                    £1000
+                                </p>
+                                <p
+                                    class="font-black text-textPrimary font-figtree lg:text-[20px] text-[16px] font-bold lg:leading-[24px] leading-[20px]"
+                                >
+                                    or more
+                                </p>
+                            </div>
+                        </div>
+                        <p
+                            class="lg:text-[18px] md:text-[14px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary font-figtree lg:pe-16"
+                        >
+                            This allows for high-quality materials and
+                            craftsmanship.
+                        </p>
+                    </div>
+
+                    <div class="w-full">
+                        <div class="flex items-start gap-[16px] lg:mb-[17px] mb-[10px]">
+                            <div
+                                class="bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] lg:rounded-[20px] rounded-[16px] lg:w-[64px] w-[52px] lg:h-[64px] h-[52px] flex items-center justify-center font-bold"
+                            >
+                                <Image
+                                    src={clockImg}
+                                    alt="wallet"
+                                    class="w-[27.35px] h-auto rounded-[40px]"
+                                />
+                            </div>
+                            <div>
+                                <p
+                                    class="lg:text-[32px] text-[22px] lg:leading-[36px] leading-[26px] font-black text-textPrimary font-figtree"
+                                >
+                                    4-8
+                                </p>
+                                <p
+                                    class="font-black text-textPrimary font-figtree lg:text-[20px] text-[16px] font-bold lg:leading-[24px] leading-[20px]"
+                                >
+                                    weeks
+                                </p>
+                            </div>
+                        </div>
+                        <p
+                            class="lg:text-[18px] text-[16px] md:text-[14px] lg:leading-[22px] leading-[20px] text-textPrimary font-figtree lg:pe-16"
+                        >
+                            Every ring is designed and made to order, just for
+                            you.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

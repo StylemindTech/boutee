@@ -1,0 +1,122 @@
+---
+import { Image } from "astro:assets";
+import logo from "../../assets/Logo.svg";
+import facebook from "../../assets/icons/facebook-icon.svg";
+import instagram from "../../assets/icons/instagram-icon.svg";
+---
+
+<footer class="bg-secondary px-6 lg:py-[80px] py-[40px] lg:p-20">
+  <div class="max-w-screen-2xl mx-auto">
+    <div class="flex flex-col md:gap-[80px] gap-[40px]">
+    <div class="flex flex-col md:flex-row gap-12 md:gap-8 md:justify-between">
+      <div class="flex flex-col gap-[56px] md:justify-between">
+        <div class="flex flex-col gap-4">
+          <Image src={logo} alt="icon" class="" />
+          <p class="font-figtree font-normal text-[14px] leading-4.5 md:w-2/3">
+            Boutee gives you access to the best independent jewellers from
+            around Britain, all in one place.
+          </p>
+        </div>
+        <div class="flex gap-2 flex-items-end">
+          <a
+            href="https://instagram.com"
+            aria-label="Boutee on Facebook"
+            target="_blank"
+          >
+            <Image
+              src={facebook}
+              alt="boutee facebook"
+              class="cursor-pointer"
+            /></a
+          >
+          <a
+            href="https://instagram.com"
+            aria-label="Boutee on Instagram"
+            target="_blank"
+          >
+            <Image
+              src={instagram}
+              alt="boutee instagram"
+              class="cursor-pointer"
+            /></a
+          >
+        </div>
+      </div>
+
+      <nav class="flex gap-6 md:gap-8" aria-label="Footer Navigation">
+        <ul class="flex flex-col md:w-[180px]">
+          <li
+            class="font-figtree font-normal text-base leading-5 text-text-primary p-2 cursor-pointer"
+          >
+            <a href="">How It Works</a>
+          </li>
+          <li
+            class="font-figtree font-normal text-base leading-5 text-text-primary p-2 cursor-pointer"
+          >
+            <a href="">Inspiration</a>
+          </li>
+          <li
+            class="font-figtree font-normal text-base leading-5 text-text-primary p-2 cursor-pointer"
+          >
+            <a href="">Our Technology</a>
+          </li>
+          <li
+            class="font-figtree font-normal text-base leading-5 text-text-primary p-2 cursor-pointer"
+          >
+            <a href="">Our Jewellers</a>
+          </li>
+          <li
+            class="font-figtree font-normal text-base leading-5 text-text-primary p-2 cursor-pointer"
+          >
+            <a href="">Contact</a>
+          </li>
+        </ul>
+        <ul class="flex flex-col md:w-28">
+          <li
+            class="font-figtree font-normal text-base leading-5 text-text-primary p-2 cursor-pointer"
+          >
+            <a href="">For Jewellers</a>
+          </li>
+          <li
+            class="font-figtree font-normal text-base leading-5 text-text-primary p-2 cursor-pointer"
+          >
+            <a href="">About Us</a>
+          </li>
+          <li
+            class="font-figtree font-normal text-base leading-5 text-text-primary p-2 cursor-pointer"
+          >
+            <a href="">FAQs</a>
+          </li>
+          <li
+            class="font-figtree font-normal text-base leading-5 text-text-primary p-2 cursor-pointer"
+          >
+            <a href="">Blog</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="border-t border-[#A9A9B7]">
+      <div class="pt-[34px] flex flex-col-reverse md:flex-row gap-5 justify-between">
+        <p
+          class="font-normal font-figtree leading-3.5 text-text-secondary text-[12px] text-[#73737D]"
+        >
+          © {new Date().getFullYear()} Boutee.
+        </p>
+        <div class="flex gap-6">
+          <a
+            href=""
+            class="font-normal text-[#73737D] font-figtree text-sm text-text-secondary underline underline-offset-3 leading-4.5"
+            >Privacy Policy</a
+          >
+          <a
+            href=""
+            class="font-normal text-[#73737D] font-figtree text-sm text-text-secondary underline underline-offset-3 leading-4.5"
+            >Terms of Service</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</footer>
