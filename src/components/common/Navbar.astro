@@ -2,7 +2,6 @@
 import { Image } from "astro:assets";
 import localBirdImage from "../../assets/Logo.svg";
 import mobileLogo from "../../assets/mobile-logo.svg";
-import openMenuIcon from "../../assets/icons/menu-line.svg";
 import closeMenuIcon from "../../assets/icons/close.svg";
 import arrow from "../../assets/icons/dropdown-arrow.svg";
 import navMenu from '../../assets/icons/toggle-nav.svg'
@@ -44,7 +43,7 @@ const links = [
             if (link.dropdown) {
               return (
                 <div class="relative group">
-                  <button aria-haspopup="true" aria-expanded="false" class="flex items-center gap-1 cursor-pointer font-figtree text-text-primary">
+                  <button aria-haspopup="true" aria-expanded="false" class="flex items-center gap-1 cursor-pointer font-figtree text-textPrimary">
                     {link.name}
                     <Image
                       src={arrow}
@@ -56,7 +55,7 @@ const links = [
                     {link.dropdown.map((sublink) => (
                       <a
                         href={sublink.href}
-                        class="py-2 hover:bg-secondary w-full text-center rounded-sm text-base font-figtree text-text-primary"
+                        class="py-2 hover:bg-secondary w-full text-center rounded-sm text-base font-figtree text-textPrimary"
                       >
                         {sublink.name}
                       </a>
@@ -68,7 +67,7 @@ const links = [
               return (
                 <a
                   href={link.href}
-                  class="text-base font-figtree text-text-primary hover:border-b active:border-b border-[#2C2C30] transition-all duration-150"
+                  class="text-base font-figtree text-textPrimary hover:border-b active:border-b border-[#2C2C30] transition-all duration-150"
                 >
                   {link.name}
                 </a>
@@ -80,10 +79,10 @@ const links = [
 
       <!-- Buttons -->
       <div class="flex items-center gap-4">
-        <button class="px-2 py-1 border border-[#2C2C30] rounded-[12px] cursor-pointer w-[76px] text-[16px] leading-[20px] h-[36px]"
+        <button class="font-figtree text-textPrimary px-2 py-1 border border-[#2C2C30] rounded-[12px] cursor-pointer w-[76px] text-[16px] leading-[20px] h-[36px]"
           >Log in</button
         >
-        <button class=" w-[87px] h-[36px] rounded-[12px] bg-btnPrimary text-white cursor-pointer"
+        <button class="font-figtree   w-[87px] h-[36px] rounded-[12px] bg-btnPrimary text-white cursor-pointer"
           >Sign up</button
         >
       </div>
@@ -116,7 +115,7 @@ const links = [
 
     <!-- Center Nav Links -->
     <div
-      class="flex flex-col items-center gap-4 md:gap-4.5 text-lg font-figtree shadow-sm-menu-small py-10 md:py-12 text-text-primary"
+      class="flex flex-col items-center gap-4 md:gap-4.5 text-lg font-figtree shadow-sm-menu-small py-10 md:py-12 text-textPrimary"
     >
       {
         links.map((link) => {
