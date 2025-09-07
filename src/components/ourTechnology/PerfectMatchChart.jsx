@@ -11,6 +11,12 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import user1 from '../../assets/Image/img-user1.jpg'
+import user2 from '../../assets/Image/img-user2.jpg'
+import user3 from '../../assets/Image/img-user3.jpg'
+import user4 from '../../assets/Image/img-user4.png'
+import user5 from '../../assets/Image/img-user5.png'
+import user6 from '../../assets/Image/img-user6.png'
 
 ChartJS.register(
   RadialLinearScale,
@@ -27,21 +33,21 @@ const customers = [
     id: 1,
     name: "James Martin",
     need: "needs modern ring",
-    img: "/src/assets/Image/img-user1.jpg",
+    img: user1,
     profile: [8, 6, 4, 7, 5, 3, 6, 4], // radar data
   },
   {
     id: 2,
     name: "Mei Parker",
     need: "needs colourful ring",
-    img: "/src/assets/Image/img-user2.jpg",
+    img: user2,
     profile: [5, 3, 9, 4, 6, 8, 5, 7],
   },
   {
     id: 3,
     name: "Daniel Harris",
     need: "needs minimalist ring",
-    img: "/src/assets/Image/img-user3.jpg",
+    img: user3,
     profile: [3, 8, 4, 6, 7, 2, 8, 4],
   },
 ];
@@ -51,7 +57,7 @@ const jewellers = [
     id: 1,
     name: "Sophia Roberts",
     brand: "Sophia Roberts",
-    img: "/src/assets/Image/img-user4.png",
+    img: user4,
     profile: [7, 6, 5, 6, 4, 4, 6, 5],
     match: { 1: "85%", 2: "72%", 3: "50%" },
   },
@@ -59,7 +65,7 @@ const jewellers = [
     id: 2,
     name: "William Taylor",
     brand: "WT Jewellery",
-    img: "/src/assets/Image/img-user5.png",
+    img: user5,
     profile: [6, 7, 5, 3, 8, 4, 7, 6],
     match: { 1: "61%", 2: "68%", 3: "45%" },
   },
@@ -67,7 +73,7 @@ const jewellers = [
     id: 3,
     name: "Amelia Davis",
     brand: "AmDa Jewellery",
-    img: "/src/assets/Image/img-user6.png",
+    img: user6,
     profile: [4, 5, 6, 7, 5, 7, 6, 5],
     match: { 1: "36%", 2: "55%", 3: "40%" },
   },
@@ -203,12 +209,12 @@ export default function CustomerJewellerMatch() {
                 }`}
             >
               <img
-                src={c.img}
+                src={c.img.src}
                 alt={c.name}
-                className="xl:w-[124px] xl:w-[100px] w-full xl:h-[124px] h-[100px] xl:rounded-tl-[24px] xl:rounded-bl-[24px] rounded-tl-[16px] rounded-tr-[16px] xl:rounded-tr-[0px]  object-cover"
+                className="xl:w-[124px]  w-full xl:h-[124px] h-[100px] xl:rounded-tl-[24px] xl:rounded-bl-[24px] rounded-tl-[16px] rounded-tr-[16px] xl:rounded-tr-[0px]  object-cover"
               />
               <div className="flex flex-col gap-[4px] px-[4px] xl:px-0 pb-[8px] xl:pb-[0px]">
-                <h4 className="font-figtree font-bold xl:text-[20px] text-[12px] text-center xl:text-start xl:leading-[24px] leading-[16px] text-textPrimary">{c.name}</h4>
+                <h4 className="font-figtree font-bold xl:text-[20px] text-[12px] text-center xl:text-start xl:leading-[24px] leading-[16px] text-textPrimary">{c.name}fffff</h4>
                 <p className="font-figtree font-normal xl:text-[16px] text-[12px] text-center xl:text-start xl:leading-[20px] leading-[14px] text-textSecondary">{c.need}</p>
               </div>
             </div>
@@ -234,9 +240,9 @@ export default function CustomerJewellerMatch() {
         }`}
       >
         <img
-          src={j.img}
+          src={j.img.src}
           alt={j.name}
-          className="xl:w-[124px] xl:w-[100px] w-full xl:h-[124px] h-[100px] xl:rounded-tl-[24px] xl:rounded-bl-[24px] rounded-tl-[16px] rounded-tr-[16px] xl:rounded-tr-[0px]  object-cover"
+          className="xl:w-[124px]  w-full xl:h-[124px] h-[100px] xl:rounded-tl-[24px] xl:rounded-bl-[24px] rounded-tl-[16px] rounded-tr-[16px] xl:rounded-tr-[0px]  object-cover"
         />
         <div className="flex-1 w-full xl:py-[12px] flex flex-col justify-between px-[4px] xl:px-0 pb-[4px] h-full">
           <div className="mb-[4px]">
