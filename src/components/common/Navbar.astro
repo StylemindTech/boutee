@@ -4,7 +4,7 @@ import localBirdImage from "../../assets/Logo.svg";
 import mobileLogo from "../../assets/mobile-logo.svg";
 import closeMenuIcon from "../../assets/icons/close.svg";
 import arrow from "../../assets/icons/dropdown-arrow.svg";
-import navMenu from '../../assets/icons/toggle-nav.svg'
+import navMenu from "../../assets/icons/toggle-nav.svg";
 
 const links = [
   { name: "How It Works", href: "/how-it-works" },
@@ -20,9 +20,12 @@ const links = [
   },
   { name: "For Jewellers", href: "/for-jewellers" },
 ];
+const currentPath = Astro.url.pathname;
 ---
 
-<header class=" bg-white md:pt-[12px] lg:px-[48px] pt-[8px] px-[12px] md:px-[24px]">
+<header
+  class="bg-white md:pt-[12px] lg:px-[48px] pt-[8px] px-[12px] md:px-[24px]"
+>
   <nav
     class="bg-secondary md:py-5 py-[11px] pl-[16px] pr-[17px] md:px-8 md:rounded-3xl rounded-[16px] flex justify-between items-center"
   >
@@ -43,7 +46,11 @@ const links = [
             if (link.dropdown) {
               return (
                 <div class="relative group">
-                  <button aria-haspopup="true" aria-expanded="false" class="flex items-center gap-1 cursor-pointer font-figtree text-textPrimary">
+                  <button
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    class="flex items-center gap-1 cursor-pointer font-figtree text-textPrimary"
+                  >
                     {link.name}
                     <Image
                       src={arrow}
@@ -67,7 +74,12 @@ const links = [
               return (
                 <a
                   href={link.href}
-                  class="text-base font-figtree text-textPrimary hover:border-b active:border-b border-[#2C2C30] transition-all duration-150"
+                  class:list={[
+                    "text-base font-figtree text-textPrimary transition-all duration-150",
+                    currentPath === link.href
+                      ? "border-b border-[#2C2C30] font-semibold"
+                      : "hover:border-b border-[#2C2C30]",
+                  ]}
                 >
                   {link.name}
                 </a>
@@ -79,10 +91,12 @@ const links = [
 
       <!-- Buttons -->
       <div class="flex items-center gap-4">
-        <button class="font-figtree text-textPrimary px-2 py-1 border border-[#2C2C30] rounded-[12px] cursor-pointer w-[76px] text-[16px] leading-[20px] h-[36px]"
+        <button
+          class="font-figtree text-textPrimary px-2 py-1 border border-[#2C2C30] rounded-[12px] cursor-pointer w-[76px] text-[16px] leading-[20px] h-[36px]"
           >Log in</button
         >
-        <button class="font-figtree   w-[87px] h-[36px] rounded-[12px] bg-btnPrimary text-white cursor-pointer"
+        <button
+          class="font-figtree w-[87px] h-[36px] rounded-[12px] bg-btnPrimary text-white cursor-pointer"
           >Sign up</button
         >
       </div>
@@ -100,12 +114,10 @@ const links = [
   <!-- Mobile Fullscreen Menu -->
   <div
     id="mobile-menu"
-    class="fixed inset-0 z-50 hidden flex-col justify-between rounded-20px bg-secondary border border-secondary pt-2  pb-8 pl-[12px] pt-[8px] pr-[8px] my-2 mx-3 sm:mx-4 sm:my-3"
+    class="fixed inset-0 z-50 hidden flex-col justify-between rounded-20px bg-secondary border border-secondary pt-2 pb-8 pl-[12px] pt-[8px] pr-[8px] my-2 mx-3 sm:mx-4 sm:my-3"
   >
     <!-- Top bar -->
-    <div
-      class="bg-secondary flex justify-between items-center  rounded-20px"
-    >
+    <div class="bg-secondary flex justify-between items-center rounded-20px">
       <Image src={mobileLogo} alt="Boutee logo" class="" />
       <button id="close-menu" class="focus:outline-none">
         <!-- Close Icon -->
@@ -127,7 +139,6 @@ const links = [
               </a>
             ));
           } else {
-           
             return (
               <a href={link.href} class="w-full text-center p-2">
                 {link.name}
