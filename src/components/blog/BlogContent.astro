@@ -1,0 +1,102 @@
+---
+import { Image } from "astro:assets";
+import heroImg from "../../assets/Image/jws-hero.png";
+import dummyImage from "../../assets/Image/ContentDummy.png";
+import arrow  from "../../assets/icons/ArrowRight.svg";
+import heroImgMobile from "../../assets/Image/jws-hero-mobile.png";
+---
+
+<section class="md:py-[80px]  pt-[16px] pb-[48px]">
+  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+
+    <div class="flex flex-col lg:flex-row gap-10 lg:gap-20 xl:gap-[120px]">
+        <div class="flex flex-col">
+            <div class="mb-[32px]">
+                <h3 class="mb-[16px] font-figtree font-normal text-[28px] leading-[32px] text-textPrimary lg:text-[40px] lg:leading-[44px]">Title</h3>
+                <p class="mb-[16px] font-figtree font-normal text-[16px] lg:text-[18px] lg:leading-[22px] leading-[20px] text-textPrimary">Mi tincidunt elit, id quisque ligula ac diam, amet. Vel etiam suspendisse morbi eleifend faucibus eget vestibulum felis. Dictum quis montes, sit sit. Tellus aliquam enim urna, etiam. Mauris posuere vulputate arcu amet, vitae nisi, tellus tincidunt. At feugiat sapien varius id.</p>
+                <p class="font-figtree font-bold text-[16px] lg:text-[18px] lg:leading-[22px] leading-[20px] text-textPrimary">Dolor enim eu tortor urna sed duis nulla. Aliquam vestibulum, nulla odio nisl vitae. In aliquet pellentesque aenean hac vestibulum turpis mi bibendum diam. Tempor integer aliquam in vitae malesuada fringilla.</p>
+            </div>
+            <div class="mb-[32px]">
+                <h3 class="mb-[16px] font-figtree font-normal text-[28px] leading-[32px] text-textPrimary lg:text-[40px] lg:leading-[44px]">Title</h3>
+                <p class="mb-[16px] font-figtree font-normal text-[16px] lg:text-[18px] lg:leading-[22px] leading-[20px] text-textPrimary">Mi tincidunt elit, id quisque ligula ac diam, amet. Vel etiam suspendisse morbi eleifend faucibus eget vestibulum felis. Dictum quis montes, sit sit. Tellus aliquam enim urna, etiam. Mauris posuere vulputate arcu amet, vitae nisi, tellus tincidunt. At feugiat sapien varius id.</p>
+               <div class="">
+                  <Image src={dummyImage} alt="blog image" class="rounded-[24px] lg:h-[589px] w-full mb-[8px]" />
+                  <div class="px-[20px]">
+
+                      <figcaption class="font-figtree font-normal text-sm leading-[18px] text-textSecondary border-l px-2 border-[#A9A9B7] h-[18px] ">Image caption goes here</figcaption>
+                  </div>
+               </div>
+            </div>
+
+              <div class="mb-[32px]">
+                <h3 class="mb-[16px] font-figtree font-black text-[22px] leading-[26px] text-textPrimary lg:text-[32px] lg:leading-[36px]">Subtitle</h3>
+                <p class="mb-[16px] font-figtree font-normal text-[16px] lg:text-[18px] lg:leading-[22px] leading-[20px] text-textPrimary">Mi tincidunt elit, id quisque ligula ac diam, amet. Vel etiam suspendisse morbi eleifend faucibus eget vestibulum felis. Dictum quis montes, sit sit. Tellus aliquam enim urna, etiam. Mauris posuere vulputate arcu amet, vitae nisi, tellus tincidunt. At feugiat sapien varius id.</p>
+                <p class="py-3 px-4 bg-secondary  border border-[#F2F3F7] rounded-[16px] italic font-figtree font-medium text-[16px] lg:text-[18px] lg:leading-[22px] leading-[20px] text-textSecondary">"Ipsum sit mattis nulla quam nulla. Gravida id gravida ac enim mauris id. Non pellentesque congue eget consectetur turpis. Sapien, dictum molestie sem tempor. Diam elit, orci, tincidunt aenean tempus."</p>
+            </div>
+            <div class="mb-[32px]">
+                <h3 class="mb-[16px] font-figtree font-black text-[22px] leading-[26px] text-textPrimary lg:text-[32px] lg:leading-[36px]">Subtitle</h3>
+                <p class="mb-[16px] font-figtree font-normal text-[16px] lg:text-[18px] lg:leading-[22px] leading-[20px] text-textPrimary">Mi tincidunt elit, id quisque ligula ac diam, amet. Vel etiam suspendisse morbi eleifend faucibus eget vestibulum felis. Dictum quis montes, sit sit. Tellus aliquam enim urna, etiam. Mauris posuere vulputate arcu amet, vitae nisi, tellus tincidunt. At feugiat sapien varius id.</p>
+                  
+                <ol class="mb-[16px] flex flex-col">
+  <li class="font-figtree font-normal text-base leading-[20px] text-textPrimary lg:text-[18px] lg:leading-[22px] mb-2 flex items-baseline gap-2 ">
+    <span class=" rounded-[40px] h-[28px] w-[28px] bg-[linear-gradient(189.75deg,#F2F3F7_-1.71%,#EDEAEF_100.1%)] flex items-center justify-center p-1">1</span>
+    Fermentum urna quam egestas posuere magna.
+  </li>
+  <li class="font-figtree font-normal text-base leading-[20px] text-textPrimary lg:text-[18px] lg:leading-[22px] mb-2 flex items-baseline gap-2">
+    <span class="p-[4px] rounded-[40px] h-[28px] w-[28px] bg-[linear-gradient(189.75deg,#F2F3F7_-1.71%,#EDEAEF_100.1%)] flex items-center justify-center">2</span>
+    Fermentum urna quam egestas posuere magna.
+  </li>
+  <li class="font-figtree font-normal text-base leading-[20px] text-textPrimary lg:text-[18px] lg:leading-[22px] mb-2 flex items-baseline gap-2">
+    <span class="p-[4px] rounded-[40px] h-[28px] w-[28px] bg-[linear-gradient(189.75deg,#F2F3F7_-1.71%,#EDEAEF_100.1%)] flex items-center justify-center">3</span>
+    Fermentum urna quam egestas posuere magna.
+  </li>
+  <li class="font-figtree font-normal text-base leading-[20px] text-textPrimary lg:text-[18px] lg:leading-[22px] mb-2 flex items-baseline gap-2">
+    <span class="p-[4px] rounded-[40px] h-[28px] w-[28px] bg-[linear-gradient(189.75deg,#F2F3F7_-1.71%,#EDEAEF_100.1%)] flex items-center justify-center">4</span>
+    Fermentum urna quam egestas posuere magna.
+  </li>
+  
+</ol>
+
+                
+                <p class="mb-[16px] font-figtree font-normal text-[16px] lg:text-[18px] lg:leading-[22px] leading-[20px] text-textPrimary">Mi tincidunt elit, id quisque ligula ac diam, amet. Vel etiam suspendisse morbi eleifend faucibus eget vestibulum felis. Dictum quis montes, sit sit. Tellus aliquam enim urna, etiam. Mauris posuere vulputate arcu amet, vitae nisi, tellus tincidunt. At <a href=" " class="underline underline-offset-3">feugiat</a> sapien varius id.</p>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div>
+            <h5 class="mb-[24px] font-figtree font-bold text-[20px] leading-[24px] text-textPrimary">Table of contents</h5>
+            <ul>
+                <li class="mb-[8px] flex px-3 py-2 gap-2 items-center bg-cardColor text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"><Image src={arrow } class="h-5 w-5" alt="hero-image" /> <span class="font-figtree font-normal text-[16px] leading-[20px]">Block 1</span></li>
+                <li class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"><Image src={arrow } class="h-5 w-5" alt="hero-image" /> <span class="font-figtree font-normal text-[16px] leading-[20px]">Block 2</span></li>
+                <li class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"><Image src={arrow } class="h-5 w-5" alt="hero-image" /> <span class="font-figtree font-normal text-[16px] leading-[20px]">Block 3</span></li>
+                <li class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"><Image src={arrow } class="h-5 w-5" alt="hero-image" /> <span class="font-figtree font-normal text-[16px] leading-[20px]">Block 4</span></li>
+                
+            </ul>
+        </div>
+    </div>
+   
+  </div>
+</section>
