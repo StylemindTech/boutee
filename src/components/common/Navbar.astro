@@ -24,10 +24,11 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header
+id="header"
   class="bg-white md:pt-[12px] lg:px-[48px] pt-[8px] px-[12px] md:px-[24px]"
 >
   <nav
-    class="bg-secondary md:py-5 py-[11px] pl-[16px] pr-[17px] md:px-8 md:rounded-3xl rounded-[16px] flex justify-between items-center"
+    class="max-w-[1504px] bg-secondary md:py-5 py-[11px] pl-[16px] pr-[17px] md:px-8 md:rounded-3xl rounded-[16px] flex justify-between items-center mx-auto"
   >
     <!-- Logo -->
     <a href="/">
@@ -161,28 +162,37 @@ const currentPath = Astro.url.pathname;
       >
     </div>
   </div>
-  <script type="module" client:load>
-    const menuBtn = document.getElementById("menu-btn");
-    const closeMenu = document.getElementById("close-menu");
-    const mobileMenu = document.getElementById("mobile-menu");
+  </header>
+ <script type="module" client:load>
+  const header = document.getElementById("header");
+  const menuBtn = document.getElementById("menu-btn");
+  const closeMenu = document.getElementById("close-menu");
+  const mobileMenu = document.getElementById("mobile-menu");
 
-    menuBtn?.addEventListener("click", () => {
-      mobileMenu?.classList.remove("hidden");
-      mobileMenu?.classList.add("flex");
-      document.body.classList.add("menu-open");
-    });
+  menuBtn?.addEventListener("click", () => {
+    mobileMenu?.classList.remove("hidden");
+    mobileMenu?.classList.add("flex");
+    header?.classList.add("menu-open"); // 🔹 class add on header
+  });
 
-    closeMenu?.addEventListener("click", () => {
-      mobileMenu?.classList.add("hidden");
-      mobileMenu?.classList.remove("flex");
-      document.body.classList.remove("menu-open");
-    });
-  </script>
+  closeMenu?.addEventListener("click", () => {
+    mobileMenu?.classList.add("hidden");
+    mobileMenu?.classList.remove("flex");
+    header?.classList.remove("menu-open"); // 🔹 class remove on header
+  });
+</script>
 
-  <style>
-    body.menu-open {
-      background-color: rgba(23, 23, 25, 0.4) !important;
-      overflow: hidden;
-    }
-  </style>
-</header>
+<style>
+  #header.menu-open {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0; 
+  background-color: rgba(23, 23, 25, 0.4) !important;
+  overflow: hidden;
+  z-index: 40;
+}
+
+</style>
+

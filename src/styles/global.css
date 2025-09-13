@@ -46,6 +46,22 @@
  
 }
 
+::selection {
+  background-color: #D6F99A;  
+}
+
+
+@layer utilities {
+  @keyframes spin-once {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .animate-spin-once {
+    animation: spin-once 0.5s linear;
+  }
+}
+
+
 .btn-after{
 position: relative;
 }
