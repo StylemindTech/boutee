@@ -10,6 +10,24 @@ import heroImgMobile from "../../assets/Image/jws-hero-mobile.png";
   <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
 
     <div class="flex flex-col lg:flex-row gap-10 lg:gap-20 xl:gap-[120px]">
+
+
+       <div
+        class="flex lg:hidden items-center w-full py-2 px-3 h-13 gap-1 bg-white border border-[#F2F3F7] acd-shadow rounded-[16px]"
+      >
+        <select
+          name="category"
+          id=""
+          class="w-full font-figtree font-bold text-[18px] leading-[22px] text-textPrimary outline-none"
+        >
+          <option value="" class="">Block 1</option>
+          <option value="">Block 2</option>
+          <option value="">Block 3</option>
+          <option value="">Block 4</option>
+        </select>
+      </div>
+
+
         <div class="flex flex-col">
             <div class="mb-[32px]">
                 <h3 class="mb-[16px] font-figtree font-normal text-[28px] leading-[32px] text-textPrimary lg:text-[40px] lg:leading-[44px]">Title</h3>
@@ -86,7 +104,7 @@ import heroImgMobile from "../../assets/Image/jws-hero-mobile.png";
 
 
 
-        <div>
+        <div class="hidden lg:block">
             <h5 class="mb-[24px] font-figtree font-bold text-[20px] leading-[24px] text-textPrimary">Table of contents</h5>
             <ul>
                 <li class="mb-[8px] flex px-3 py-2 gap-2 items-center bg-cardColor text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"><Image src={arrow } class="h-5 w-5" alt="hero-image" /> <span class="font-figtree font-normal text-[16px] leading-[20px]">Block 1</span></li>
