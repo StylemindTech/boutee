@@ -69,9 +69,9 @@ export default function RingSelector() {
             key={ring.id}
             src={ring.image.src}
             alt={`Ring ${ring.id}`}
-            className={`aspect-[144/144] object-cover border-1  rounded-[12px] cursor-pointer ${
+            className={`aspect-[144/144] object-cover  rounded-[12px] cursor-pointer ${
               selectedRing.id === ring.id
-                ? "border-[#D7F650]"
+                ? "border-[3px] border-[#D7F650]"
                 : "border-transparent"
             }`}
             onClick={() => setSelectedRing(ring)}
