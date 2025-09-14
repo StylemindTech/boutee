@@ -8,7 +8,7 @@ import userImage1 from '../../assets/Image/img-test.png'
 
 function TestimonialCard({  review, name, location, userImage = '' }) {
   return (
-    <div className="bg-white rounded-[32px] shadow-[0px_4px_24px_0px_#1617190F,0px_4px_8px_0px_#00000008] lg:p-[32px] p-[24px] h-full flex flex-col justify-between">
+    <div className="bg-white rounded-[32px] shadow-[0px_4px_12px_0px_#1617190F,0px_2px_6px_0px_#00000008] lg:p-[32px] p-[24px] h-full flex flex-col justify-between overflow-hidden">
       <img
         src={rating?.src}
         alt="stars"
@@ -67,7 +67,7 @@ export default function ResponsiveCarousel({ items = [] }) {
       <style>{`
         .swiper-button-prev, .swiper-button-next {
           width: 38px; height: 38px; border-radius: 9999px;
-          background: white; box-shadow: 0 4px 16px rgba(0,0,0,.08);
+          background: white;
         }
         .swiper-button-prev:after, .swiper-button-next:after { font-size: 14px; color: black; }
         .swiper-pagination-bullet { opacity: .4; }

@@ -181,6 +181,10 @@ pointer-events: none;
     content:'' !important;
 pointer-events: none;
   }
+   .swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background: #E3E4E8 !important;
+}
    .swiper-button-prev,
   .swiper-button-next{
     display: grid !important;

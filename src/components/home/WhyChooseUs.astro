@@ -15,22 +15,22 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
 
            <div class="md:block hidden">
               <button
-          type="button"
-          class="cursor-pointer bg-btnPrimary  btn-after text-white text-base leading-5 py-2 mx-auto md:ml-0 min-h-[56px] min-w-[212px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+          type="button"         
+          class="spinBtn cursor-pointer bg-btnPrimary  btn-after text-white text-base leading-5 py-2 mx-auto md:ml-0 min-h-[56px] min-w-[212px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
         >
-          <Image src={btnIcon} class="w-5 h-5" alt="image" />
+          <Image src={btnIcon} class="btnIcon w-5 h-5 transition-transform duration-500" alt="image" />
           Find Your Jeweller
         </button>
            </div>
          </div>
 
-         <div class="flex flex-col">
+         <div class="flex flex-col ">
             <div
-               class="rounded-[24px] p-[2px] pt-[8px] bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)]"
+               class="rounded-[24px] p-[2px] pt-[8px] bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] hover:p-[3px] hover:pt-[10px] hover:scale-x-[101%]  transition-all duration-300 overflow-hidden  "
             >
                <div class="py-[24px] px-[16px] rounded-[24px] bg-white">
                   <p
-                     class="lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary lg:pr-14"
+                     class="font-figtree lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary lg:pr-14"
                   >
                      Your ring should be made by a person, not a production
                      line. <br />
@@ -41,10 +41,10 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
             </div>
 
             <div
-               class="rounded-[24px] p-[2px] pt-[8px] bg-[linear-gradient(72.92deg,#F8BEA5_29.07%,#F8D2A5_78.07%)] mt-[-10px]"
+               class="rounded-[24px] p-[2px] pt-[8px] bg-[linear-gradient(72.92deg,#F8BEA5_29.07%,#F8D2A5_78.07%)] mt-[-10px] hover:p-[3px] hover:pt-[10px] z-10 hover:scale-x-[101%]  transition-all duration-300 overflow-hidden"
             >
                <div class="py-[24px] px-[16px] rounded-[24px] bg-white">
-                  <p class="lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary">
+                  <p class="font-figtree lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary">
                      They are experts in their craft, ready to take Pinterest
                      boards and sketches and turn them into the perfect ring.
                   </p>
@@ -52,22 +52,35 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
             </div>
 
             <div
-               class="rounded-[24px] p-[2px] pt-[8px] bg-[linear-gradient(180.61deg,#EFA7F2_6.82%,#9B9FE8_90.78%)] mt-[-10px]"
+               class="rounded-[24px] p-[2px] pt-[8px] bg-[linear-gradient(180.61deg,#EFA7F2_6.82%,#9B9FE8_90.78%)] mt-[-10px] hover:p-[3px] hover:pt-[10px] z-20 hover:scale-x-[101%]  transition-all duration-300 overflow-hidden"
             >
                <div class="py-[24px] px-[16px] rounded-[24px] bg-white">
-                  <p class="lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary">
+                  <p class="font-figtree lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary">
                      Skip the middlemen for a better ring, at a better price.
                   </p>
                </div>
             </div>
          </div>
           <button
-          type="button"
-          class="cursor-pointer bg-btnPrimary md:hidden btn-after text-white text-base leading-5 py-2 mx-auto md:ml-0 w-full min-h-[56px] justify-center px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+          type="button"     
+          class="spinBtn cursor-pointer bg-btnPrimary md:hidden btn-after text-white text-base leading-5 py-2 mx-auto md:ml-0 w-full min-h-[56px] justify-center px-6 rounded-full font-figtree font-medium flex items-center gap-3"
         >
-          <Image src={btnIcon} class="w-5 h-5" alt="image" />
+          <Image  src={btnIcon} class="btnIcon  w-5 h-5 transition-transform duration-500" alt="image" />
           Find Your Jeweller
         </button>
       </div>
    </div>
 </section>
+
+<script>
+   const buttons = document.querySelectorAll(".spinBtn");
+
+  buttons.forEach((btn) => {
+    const icon = btn.querySelector(".btnIcon");
+    btn.addEventListener("click", () => {
+      icon.classList.remove("animate-spin-once");
+      void icon.offsetWidth; // reflow force
+      icon.classList.add("animate-spin-once");
+    });
+  });
+</script>
