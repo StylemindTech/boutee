@@ -50,6 +50,7 @@ export default function RingModal() {
     const [currentPage, setCurrentPage] = useState(1);
     const [shuffledData, setShuffledData] = useState([]);
 
+  const [open, setOpen] = useState(false);
     const itemsPerPage = 12;
 
     useEffect(() => {
@@ -124,12 +125,12 @@ export default function RingModal() {
       <img
         src={arrowDown.src}
         alt="arrow icons"
-        className="absolute right-1 top-1/2 -translate-y-1/2 pb-[5px] pointer-events-none rotate-180 w-[12px]"
+        className="absolute right-3 top-3 -translate-y-1/2  pointer-events-none rotate-180 w-[16px] h-5"
       />
     </div>
   </div>
 
-  <div className="w-1/2 sm:w-auto flex items-center font-figtree gap-2 py-[8px] px-[12px] bg-cardColor rounded-[12px] text-[16px] leading-[20px] text-textSecondary lg:hidden relative">
+  {/* <div className="w-1/2 sm:w-auto flex items-center font-figtree gap-2 py-[8px] px-[12px] bg-cardColor rounded-[12px] text-[16px] leading-[20px] text-textSecondary lg:hidden relative">
     <span className="text-textPrimary">Filters</span>
     {activeFilters.length > 0 && (
       <div className="text-[12px] w-[20px] h-[20px] flex items-center justify-center bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] text-textPrimary font-medium rounded-full">
@@ -143,11 +144,68 @@ export default function RingModal() {
       <option value="" className="hidden"></option>
       {filters.map((f) => (
         <option key={f} value={f}>
-          {f}
+          {f}f
         </option>
       ))}
     </select>
-  </div>
+  </div> */}
+
+  <div className="lg:hidden relative w-1/2">
+      {/* Filter Button */}
+      <div
+        onClick={() => setOpen(true)}
+        className="w-full h-9 py-2 px-3 bg-cardColor rounded-[12px] flex justify-between items-center"
+      >
+        <div className="flex items-center gap-1">
+            <span className="font-figtree font-medium text-[16px] leading-[20px] text-textPrimary">Filters</span>
+        {activeFilters.length > 0 && (
+          <div className="text-[12px] w-[20px] h-[20px] flex items-center justify-center bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] text-textPrimary font-medium rounded-full">
+            {activeFilters.length}
+          </div>
+        )}
+        </div>
+        <img
+        src={arrowDown.src}
+        alt="arrow icons"
+        className="absolute right-3 top-4.5 -translate-y-1/2  pointer-events-none rotate-180 w-[16px] h-5"
+      />
+      </div>
+
+      {/* Bottom Sheet */}
+      {open && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-end z-50">
+          <div className="w-full bg-white rounded-t-[25px] pb-[20px] px-4">
+            {/* Drag Handle */}
+            <div className="h-[36px]  p-4">
+                <div className="w-8 h-1 bg-[#79747E] rounded-full mx-auto "></div>
+            </div>
+
+                       {/* Filter Options */}
+            <div className="flex flex-col gap-2 mb-[32px]  pt-3 ">
+              {filters.map((f) => (
+                <label key={f} className="flex items-center gap-2 h-9">
+                  <input
+                    type="checkbox"
+                    checked={activeFilters.includes(f)}
+                    onChange={() => toggleFilter(f)}
+                    className="p-1 rounded-[8px] border-2 border-textPrimary accent-textPrimary h-5 w-5" 
+                  />
+                  <span className="font-figtree font-normal text-base leading-5 text-textPrimary">{f}</span>
+                </label>
+              ))}
+            </div>
+
+            {/* Apply Button */}
+            <button
+              onClick={() => setOpen(false)}
+              className="h-[36px] py-[8px] px-[16px]  rounded-[40px] bg-textPrimary font-figtree font-medium text-base leading-5 text-white w-full"
+            >
+              Apply
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
 
 
                 <div className="hidden lg:flex gap-[16px] flex-wrap">
