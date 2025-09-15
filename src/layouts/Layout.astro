@@ -1,6 +1,7 @@
 ---
 import Navbar from "../components/common/Navbar.astro";
 import Footer from "../components/common/Footer.astro";
+import "aos/dist/aos.css";
 import '../styles/global.css'
 const { title = "Astro Site" } = Astro.props;
 ---
@@ -26,5 +27,14 @@ const { title = "Astro Site" } = Astro.props;
 
 		<!-- footer -->
 		<Footer />
+
+
+		 <script>
+      import AOS from "aos";
+      AOS.init({
+        duration: 500,   // animation duration
+        once: false,     // sirf ek baar chale scroll pe
+      });
+    </script>
 	</body>
 </html>
