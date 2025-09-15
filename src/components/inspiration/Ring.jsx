@@ -125,7 +125,7 @@ export default function RingModal() {
       <img
         src={arrowDown.src}
         alt="arrow icons"
-        className="absolute right-3 top-3 -translate-y-1/2  pointer-events-none rotate-180 w-[16px] h-5"
+        className="absolute right-1 top-3 -translate-y-1/2  pointer-events-none rotate-180 w-[16px] h-5"
       />
     </div>
   </div>
