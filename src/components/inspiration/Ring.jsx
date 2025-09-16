@@ -144,17 +144,17 @@ export default function RingModal() {
       <option value="" className="hidden"></option>
       {filters.map((f) => (
         <option key={f} value={f}>
-          {f}f
+          {f}
         </option>
       ))}
     </select>
   </div> */}
 
-  <div className="lg:hidden relative w-1/2">
+  <div className="lg:hidden relative w-1/2 sm:w-[155px]">
       {/* Filter Button */}
       <div
         onClick={() => setOpen(true)}
-        className="w-full h-9 py-2 px-3 bg-cardColor rounded-[12px] flex justify-between items-center"
+        className="h-9 py-2 px-3 bg-cardColor rounded-[12px] flex justify-between items-center"
       >
         <div className="flex items-center gap-1">
             <span className="font-figtree font-medium text-[16px] leading-[20px] text-textPrimary">Filters</span>
