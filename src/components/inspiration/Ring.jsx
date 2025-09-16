@@ -173,7 +173,7 @@ export default function RingModal() {
 
       {/* Bottom Sheet */}
       {open && (
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-end z-50">
+        <div className="fixed inset-0 bg-[#17171966] flex justify-center items-end z-50">
           <div className="w-full bg-white rounded-t-[25px] pb-[20px] px-4">
             {/* Drag Handle */}
             <div className="h-[36px]  p-4">
