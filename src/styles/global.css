@@ -427,3 +427,15 @@ top: 129.357px;
     width: 200px;
 }
 }
+
+
+
+  /* src/styles/floating.css */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.float {
+  animation: float 4s ease-in-out infinite;
+}
