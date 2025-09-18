@@ -67,7 +67,7 @@ export default function ResponsiveCarousel({ items = [] }) {
       <style>{`
         .swiper-button-prev, .swiper-button-next {
           width: 38px; height: 38px; border-radius: 9999px;
-          background: white;
+          background: white; z-index:999;
         }
         .swiper-button-prev:after, .swiper-button-next:after { font-size: 14px; color: black; }
         .swiper-pagination-bullet { opacity: .4; }
