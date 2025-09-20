@@ -6,24 +6,22 @@ import "../styles/global.css";
 import "../styles/ourJewellers.css";
 import "../styles/forJewellers.css";
 
-const { title = "Astro Site" } = Astro.props;
+const { title = "Boutee - Home", description = "Find your perfect handcrafted ring by connecting directly with independent UK jewellers. Boutee helps you define your style, match with makers, and bring your ideas to life." } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/Logo.svg" />
     <meta name="generator" content={Astro.generator} />
-    <link rel="stylesheet" href="/src/styles/global.css" />
-    <link rel="stylesheet" href="/src/styles/ourJewellers.css" />
-    <link rel="stylesheet" href="/src/styles/forJewellers.css" />
 
     <title>{title}</title>
+    <meta name="description" content={description} />
   </head>
-  <body class="min-h-screen flex flex-col scroll-smooth">
-    <!-- header -->
+  <body class="flex flex-col min-h-screen scroll-smooth">
+    <!-- Header -->
     <Navbar />
 
     <!-- Page Content -->
@@ -31,13 +29,14 @@ const { title = "Astro Site" } = Astro.props;
       <slot />
     </main>
 
-    <!-- footer -->
+    <!-- Footer -->
     <Footer />
 
-    <script>
+    <!-- ✅ AOS init -->
+    <script is:inline>
       import AOS from "aos";
       AOS.init({
-        duration: 500, // animation duration
+        duration: 500, // ms
         once: false,
       });
     </script>
