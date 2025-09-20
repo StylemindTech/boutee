@@ -90,15 +90,3 @@ We'll work with you to get your profile perfect before launching you on the plat
     </div>
 </section>
 
-<script>
-   const buttons = document.querySelectorAll(".spinBtn");
-
-  buttons.forEach((btn) => {
-    const icon = btn.querySelector(".btnIcon");
-    btn.addEventListener("click", () => {
-      icon.classList.remove("animate-spin-once");
-      void icon.offsetWidth; // reflow force
-      icon.classList.add("animate-spin-once");
-    });
-  });
-</script>
