@@ -45,42 +45,66 @@ const { title = "Astro Site" } = Astro.props;
 </html>
 
 <script>
-// btn icons spin animation
-const buttons = document.querySelectorAll(".spinBtn");
+document.addEventListener("DOMContentLoaded", () => {
+  // 🔹 Spin Button Icons
+  const initSpinButtons = () => {
+    const buttons = document.querySelectorAll(".spinBtn");
 
-  buttons.forEach((btn) => {
-    const icon = btn.querySelector(".btnIcon");
-    btn.addEventListener("click", () => {
-      icon.classList.remove("animate-spin-once");
-      void icon.offsetWidth; // reflow force
-      icon.classList.add("animate-spin-once");
+    buttons.forEach((btn) => {
+      const icon = btn.querySelector(".btnIcon");
+      if (!icon) return;
+
+      btn.addEventListener("click", () => {
+        icon.classList.remove("animate-spin-once");
+        // Force reflow to restart animation
+        void icon.offsetWidth;
+        icon.classList.add("animate-spin-once");
+      });
     });
-  });
+  };
 
+  // 🔹 Floating Parallax for Hero
+  const initParallax = () => {
+    let ticking = false;
 
+    const updateParallax = () => {
+      document.querySelectorAll(".floating").forEach((el) => {
+        const speed = parseFloat(el.dataset.speed) || 0.3;
+        const offset = window.scrollY * speed * -0.4;
+        el.style.setProperty("--parallaxY", `${offset}px`);
+      });
+      ticking = false;
+    };
 
-  // Floating Parallax -- for Hero Section
-  window.addEventListener("scroll", () => {
-    const scrollY = window.scrollY;
-    document.querySelectorAll(".floating").forEach((el) => {
-      const speed = parseFloat(el.dataset.speed) || 0.3;
-      const offset = scrollY * speed * -0.4; // adjust multiplier for intensity
-      el.style.setProperty("--parallaxY", `${offset}px`);
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
     });
-  });
+  };
 
-  // Intersection Observer home and tech page animations
-const target = document.querySelector(".wrapper");
+  // 🔹 Intersection Observer Animations
+  const initIntersectionAnimations = () => {
+    const target = document.querySelector(".wrapper");
+    if (!target) return;
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      target.classList.add("animate");   // animate  visible
-    } else {
-      target.classList.remove("animate"); // remove visible
-    }
-  });
-}, { threshold: 0.3 });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          target.classList.toggle("animate", entry.isIntersecting);
+        });
+      },
+      { threshold: 0.3 }
+    );
 
-observer.observe(target);
+    observer.observe(target);
+  };
+
+  // Initialize all features
+  initSpinButtons();
+  initParallax();
+  initIntersectionAnimations();
+});
 </script>
+
