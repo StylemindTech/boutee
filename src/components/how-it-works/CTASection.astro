@@ -1,45 +1,41 @@
 ---
 import { Image } from "astro:assets";
 import whoImg from "../../assets/Image/cta-img.png";
-
 ---
 
 <section class="lg:py-[112px] py-[48px]">
-    <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
-
-        <div
-            class="bg-cardColor rounded-[40px] grid md:grid-cols-2 lg:gap-[80px] md:gap-[10px] gap-[8px] overflow-hidden"
+  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+    <div
+      class="bg-cardColor rounded-[40px] grid md:grid-cols-2 lg:gap-[80px] md:gap-[10px] gap-[8px] overflow-hidden"
+    >
+      <div
+        class="flex flex-col lg:pl-[80px] justify-center md:py-[0px] py-[48px] p-[24px]"
+      >
+        <h2
+          class="lg:text-[52px] text-center md:text-start text-[32px] md:text-[28px] leading-[36px] lg:leading-[56px] lg:font-black font-normal text-textPrimary font-figtree"
         >
-        <div
-                class="flex flex-col lg:pl-[80px] justify-center md:py-[0px] py-[48px] p-[24px]"
-            >
-                <h2
-                    class="lg:text-[52px] text-center md:text-start text-[32px] md:text-[28px] leading-[36px] lg:leading-[56px] lg:font-black font-normal text-textPrimary font-figtree"
-                >
-                  Ready to begin?
-                </h2>
-                <p
-                    class="text-textPrimary text-center md:text-start text-[20px] leading-[24px] font-figtree mt-[24px] lg:mb-[64px] mb-[48px]"
-                >
-                    The first step is finding your style. It's free and easy to get started.
-                </p>
-                <button
+          Ready to begin?
+        </h2>
+        <p
+          class="text-textPrimary text-center md:text-start text-[20px] leading-[24px] font-figtree mt-[24px] lg:mb-[64px] mb-[48px]"
+        >
+          The first step is finding your style. It's free and easy to get
+          started.
+        </p>
+        <button
           type="button"
-          class="cursor-pointer bg-btnPrimary howBtn-after relative text-white text-base leading-5 py-2 mx-auto md:ml-0 min-h-[56px]  min-w-[194px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+          class="cursor-pointer bg-btnPrimary howBtn-after relative text-white text-base leading-5 py-2 mx-auto md:ml-0 min-h-[56px] min-w-[194px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
         >
-         Get Started for Free
+          Get Started for Free
         </button>
-
-            </div>
-            <div class=" flex justify-end">
-                <Image
-                    src={whoImg}
-                    alt="Ring"
-                    class="max-w-full md:h-auto lg:max-h-none max-h-[261px] object-cover rounded-[40px]"
-                />
-            </div>
-
-            
-        </div>
+      </div>
+      <div class="flex justify-end">
+        <Image
+          src={whoImg}
+          alt="Ring"
+          class="max-w-full md:h-auto lg:max-h-none max-h-[261px] object-cover rounded-[40px]"
+        />
+      </div>
     </div>
+  </div>
 </section>

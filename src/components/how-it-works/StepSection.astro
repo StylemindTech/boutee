@@ -106,15 +106,3 @@ Once you approve the final design, your jeweller will get to work handcrafting y
         </div>
     </div>
 </section>
-<script>
-   const buttons = document.querySelectorAll(".spinBtn");
-
-  buttons.forEach((btn) => {
-    const icon = btn.querySelector(".btnIcon");
-    btn.addEventListener("click", () => {
-      icon.classList.remove("animate-spin-once");
-      void icon.offsetWidth; // reflow force
-      icon.classList.add("animate-spin-once");
-    });
-  });
-</script>
