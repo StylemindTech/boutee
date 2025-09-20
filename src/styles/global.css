@@ -524,9 +524,9 @@
   animation: scroll-down 8s linear infinite;
 }
 
-.float {
+/* .float {
   animation: float 4s ease-in-out infinite;
-}
+} */
 
 [data-aos="line-animate"] {
   transform: scaleY(0);

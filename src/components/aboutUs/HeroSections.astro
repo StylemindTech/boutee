@@ -11,15 +11,15 @@ import heroImgSet7 from "../../assets/Image/img-set8.png";
 ---
 
 <section class="md:pt-[112px] md:pb-[160px] pt-[124px] pb-[124px] overflow-hidden">
-  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto relative md:pb-[96px] pb-0 ">
-    <Image src={heroImgSet} alt="image"  class="lg:w-[168px] w-[133.89px] lg:h-[113px] h-[89.21px] img-set1 absolute object-contain  float"/>
-    <Image src={heroImgSet1} alt="image"  class="w-[50px] h-[50px] img-set2 absolute object-contain float [animation-delay:0.3s]"/>
-    <Image src={heroImgSet2} alt="image"  class="lg:w-[154px] w-[102px] lg:h-[124px] h-[82px] img-set3 absolute object-contain float [animation-delay:0.6s]" />
-    <Image src={heroImgSet3} alt="image"  class="w-[54px] h-[54px] img-set4 absolute object-contain float [animation-delay:0.9s]"/>
-    <Image src={heroImgSet4} alt="image"  class="w-[154px] h-[169.63px] img-set5 absolute object-contain float [animation-delay:0.3s]"/>
-    <Image src={heroImgSet5} alt="image"  class="w-[54px] h-[54px] img-set6 absolute object-contain float [animation-delay:0.6s]"/>
-    <Image src={heroImgSet6} alt="image"  class="w-[154.13px] h-[184.96px] img-set7 absolute object-contain float [animation-delay:0.9s]"/>
-    <Image src={heroImgSet7} alt="image"  class="w-[50px] h-[50px] img-set8 absolute object-contain float [animation-delay:0.3s]"/>
+  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto relative md:pb-[96px] pb-0 " >
+    <Image src={heroImgSet} alt="image"  class="lg:w-[168px] w-[133.89px] lg:h-[113px] h-[89.21px] img-set1 absolute object-contain floating" data-speed="0.2" data-float="2"/>
+    <Image src={heroImgSet1} alt="image"  class="w-[50px] h-[50px] img-set2 absolute object-contain  floating" data-speed="0.5" data-float="3"/>
+    <Image src={heroImgSet2} alt="image"  class="lg:w-[154px] w-[102px] lg:h-[124px] h-[82px] img-set3 absolute object-contain  floating" data-speed="0.3" data-float="4" />
+    <Image src={heroImgSet3} alt="image"  class="w-[54px] h-[54px] img-set4 absolute object-contain  floating" data-speed="0.6" data-float="6"/>
+    <Image src={heroImgSet4} alt="image"  class="w-[154px] h-[169.63px] img-set5 absolute object-contain  floating" data-speed="0.4" data-float="1"/>
+    <Image src={heroImgSet5} alt="image"  class="w-[54px] h-[54px] img-set6 absolute object-contain  floating" data-speed="0.2" data-float="2"/>
+    <Image src={heroImgSet6} alt="image"  class="w-[154.13px] h-[184.96px] img-set7 absolute object-contain floating" data-speed="0.5" data-float="3"/>
+    <Image src={heroImgSet7} alt="image"  class="w-[50px] h-[50px] img-set8 absolute object-contain floating" data-speed="0.1" data-float="4"/>
     <div class="text-center items-center max-w-[990px] mx-auto">
       <div
         class="md:text-[16px] text-[10px] font-medium md:leading-[20px] leading-[14px] text-textPrimary bg-cardColor md:py-[8.5px] py-[5px] md:px-[16px] px-[12px] font-figtree rounded-[40px] inline"
@@ -42,3 +42,37 @@ import heroImgSet7 from "../../assets/Image/img-set8.png";
     </div>
   </div>
 </section>
+
+<script>
+     // Floating Parallax
+  window.addEventListener("scroll", () => {
+    const scrollY = window.scrollY;
+    document.querySelectorAll(".floating").forEach((el) => {
+      const speed = parseFloat(el.dataset.speed) || 0.3;
+      const offset = scrollY * speed * -0.4; // adjust multiplier for intensity
+      el.style.setProperty("--parallaxY", `${offset}px`);
+    });
+  });
+</script>
+
+<style>
+     /* Floating keyframes */
+@keyframes floatUpDown {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-12px) translateX(4px); }
+}
+
+.floating {
+  transform: translateY(var(--parallaxY, 0)) translateZ(0);
+  animation: floatUpDown infinite ease-in-out;
+  will-change: transform;
+  transition: transform 0.3s ease-out;
+}
+
+/* Natural randomness */
+[data-float="1"] { animation-duration: 5s; animation-delay: 0s; }
+[data-float="2"] { animation-duration: 6s; animation-delay: 0.5s; }
+[data-float="3"] { animation-duration: 7s; animation-delay: 1s; }
+[data-float="4"] { animation-duration: 8s; animation-delay: 1.2s; }
+[data-float="6"] { animation-duration: 5.5s; animation-delay: 1s; }
+</style>

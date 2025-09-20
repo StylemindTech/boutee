@@ -1,0 +1,214 @@
+.card {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.card .ourImg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---- Top Left (User) ---- */
+.user-card {
+  max-width: 248px;
+  padding: 8px 8px 16px;
+  position: absolute;
+  right: 18.3125rem;
+  top: 3.375rem;
+  z-index: 9;
+}
+
+.user-card .user-card-img {
+  width: 14.5rem;
+  height: 14.5rem;
+  border-radius: 24px;
+}
+
+
+
+/* ---- Info Box ---- */
+.info-box {
+  position: absolute;
+  top: 5.75rem;
+  right: 5.5rem;
+  background: #fff;
+  border-radius: 16px;
+  display: flex;
+  z-index: 9;
+  gap: 12px;
+  padding: 12px 12px;
+  box-shadow:
+    0px 8px 8px 0px #87878708,
+    0px 19px 11px 0px #87878705,
+    0px 33px 13px 0px #87878700;
+  background: #ffffffcc;
+}
+
+.layer-green {
+  width: 388.234px;
+  height: 156px;
+  transform: rotate(18.222deg);
+  stroke-width: 1px;
+  stroke: #000;
+  background: #b9f55147;
+  top: 5rem;
+  right: 5.625rem;
+  pointer-events: none;
+  position: absolute;
+  filter: blur(44px);
+}
+
+.layer-pink {
+  width: 284px;
+  height: 190px;
+  stroke-width: 1px;
+  background: #f702ff0f;
+  top: 18.75rem;
+  right: 16.0625rem;
+  pointer-events: none;
+  position: absolute;
+  filter: blur(44px);
+}
+
+.layer-pink1 {
+  width: 287.13px;
+  height: 202.578px;
+  transform: rotate(-15.692deg);
+  stroke-width: 1px;
+  background: #f6d89547;
+  top: 20.6875rem;
+  right: 0.4375rem;
+  pointer-events: none;
+  position: absolute;
+  filter: blur(44px);
+}
+
+/* .info-box div {
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+  line-height: 22px;
+  color: #171719;
+  width: 89px;
+} */
+
+/* .info-box div span {
+  display: block;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  color: #73737d;
+} */
+
+/* ---- Right (Jeweller) ---- */
+.jeweller-card {
+  position: absolute;
+  top: 214px;
+  padding: 8px 8px 16px;
+  right: 65px;
+  max-width: 248px;
+}
+
+.jeweller-card .jeweller-card-img {
+  width: 14.5rem;
+  height: 14.5rem;
+  border-radius: 24px;
+}
+
+
+
+/* ---- Bottom Left Work ---- */
+.work-card {
+  position: absolute;
+  right: 284px;
+  top: 451px;
+  z-index: -9;
+  width: 168px;
+  height: 116px;
+  background: linear-gradient(208.61deg, #efa7f2 6.82%, #9b9fe8 90.78%);
+  padding: 2px;
+}
+
+.work-card .work-card-img {
+  border-radius: 24px;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  .user-card .user-card-img,
+  .jeweller-card .jeweller-card-img {
+    width: 8.5rem;
+    height: 8.5rem;
+    border-radius: 16px;
+  }
+  .jeweller-card {
+    right: 0px;
+    max-width: 148px;
+  }
+  .user-card {
+    width: fit-content;
+    max-width: 148px;
+    right: 0.8rem;
+    z-index: 0;
+    top: 7.5rem;
+  }
+  /* .info-box div {
+    font-size: 14px;
+    line-height: 18px;
+    width: 65px;
+  } */
+  /* .info-box div span {
+    font-size: 10px;
+  } */
+
+  .card {
+    border-radius: 16px;
+  }
+  .jeweller-card {
+    position: relative;
+    width: 100%;
+    top: 20px;
+    right: -1rem;
+  }
+  .info-box {
+    top: 2rem;
+    right: 2rem;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 10px;
+  }
+  .layer-green {
+    width: 258.234px;
+    height: 86px;
+    top: 4rem;
+    right: 0.625rem;
+    z-index: -9;
+  }
+  .layer-pink {
+    width: 184px;
+    height: 90px;
+    top: 13.75rem;
+    right: 6.0625rem;
+    z-index: -99;
+  }
+  .layer-pink1 {
+    display: none;
+  }
+  .work-card {
+    right: 9rem;
+    top: 17rem;
+    z-index: -9;
+    width: 110px;
+    height: 76px;
+  }
+  .card .ourImg {
+    border-radius: 16px;
+  }
+  .jeweller-card,
+  .user-card {
+    padding: 5px 5px 10px;
+  }
+}
