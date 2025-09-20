@@ -45,6 +45,20 @@ const { title = "Astro Site" } = Astro.props;
 </html>
 
 <script>
+// btn icons spin animation
+const buttons = document.querySelectorAll(".spinBtn");
+
+  buttons.forEach((btn) => {
+    const icon = btn.querySelector(".btnIcon");
+    btn.addEventListener("click", () => {
+      icon.classList.remove("animate-spin-once");
+      void icon.offsetWidth; // reflow force
+      icon.classList.add("animate-spin-once");
+    });
+  });
+
+
+
   // Floating Parallax -- for Hero Section
   window.addEventListener("scroll", () => {
     const scrollY = window.scrollY;
