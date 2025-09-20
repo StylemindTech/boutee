@@ -2,45 +2,56 @@
 import Navbar from "../components/common/Navbar.astro";
 import Footer from "../components/common/Footer.astro";
 import "aos/dist/aos.css";
-import '../styles/global.css'
-import '../styles/ourJewellers.css'
-import '../styles/forJewellers.css'
+import "../styles/global.css";
+import "../styles/ourJewellers.css";
+import "../styles/forJewellers.css";
 
 const { title = "Astro Site" } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/Logo.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<link rel="stylesheet" href="/src/styles/global.css" />
-		<link rel="stylesheet" href="/src/styles/ourJewellers.css" />
-		<link rel="stylesheet" href="/src/styles/forJewellers.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/Logo.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="stylesheet" href="/src/styles/global.css" />
+    <link rel="stylesheet" href="/src/styles/ourJewellers.css" />
+    <link rel="stylesheet" href="/src/styles/forJewellers.css" />
 
-		<title>{title}</title>
-	</head>
-	<body class="min-h-screen flex flex-col scroll-smooth">
-		<!-- header -->
-		<Navbar />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen flex flex-col scroll-smooth">
+    <!-- header -->
+    <Navbar />
 
-		<!-- Page Content -->
-		<main class="flex-1">
-			<slot />
-		</main>
+    <!-- Page Content -->
+    <main class="flex-1">
+      <slot />
+    </main>
 
-		<!-- footer -->
-		<Footer />
+    <!-- footer -->
+    <Footer />
 
-
-		 <script>
+    <script>
       import AOS from "aos";
       AOS.init({
-        duration: 500,   // animation duration
-        once: false,     // sirf ek baar chale scroll pe
+        duration: 500, // animation duration
+        once: false,
       });
     </script>
-	</body>
+  </body>
 </html>
+
+<script>
+  // Floating Parallax -- for Hero Section
+  window.addEventListener("scroll", () => {
+    const scrollY = window.scrollY;
+    document.querySelectorAll(".floating").forEach((el) => {
+      const speed = parseFloat(el.dataset.speed) || 0.3;
+      const offset = scrollY * speed * -0.4; // adjust multiplier for intensity
+      el.style.setProperty("--parallaxY", `${offset}px`);
+    });
+  });
+</script>
