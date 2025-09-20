@@ -8,7 +8,7 @@ import linkedin from "../../assets/icons/Linkedin.svg";
 import facebook from "../../assets/icons/Facebook.svg";
 import twitter from "../../assets/icons/X.svg";
 import BlogContent from "./BlogContent.astro";
-import RelatedPosts from './RelatedPosts.astro'
+import RelatedPosts from "./RelatedPosts.astro";
 ---
 
 <section class="md:pt-[112px] md:pb-[32px] pt-[24px]">
@@ -26,7 +26,8 @@ import RelatedPosts from './RelatedPosts.astro'
             ><Image src={rightShift} class="h-3 w-3" alt="hero-image" />
             <span
               class="font-figtree font-normal text-[16px] leading-[20px] text-textSecondary"
-              >Category</span>
+              >Category</span
+            >
           </div>
           <h1
             class="font-figtree font-black text-textPrimary text-[32px] leading-[36px] md:text-[52px] md:leading-[56px]"
@@ -35,7 +36,9 @@ import RelatedPosts from './RelatedPosts.astro'
           </h1>
         </div>
         <div>
-          <div class="mb-[16px] md:mb-[32px] w-full flex items-center gap-[12px]">
+          <div
+            class="mb-[16px] md:mb-[32px] w-full flex items-center gap-[12px]"
+          >
             <span
               class="font-figtree font-normal text-sm leading-[18px] text-textSecondary"
               >12 Aug 2025</span
@@ -83,8 +86,8 @@ import RelatedPosts from './RelatedPosts.astro'
 </section>
 <!-- blog content -->
 <section>
-    <BlogContent/>
+  <BlogContent />
 </section>
 <section>
-    <RelatedPosts/>
+  <RelatedPosts />
 </section>
