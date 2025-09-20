@@ -68,4 +68,19 @@ const buttons = document.querySelectorAll(".spinBtn");
       el.style.setProperty("--parallaxY", `${offset}px`);
     });
   });
+
+  // Intersection Observer home and tech page animations
+const target = document.querySelector(".wrapper");
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      target.classList.add("animate");   // animate  visible
+    } else {
+      target.classList.remove("animate"); // remove visible
+    }
+  });
+}, { threshold: 0.3 });
+
+observer.observe(target);
 </script>
