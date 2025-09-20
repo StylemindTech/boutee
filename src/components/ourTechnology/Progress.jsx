@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import ring1 from '../../assets/Image/tech-1.png'
-import ring2 from '../../assets/Image/tech-8.png'
-import ring3 from '../../assets/Image/tech-5.png'
-import ring4 from '../../assets/Image/tech-4.png'
+import ring1 from "../../assets/Image/tech-1.png";
+import ring2 from "../../assets/Image/tech-8.png";
+import ring3 from "../../assets/Image/tech-5.png";
+import ring4 from "../../assets/Image/tech-4.png";
 
 const rings = [
   {
@@ -83,8 +83,12 @@ export default function RingSelector() {
       <div className="space-y-[12px] mt-[20px]">
         <div>
           <div className="flex justify-between mb-[4px]">
-            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">Classic</span>
-            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">Alternative</span>
+            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">
+              Classic
+            </span>
+            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">
+              Alternative
+            </span>
           </div>
           {renderBar(selectedRing.attributes.classic, "classic")}
         </div>
@@ -92,8 +96,12 @@ export default function RingSelector() {
         {/* Bold vs Minimalist */}
         <div>
           <div className="flex justify-between mb-[4px]">
-            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">Bold</span>
-            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">Minimalist</span>
+            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">
+              Bold
+            </span>
+            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">
+              Minimalist
+            </span>
           </div>
           {renderBar(selectedRing.attributes.bold, "bold")}
         </div>
@@ -101,8 +109,12 @@ export default function RingSelector() {
         {/* Monotone vs Colourful */}
         <div>
           <div className="flex justify-between mb-[4px]">
-            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">Monotone</span>
-            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">Colourful</span>
+            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">
+              Monotone
+            </span>
+            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">
+              Colourful
+            </span>
           </div>
           {renderBar(selectedRing.attributes.monotone, "monotone")}
         </div>
@@ -110,8 +122,12 @@ export default function RingSelector() {
         {/* Organic vs Refined */}
         <div>
           <div className="flex justify-between mb-[4px]">
-            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">Organic</span>
-            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">Refined</span>
+            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">
+              Organic
+            </span>
+            <span className="font-figtree text-textPrimary font-normal text-[14px] leading-[18px]">
+              Refined
+            </span>
           </div>
           {renderBar(selectedRing.attributes.organic, "organic")}
         </div>
