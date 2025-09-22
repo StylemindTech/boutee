@@ -4,89 +4,119 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
 ---
 
 <section class="lg:py-[112px] py-[48px]">
-    <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
-        <div class="grid md:grid-cols-2 md:gap-[40px] items-start">
-         
-            <div>
-                <h2 class="lg:text-[52px] text-[32px] lg:leading-[56px] leading-[36px] font-black  text-center font-figtree md:text-start md:mb-[40px] mb-[24px]">
-                 Joining Boutee
-in <br> 3 Simple Steps
-                </h2>
-                <div class="hidden md:block">
-                    <button
-                    type="button"
-                    class="spinBtn cursor-pointer bg-btnPrimary relative text-white text-base leading-5 py-2 mx-auto md:ml-0 min-h-[56px]  min-w-[167px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
-                >
-                    <Image src={btnIcon} class="btnIcon w-5 h-5" alt="image" />
-                  Join Boutee
-                </button>
-                </div>
-            </div>
-
-            <div class="space-y-[16px] max-w-[600px] ml-auto">
-            
-                <div class="flex gap-[40px]">
-                    <div class="flex flex-col gap-[16px]  items-center">
-                        <div
-                            class="bg-[linear-gradient(72.92deg,#F8BEA5_29.07%,#F8D2A5_78.07%)] font-figtree text-textPrimary lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] font-bold lg:w-[40px] w-[38px] lg:h-[40px] h-[38px] rounded-full flex items-center justify-center"
-                        >
-                            1
-                        </div>
-                        <div class="w-[1px] lg:min-h-[68px] min-h-[92px] bg-black flex-1" data-aos="line-animate"></div>
-                    </div>
-                    <div>
-                        <h3 class="font-bold lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] text-black font-figtree">Register Your Interest</h3>
-                        <p class="font-figtree lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textSecondary lg:mt-[16px] mt-[12px]">
-                          Submit the form below. <br>
-We’ll send you more detailed information and a short questionnaire to ensure we’re a good fit.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex gap-[40px] ">
-                    <div class="flex flex-col gap-[16px]  items-center">
-                        <div
-                            class="bg-[linear-gradient(72.92deg,#F8BEA5_29.07%,#F8D2A5_78.07%)] font-figtree text-textPrimary lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] font-bold lg:w-[40px] w-[38px] lg:h-[40px] h-[38px] rounded-full flex items-center justify-center"
-                        >
-                            2
-                        </div>
-                        <div class="w-[1px] lg:min-h-[68px] min-h-[92px] bg-black flex-1" data-aos="line-animate"></div>
-                    </div>
-                    <div>
- <h3 class="font-bold lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] text-black font-figtree">Set Up Your Profile</h3>
-                        <p class="font-figtree lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textSecondary lg:mt-[16px] mt-[12px]">
-                         Once approved, you'll get access to your personal Jeweller Portal where you can easily upload your work and set your bespoke parameters.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex gap-[40px]">
-                    <div class="flex flex-col gap-[16px]  items-center">
-                        <div
-                            class="bg-[linear-gradient(72.92deg,#F8BEA5_29.07%,#F8D2A5_78.07%)] font-figtree text-textPrimary lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] font-bold lg:w-[40px] w-[38px] lg:h-[40px] h-[38px] rounded-full flex items-center justify-center"
-                        >
-                            3
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="font-bold lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] text-black font-figtree">Go Live</h3>
-                        <p class="font-figtree lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textSecondary lg:mt-[16px] mt-[12px]">
-We'll work with you to get your profile perfect before launching you on the platform and welcoming you to the community.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="md:hidden mt-[44px]">
-                      <button
-                    type="button"
-                    class="spinBtn cursor-pointer bg-btnPrimary relative text-white text-base leading-5 py-2 mx-auto md:ml-0 min-h-[56px]  min-w-[167px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
-                >
-                    <Image src={btnIcon} class="btnIcon w-5 h-5" alt="image" />
-                  Join Boutee
-                </button>
-            </div>
+  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+    <div class="grid md:grid-cols-2 md:gap-[40px] items-start">
+      <div>
+        <h2
+          class="lg:text-[52px] text-[32px] lg:leading-[56px] leading-[36px] font-black text-center font-figtree md:text-start md:mb-[40px] mb-[24px]"
+        >
+          Joining Boutee in <br /> 3 Simple Steps
+        </h2>
+        <div class="hidden md:block">
+          <button
+            type="button"
+            class="spinBtn cursor-pointer bg-btnPrimary relative text-white text-base leading-5 py-2 mx-auto md:ml-0 min-h-[56px] min-w-[167px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+          >
+            <Image src={btnIcon} class="btnIcon w-5 h-5" alt="image" />
+            Join Boutee
+          </button>
         </div>
-    </div>
-</section>
+      </div>
 
+      <div class="space-y-[16px] max-w-[600px] ml-auto">
+        <div class="flex gap-[40px]">
+          <div class="flex flex-col gap-[16px] items-center">
+            <div
+              class="bg-[linear-gradient(72.92deg,#F8BEA5_29.07%,#F8D2A5_78.07%)] font-figtree text-textPrimary lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] font-bold lg:w-[40px] w-[38px] lg:h-[40px] h-[38px] rounded-full flex items-center justify-center"
+            >
+              1
+            </div>
+            <div
+              class="w-[1px] lg:min-h-[68px] min-h-[92px] flex-1 overflow-hidden"
+              data-aos="line-animate"
+            >
+              <div class="line-fill w-full h-0 bg-textPrimary"></div>
+            </div>
+          </div>
+          <div>
+            <h3
+              class="font-bold lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] text-black font-figtree"
+            >
+              Register Your Interest
+            </h3>
+            <p
+              class="font-figtree lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textSecondary lg:mt-[16px] mt-[12px]"
+            >
+              Submit the form below. <br />
+              We’ll send you more detailed information and a short questionnaire
+              to ensure we’re a good fit.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex gap-[40px]">
+          <div class="flex flex-col gap-[16px] items-center">
+            <div
+              class="bg-[linear-gradient(72.92deg,#F8BEA5_29.07%,#F8D2A5_78.07%)] font-figtree text-textPrimary lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] font-bold lg:w-[40px] w-[38px] lg:h-[40px] h-[38px] rounded-full flex items-center justify-center"
+            >
+              2
+            </div>
+            <div
+              class="w-[1px] lg:min-h-[68px] min-h-[92px] flex-1 overflow-hidden"
+              data-aos="line-animate"
+            >
+              <div class="line-fill w-full h-0 bg-textPrimary"></div>
+            </div>
+          </div>
+          <div>
+            <h3
+              class="font-bold lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] text-black font-figtree"
+            >
+              Set Up Your Profile
+            </h3>
+            <p
+              class="font-figtree lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textSecondary lg:mt-[16px] mt-[12px]"
+            >
+              Once approved, you'll get access to your personal Jeweller Portal
+              where you can easily upload your work and set your bespoke
+              parameters.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex gap-[40px]">
+          <div class="flex flex-col gap-[16px] items-center">
+            <div
+              class="bg-[linear-gradient(72.92deg,#F8BEA5_29.07%,#F8D2A5_78.07%)] font-figtree text-textPrimary lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] font-bold lg:w-[40px] w-[38px] lg:h-[40px] h-[38px] rounded-full flex items-center justify-center"
+            >
+              3
+            </div>
+          </div>
+          <div>
+            <h3
+              class="font-bold lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] text-black font-figtree"
+            >
+              Go Live
+            </h3>
+            <p
+              class="font-figtree lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textSecondary lg:mt-[16px] mt-[12px]"
+            >
+              We'll work with you to get your profile perfect before launching
+              you on the platform and welcoming you to the community.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="md:hidden mt-[44px]">
+        <button
+          type="button"
+          class="spinBtn cursor-pointer bg-btnPrimary relative text-white text-base leading-5 py-2 mx-auto md:ml-0 min-h-[56px] min-w-[167px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+        >
+          <Image src={btnIcon} class="btnIcon w-5 h-5" alt="image" />
+          Join Boutee
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
