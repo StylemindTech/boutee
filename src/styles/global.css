@@ -528,7 +528,7 @@
   animation: float 4s ease-in-out infinite;
 } */
 
-[data-aos="line-animate"] {
+/* [data-aos="line-animate"] {
   transform: scaleY(0);
   transform-origin: top;
   transition: transform 2s ease;
@@ -536,8 +536,29 @@
 
 [data-aos="line-animate"].aos-animate {
   transform: scaleY(1);
-}
+} */
 
+[data-aos="line-animate"] .line-fill {
+    height: 0;
+    transition: height 1s ease;
+  }
+
+  [data-aos="line-animate"]:nth-child(1) .line-fill {
+    transition-delay: 2s;
+  }
+  [data-aos="line-animate"]:nth-child(2) .line-fill {
+    transition-delay: 0.5s;
+  }
+  [data-aos="line-animate"]:nth-child(3) .line-fill {
+    transition-delay: 0.6s;
+  }
+  [data-aos="line-animate"]:nth-child(4) .line-fill {
+    transition-delay: 0.8s;
+  }
+
+  [data-aos="line-animate"].aos-animate .line-fill {
+    height: 100%;
+  }
 
 
 
