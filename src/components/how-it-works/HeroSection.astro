@@ -1,23 +1,29 @@
 ---
 import { Image } from "astro:assets";
-import heroImg from "../../assets/Image/how-banner.png";
-import heroImgMobile from "../../assets/Image/how-banner-mobile.png";
+import heroImg from "../../assets/Image/user-img.jpg";
+import heroImg1 from "../../assets/Image/Heart.png";
+import "../../styles/how.css"
+import heroImgMobile from "../../assets/Image/ring-img.png";
 import btnIcon from "../../assets/icons/btn-icon.svg";
 import heroRating from "../../assets/icons/hero-rating.svg";
 ---
 
 <section class="md:py-[112px] pt-[40px]">
   <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
-    <div class="grid lg:grid-cols-2 lg:gap-20 gap-[48px] items-center">
+    <div class="grid xl:grid-cols-2 lg:gap-20 gap-[48px] items-center">
       <div>
         <h1
           class="md:text-[80px] text-[48px] text-center md:text-start leading-[42px] text-textPrimary font-black md:leading-[84px] font-figtree md:mb-6 mb-[16px]"
         >
-      Bespoke, made simple
+          Bespoke, made simple
         </h1>
 
-        <p class="md:text-xl text-[16px] text-center md:text-start leading-[20px] md:leading-[24px] text-textSecondary font-figtree mb-12">
-        Commissioning a ring should be exciting, not intimidating. We've broken down the entire process into clear, simple steps, so you know exactly what to expect from start to finish.
+        <p
+          class="md:text-xl text-[16px] text-center md:text-start leading-[20px] md:leading-[24px] text-textSecondary font-figtree mb-12"
+        >
+          Commissioning a ring should be exciting, not intimidating. We've
+          broken down the entire process into clear, simple steps, so you know
+          exactly what to expect from start to finish.
         </p>
         <button
           type="button"
@@ -27,11 +33,54 @@ import heroRating from "../../assets/icons/hero-rating.svg";
           Find Your Jeweller
         </button>
       </div>
+<div class="flex justify-center xl:justify-end relative   w-full">
+   <div
+        class="md:max-w-[600px] max-w-[327px] h-full min-h-[600px] relative w-full"
+      >
+        <div class="profile-img">
+          <Image src={heroImg} class="" alt="hero-image" />
+        </div>
 
-      <div class="flex justify-center lg:justify-end">
-        <Image src={heroImg} class="w-full h-full md:block hidden max-h-[600px] object-cover" alt="hero-image" />
-        <Image src={heroImgMobile} class="w-full h-full md:hidden" alt="hero-image" />
+        <!-- Ring Box -->
+        <div class="ring-box">
+          <Image
+            src={heroImgMobile}
+            class="object-cover ring-img"
+            alt="hero-image"
+          />
+          <div class="heart">
+            <Image
+              src={heroImg1}
+              class="w-[30.62px] h-[30.62px]"
+              alt="hero-image"
+            />
+          </div>
+        </div>
+
+        <!-- Chat Bubble -->
+        <div class="chat">
+          <p>
+            Hi, I really like your work and would love to order a ring from you.
+            I’ve attached a few examples of rings I like for reference. Could
+            you let me know how much something similar would cost and how long
+            it would take to make?
+          </p>
+          <button>Contact jeweller</button>
+        </div>
+
+        <!-- Accordion -->
+        <div class="accordion">
+          <h4>Budget range</h4>
+          <label><input type="radio" name="budget" /> &lt; £1500</label>
+          <label><input type="radio" name="budget" /> £1500 - £3000</label>
+          <label><input type="radio" name="budget" /> £3000 - £4500</label>
+          <label><input type="radio" name="budget" /> &gt; £4500</label>
+        </div>
+        <div class="layer-how"></div>
+        <div class="layer-how1"></div>
       </div>
+</div>
+     
     </div>
   </div>
 </section>

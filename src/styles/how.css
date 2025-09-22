@@ -1,0 +1,194 @@
+ .profile-img {
+   width: 321px;
+   height: 321px;
+   border-radius: 24px;
+   overflow: hidden;
+   transform: rotate(-3deg);
+   position: absolute;
+  top: 2.6875rem;
+left: 5rem;
+ }
+
+ .profile-img img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+ }
+
+ /* Ring box */
+ .ring-box {
+   position: absolute;
+top: 3.5625rem;
+right: 2.8125rem;
+   width: 154px;
+   z-index: -9;
+   height: 184px;
+   border-radius: 22.57px;
+   background: linear-gradient(#fff, #fff) padding-box,
+     linear-gradient(208.61deg, #EFA7F2 6.82%, #9B9FE8 90.78%) border-box;
+   border: 4px solid transparent;
+   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+   transform: rotate(10deg);
+ }
+
+ .ring-box .ring-img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   object-position: center;
+   border-radius: 20.57px;
+ }
+
+ .heart {
+   position: absolute;
+   bottom: -15px;
+   left: 50%;
+   transform: translateX(-50%);
+   width: 54.82px;
+   height: 54.82px;
+   background: linear-gradient(208.61deg, #EFA7F2 6.82%, #9B9FE8 90.78%);
+
+   border-radius: 50%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+ }
+
+ /* Chat bubble */
+ .chat {
+   position: absolute;
+ top: 19.5625rem;
+left: 1.1875rem;
+   max-width: 244px;
+   transform: rotate(-3.79deg);
+   z-index: -9;
+
+ }
+
+ .chat p {
+   border-radius: 17.07px;
+   width: 100%;
+   box-shadow: 0px 2.85px 5.69px 0px #1F21280F, 0px 1.42px 3.56px 0px #1F212805;
+   margin-bottom: 6.37px;
+   font-size: 11.79px;
+   line-height: 14.73px;
+   color: #171719;
+   padding: 10.42px 12.22px;
+ }
+
+ .chat button {
+   margin-top: 10px;
+   padding: 10px 16px;
+   background: linear-gradient(76deg, #B9F551 22.87%, #D7F650 74.01%);
+   height: 35.63px;
+   width: 100%;
+   border: none;
+   border-radius: 50px;
+   font-weight: bold;
+   cursor: pointer;
+   font-size: 11.79px;
+   line-height: 14.73px;
+ }
+
+ /* Accordion Box */
+ .accordion {
+   position: absolute;
+  top: 21.4375rem;
+left: 20.375rem;
+   width: 225px;
+   background: #fff;
+   border-radius: 21px;
+   padding: 12px;
+ }
+
+ .accordion h4 {
+   margin-bottom: 10px;
+   font-size: 10.36px;
+   font-weight: bold;
+ }
+
+ .accordion label {
+   display: block;
+   margin: 6.9px 0;
+   font-size: 9.21px;
+   line-height: 11.51px;
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   gap: 4.6px;
+ }
+
+ .accordion label input {
+   width: 11.51px;
+   height: 11.51px;
+ }
+
+ .layer-how {
+   width: 287px;
+   height: 202px;
+   transform: rotate(125deg);
+   background-color: #95C4F636;
+   filter: blur(78px);
+   position: absolute;
+ top: 16.4375rem;
+left: 14.8125rem;
+   z-index: -9;
+   pointer-events: none;
+ }
+
+ .layer-how1 {
+   width: 284px;
+   height: 190px;
+   background-color: #F702FF1C;
+   filter: blur(78px);
+   position: absolute;
+   top: 3rem;     
+left: 1.375rem;
+   z-index: -9;
+   pointer-events: none;
+ }
+
+ @media (max-width:767px){
+  .profile-img {
+    width: 211px;
+    height: 241px;
+        left: 1rem;
+  }
+  .ring-box {
+    top: 3.5625rem;
+    right: 0rem;
+    width: 124px;
+    height: 154px;
+  }
+  .chat {
+    position: absolute;
+    top: 15.5625rem;
+    left: -0.8125rem;
+    max-width: 150px;
+  }
+  .chat p {
+    border-radius: 14.07px;
+    font-size: 6.79px;
+    line-height: 10.73px;
+  }
+  .chat button {
+    height: 32.63px;
+    font-size: 9.79px;
+    padding: 0px;
+  }
+  .accordion {
+    top: 16.4375rem;
+    left: 9.375rem;
+    width: 175px;
+    border-radius: 15px;
+    padding: 10px;
+}
+.layer-how {
+    width: 187px;
+    height: 102px;
+    top: 16.4375rem;
+    left: 5.8125rem;
+}
+
+ }
