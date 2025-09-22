@@ -97,9 +97,9 @@ left: 1.1875rem;
   top: 21.4375rem;
 left: 20.375rem;
    width: 225px;
-   background: #fff;
+   /* background: #fff;
    border-radius: 21px;
-   padding: 12px;
+   padding: 12px; */
  }
 
  .accordion h4 {
@@ -181,8 +181,8 @@ left: 1.375rem;
     top: 16.4375rem;
     left: 9.375rem;
     width: 175px;
-    border-radius: 15px;
-    padding: 10px;
+    /* border-radius: 15px;
+    padding: 10px; */
 }
 .layer-how {
     width: 187px;

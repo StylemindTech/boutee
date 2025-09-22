@@ -4,6 +4,7 @@ import heroImg from "../../assets/Image/user-img.jpg";
 import heroImg1 from "../../assets/Image/Heart.png";
 import "../../styles/how.css"
 import heroImgMobile from "../../assets/Image/ring-img.png";
+import heroImgMobile1 from "../../assets/Image/SetHero.png";
 import btnIcon from "../../assets/icons/btn-icon.svg";
 import heroRating from "../../assets/icons/hero-rating.svg";
 ---
@@ -37,12 +38,12 @@ import heroRating from "../../assets/icons/hero-rating.svg";
    <div
         class="md:max-w-[600px] max-w-[327px] h-full min-h-[600px] relative w-full"
       >
-        <div class="profile-img">
+        <div class="profile-img floating rotate-[-3.73deg]" data-speed="0.2" data-float="2">
           <Image src={heroImg} class="" alt="hero-image" />
         </div>
 
         <!-- Ring Box -->
-        <div class="ring-box">
+        <div class="ring-box floating rotate-[10deg]" data-speed="0.6" data-float="2">
           <Image
             src={heroImgMobile}
             class="object-cover ring-img"
@@ -58,23 +59,28 @@ import heroRating from "../../assets/icons/hero-rating.svg";
         </div>
 
         <!-- Chat Bubble -->
-        <div class="chat">
-          <p>
+        <div class="chat floating" data-speed="0.6" data-float="1">
+          <p class="font-figtree">
             Hi, I really like your work and would love to order a ring from you.
             I’ve attached a few examples of rings I like for reference. Could
             you let me know how much something similar would cost and how long
             it would take to make?
           </p>
-          <button>Contact jeweller</button>
+          <button class="font-figtree">Contact jeweller</button>
         </div>
 
         <!-- Accordion -->
-        <div class="accordion">
-          <h4>Budget range</h4>
-          <label><input type="radio" name="budget" /> &lt; £1500</label>
-          <label><input type="radio" name="budget" /> £1500 - £3000</label>
-          <label><input type="radio" name="budget" /> £3000 - £4500</label>
-          <label><input type="radio" name="budget" /> &gt; £4500</label>
+        <div class="accordion floating" data-speed="0.3" data-float="4">
+          <!-- <h4 class="font-figtree">Budget range</h4>
+          <label class="font-figtree"><input type="radio" name="budget" /> &lt; £1500</label>
+          <label class="font-figtree"><input type="radio" name="budget" /> £1500 - £3000</label>
+          <label class="font-figtree"><input type="radio" name="budget" /> £3000 - £4500</label>
+          <label class="font-figtree"><input type="radio" name="budget" /> &gt; £4500</label> -->
+          <Image
+              src={heroImgMobile1 }
+              class="object-cover"
+              alt="hero-image"
+            />
         </div>
         <div class="layer-how"></div>
         <div class="layer-how1"></div>
