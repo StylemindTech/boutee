@@ -123,6 +123,26 @@ const RingStyleAnalyzer = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+
+  // Auto-scroll effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prevIndex) => {
+        const nextIndex = (prevIndex + 1) % ringImages.length; // Loop back to first ring
+        return nextIndex;
+      });
+    }, 3000); // Every 3 seconds
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [ringImages.length]);
+
+  // Update chart data whenever activeIndex changes
+  useEffect(() => {
+    setChartData(ringDataVectors[activeIndex]);
+  }, [activeIndex, ringDataVectors]);
+
+
+
   const radarOptions = {
     responsive: true,
     animation: { duration: 800 },
@@ -211,7 +231,7 @@ const RingStyleAnalyzer = () => {
               }}
               style={{
                 borderRadius: "12px",
-                padding: "1px",
+                padding: "2px",
                 background:
                   activeIndex === index
                     ? "linear-gradient(76deg, #B9F551 22.87%, #D7F650 74.01%)"
