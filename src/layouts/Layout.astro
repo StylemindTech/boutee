@@ -3,10 +3,6 @@ import Navbar from "../components/common/Navbar.astro";
 import Footer from "../components/common/Footer.astro";
 import "aos/dist/aos.css";
 import "../styles/global.css";
-import "../styles/ourJewellers.css";
-import "../styles/forJewellers.css";
-
-
 const { title = "Boutee - Home", description = "Find your perfect handcrafted ring by connecting directly with independent UK jewellers. Boutee helps you define your style, match with makers, and bring your ideas to life." } = Astro.props;
 ---
 
@@ -33,7 +29,7 @@ const { title = "Boutee - Home", description = "Find your perfect handcrafted ri
     <!-- Footer -->
     <Footer />
 
-    <!-- ✅ AOS init -->
+    <!-- AOS init -->
     <script>
       import AOS from "aos";
       AOS.init({
