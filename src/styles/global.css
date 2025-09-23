@@ -47,8 +47,39 @@
   --spacing-xs: 0.25rem;
 }
 
+
+/* Enable smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* For Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 10px;               /* scrollbar width */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;        /* track background */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #B9F551;  /* your brand color */
+  border-radius: 10px;
+  border: 2px solid #f1f1f1;  /* space around thumb */
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;                 /* "auto" or "thin" */
+  scrollbar-color: #B9F551 #f1f1f1;      /* thumb | track */
+}
+
+
+
+
 ::selection {
-  background-color: #d6f99a;
+  background-color: #D6F99A;
 }
 
 @layer utilities {
