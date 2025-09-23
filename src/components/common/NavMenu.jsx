@@ -115,7 +115,7 @@ export default function Header() {
 
         {/* Mobile Hamburger */}
         <div className="lg:hidden">
-          <button onClick={() => setIsOpen(true)} className="focus:outline-none">
+          <button onClick={() => setIsOpen(true)} className="focus:outline-none cursor-pointer">
             <img src={navMenu.src} alt="menu" />
           </button>
         </div>
@@ -147,9 +147,9 @@ export default function Header() {
                 <img src={mobileLogo.src} alt="Boutee logo" />
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="focus:outline-none"
+                  className="focus:outline-none cursor-pointer"
                 >
-                  <img src={closeMenuIcon.src} alt="close"  />
+                  <img src={closeMenuIcon.src} alt="close "/>
                 </button>
               </div>
 
