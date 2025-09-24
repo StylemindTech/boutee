@@ -21,7 +21,7 @@ export default defineConfig({
       apiVersion: "2025-01-28", // insert the current date to access the latest version of the API
       studioBasePath: '/studio',
       stega: {
-        studioUrl: "/studio",
+        studioUrl: "https://boutee.vercel.app/studio",
       },
     }),react()],
      output: "server",
