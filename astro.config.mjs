@@ -7,8 +7,11 @@ import react from '@astrojs/react';
 
 import sanity from "@sanity/astro";
 
+import vercel from '@astrojs/vercel';
+// import vercel from '@astrojs/vercel/server';
 // https://astro.build/config
 export default defineConfig({
+   output: "server", // important for SSR
   vite: {
     plugins: [tailwindcss()]
   },
@@ -23,5 +26,5 @@ export default defineConfig({
         studioUrl: "/studio",
       },
     }),react()],    
-    
+     adapter: vercel(),
 });
