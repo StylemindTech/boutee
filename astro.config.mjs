@@ -23,7 +23,6 @@ export default defineConfig({
       stega: {
         studioUrl: "/studio",
       },
-    }),react()],
-     output: "server",
+    }),react()],    
      adapter: vercel(),
 });
