@@ -17,10 +17,8 @@ export default defineConfig({
   },
 
   integrations: [sanity({
-      // projectId: 'q7yn2bfx',
-      // dataset: 'production',
-      projectId: import.meta.env.SANITY_PROJECT_ID, // server-side env variable
-      dataset: import.meta.env.SANITY_DATASET,
+      projectId: 'q7yn2bfx',
+      dataset: 'production',
       useCdn: true, // See note on using the CDN
       apiVersion: "2025-01-28", // insert the current date to access the latest version of the API
       studioBasePath: '/studio',
