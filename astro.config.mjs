@@ -7,6 +7,7 @@ import react from '@astrojs/react';
 
 import sanity from "@sanity/astro";
 
+import vercel from '@astrojs/vercel';
 // https://astro.build/config
 export default defineConfig({
   vite: {
@@ -23,4 +24,5 @@ export default defineConfig({
         studioUrl: "/studio",
       },
     }),react()],
+     adapter: vercel(),
 });
