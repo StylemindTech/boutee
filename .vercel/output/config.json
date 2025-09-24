@@ -20,12 +20,64 @@
 			"dest": "_render"
 		},
 		{
+			"src": "^/404/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/about-us/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/blog/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/contact-us/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/faq/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/for-jewellers/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/how-it-works/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/inspiration/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/our-jewellers/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/our-technology/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/post/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/privacy-policy/?$",
+			"dest": "_render"
+		},
+		{
 			"src": "^/studio(?:/(.*?))?/?$",
 			"dest": "_render"
 		},
 		{
+			"src": "^/$",
+			"dest": "_render"
+		},
+		{
 			"src": "^/.*$",
-			"dest": "/404.html",
+			"dest": "_render",
 			"status": 404
 		}
 	]

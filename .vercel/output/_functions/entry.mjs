@@ -1,6 +1,6 @@
 import { renderers } from './renderers.mjs';
 import { c as createExports, s as serverEntrypointModule } from './chunks/_@astrojs-ssr-adapter_Cm0crw01.mjs';
-import { manifest } from './manifest_DZp69wCV.mjs';
+import { manifest } from './manifest_B7wAMl3g.mjs';
 
 const serverIslandMap = new Map();;
 
@@ -16,10 +16,9 @@ const _page8 = () => import('./pages/inspiration.astro.mjs');
 const _page9 = () => import('./pages/our-jewellers.astro.mjs');
 const _page10 = () => import('./pages/our-technology.astro.mjs');
 const _page11 = () => import('./pages/post/_slug_.astro.mjs');
-const _page12 = () => import('./pages/post.astro.mjs');
-const _page13 = () => import('./pages/privacy-policy.astro.mjs');
-const _page14 = () => import('./pages/studio/_---params_.astro.mjs');
-const _page15 = () => import('./pages/index.astro.mjs');
+const _page12 = () => import('./pages/privacy-policy.astro.mjs');
+const _page13 = () => import('./pages/studio/_---params_.astro.mjs');
+const _page14 = () => import('./pages/index.astro.mjs');
 const pageMap = new Map([
     ["node_modules/astro/dist/assets/endpoint/generic.js", _page0],
     ["src/pages/404.astro", _page1],
@@ -33,10 +32,9 @@ const pageMap = new Map([
     ["src/pages/our-jewellers.astro", _page9],
     ["src/pages/our-technology.astro", _page10],
     ["src/pages/post/[slug].astro", _page11],
-    ["src/pages/post.astro", _page12],
-    ["src/pages/privacy-policy.astro", _page13],
-    ["node_modules/@sanity/astro/dist/studio/studio-route.astro", _page14],
-    ["src/pages/index.astro", _page15]
+    ["src/pages/privacy-policy.astro", _page12],
+    ["node_modules/@sanity/astro/dist/studio/studio-route.astro", _page13],
+    ["src/pages/index.astro", _page14]
 ]);
 
 const _manifest = Object.assign(manifest, {
@@ -47,7 +45,7 @@ const _manifest = Object.assign(manifest, {
     middleware: () => import('./_noop-middleware.mjs')
 });
 const _args = {
-    "middlewareSecret": "77af172b-2e7c-4ba9-914b-9b1d23edb8f1",
+    "middlewareSecret": "deb4e63a-4b1e-4c09-9324-b78d190ba30d",
     "skewProtection": false
 };
 const _exports = createExports(_manifest, _args);
