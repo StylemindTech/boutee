@@ -4,14 +4,12 @@ import type { SanityDocument } from "@sanity/client";
 import { loadQuery } from "../../sanity/lib/load-query";
 import BaseLayout from "../../layouts/Layout.astro";
 import { Image } from "astro:assets";
-import blog1 from "../../assets/Image/blog1.jpg";
 import rightShift from "../../assets/icons/right-shift.png";
 import badge from "../../assets/icons/Badge-blog.svg";
 import link from "../../assets/icons/Link.svg";
 import linkedin from "../../assets/icons/Linkedin.svg";
 import facebook from "../../assets/icons/Facebook.svg";
 import twitter from "../../assets/icons/X.svg";
-import dummyImage from "../../assets/Image/ContentDummy.png";
 import arrow from "../../assets/icons/ArrowRight.svg";
 import { urlForImage } from "../../sanity/lib/url-for-image";
 import PortableText from "../../components/PortableText.astro";
@@ -55,7 +53,7 @@ const { data: post } = await loadQuery({
   params,
 });
 
-console.log(post, "post");
+
 function formatDate(dateString: string) {
   return new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
