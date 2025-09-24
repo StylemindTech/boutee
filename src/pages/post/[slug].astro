@@ -1,0 +1,218 @@
+---
+// ./src/pages/post/[slug].astro
+import type { SanityDocument } from "@sanity/client";
+import { loadQuery } from "../../sanity/lib/load-query";
+import BaseLayout from "../../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import blog1 from "../../assets/Image/blog1.jpg";
+import rightShift from "../../assets/icons/right-shift.png";
+import badge from "../../assets/icons/Badge-blog.svg";
+import link from "../../assets/icons/Link.svg";
+import linkedin from "../../assets/icons/Linkedin.svg";
+import facebook from "../../assets/icons/Facebook.svg";
+import twitter from "../../assets/icons/X.svg";
+import dummyImage from "../../assets/Image/ContentDummy.png";
+import arrow from "../../assets/icons/ArrowRight.svg";
+import { urlForImage } from "../../sanity/lib/url-for-image";
+import PortableText from "../../components/PortableText.astro";
+export async function getStaticPaths() {
+  const { data: posts } = await loadQuery<SanityDocument[]>({
+    query: `*[_type == "post"]`,
+  });
+
+  return posts.map(({ slug }) => {
+    return {
+      params: {
+        slug: slug.current,
+      },
+    };
+  });
+}
+
+const { params } = Astro;
+
+const { data: post } = await loadQuery({
+  query: `*[_type == "post" && slug.current == $slug][0]{
+    title,
+    description,
+    slug,
+    "author": author->{
+      _id,
+      name,
+      image
+    },
+    "mainImage": mainImage{
+      ...,
+      "url": asset->url
+    },
+    "categories": categories[]->{
+      _id,
+      title
+    },
+    publishedAt,
+    body
+  }`,
+  params,
+});
+
+console.log(post, "post");
+function formatDate(dateString: string) {
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(dateString));
+}
+---
+
+<BaseLayout title="Boutee - Page not found">
+  <section class="md:pt-[112px] md:pb-[32px] pt-[24px]">
+    <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto pb-[8px]">
+      <div
+        class="flex flex-col justify-between lg:flex-row lg:gap-10 xl:gap-20"
+      >
+        <div class="flex flex-col justify-between mb-[48px] lg:mb-0">
+          <div class="pb-[20px] md:pb-[24px] mb-[24px] md:mb-[20px]">
+            <div
+              class="mb-[20px] md:mb-[24px] flex justify-start items-center gap-1"
+            >
+              <a
+                href="/blog"
+                class="font-figtree font-normal text-[16px] leading-[20px] text-textSecondary"
+                >Blog</a
+              ><Image src={rightShift} class="h-3 w-3" alt="hero-image" />
+              {
+                post.categories && (
+                  <span class="font-figtree font-normal text-[16px] leading-[20px] text-textSecondary capitalize">
+                    {post.categories.map((cat) => cat.title).join(", ")}
+                  </span>
+                )
+              }
+            </div>
+            <h1
+              class="font-figtree font-black text-textPrimary text-[32px] leading-[36px] md:text-[52px] md:leading-[56px]"
+            >
+              {post.title}
+            </h1>
+          </div>
+          <div>
+            <div
+              class="mb-[16px] md:mb-[32px] w-full flex items-center gap-[12px]"
+            >
+              <span
+                class="font-figtree font-normal text-sm leading-[18px] text-textSecondary"
+                >{formatDate(post.publishedAt)}</span
+              >
+              <Image src={badge} alt="blog image" class="h-2 w-2" />
+              <span
+                class="font-figtree font-normal text-sm leading-[18px] text-textSecondary"
+                >5 min read</span
+              >
+            </div>
+
+            <div>
+              <p
+                class="font-figtree font-normal text-[16px] leading-[20px] text-textPrimary mb-[16px]"
+              >
+                Share this post
+              </p>
+              <div class="flex items-center gap-2">
+                <a href="" class="h-9 w-9 rounded-[12px] p-2 bg-cardColor">
+                  <Image src={link} alt="blog image" class="h-5 w-5" /></a
+                >
+                <a href="" class="h-9 w-9 rounded-[12px] p-2 bg-cardColor">
+                  <Image src={facebook} alt="blog image" class="h-5 w-5" /></a
+                >
+                <a href="" class="h-9 w-9 rounded-[12px] p-2 bg-cardColor">
+                  <Image src={linkedin} alt="blog image" class="h-5 w-5" /></a
+                >
+                <a href="" class="h-9 w-9 rounded-[12px] p-2 bg-cardColor">
+                  <Image src={twitter} alt="blog image" class="h-5 w-5" /></a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <img
+            src={`${urlForImage(post.mainImage)}`}
+            alt={post.mainImage.alt || "blog image"}
+            class="rounded-[24px] xl:w-[600px] xl:h-[425px]"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  
+<section class="md:py-[80px] pt-[16px] pb-[48px]">
+  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+    <div class="flex flex-col justify-between lg:flex-row gap-10 lg:gap-20 xl:gap-[120px]">
+      <div
+        class="flex lg:hidden items-center w-full py-2 px-3 h-13 gap-1 bg-white border border-[#F2F3F7] acd-shadow rounded-[16px]"
+      >
+        <select
+          name="category"
+          id=""
+          class="w-full font-figtree font-bold text-[18px] leading-[22px] text-textPrimary outline-none"
+        >
+          <option value="" class="">Block 1</option>
+          <option value="">Block 2</option>
+          <option value="">Block 3</option>
+          <option value="">Block 4</option>
+        </select>
+      </div>
+
+<div class="flex flex-col font-figtree
+            [&>ul]:list-disc [&>ul]:list-inside
+            [&>ol]:list-decimal [&>ol]:list-inside
+            [&>blockquote]:border-l-4 [&>blockquote]:pl-4 [&>blockquote]:italic
+            [&>p]:mb-2">
+  <PortableText portableText={post.body} />
+</div>
+
+      <div class="hidden lg:block">
+        <h5
+          class="mb-[24px] font-figtree font-bold text-[20px] leading-[24px] text-textPrimary"
+        >
+          Table of contents
+        </h5>
+        <ul>
+          <li
+            class="mb-[8px] flex px-3 py-2 gap-2 items-center bg-cardColor text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
+          >
+            <Image src={arrow} class="h-5 w-5" alt="hero-image" />
+            <span class="font-figtree font-normal text-[16px] leading-[20px]"
+              >Block 1</span>
+          </li>
+          <li
+            class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
+          >
+            <Image src={arrow} class="h-5 w-5" alt="hero-image" />
+            <span class="font-figtree font-normal text-[16px] leading-[20px]"
+              >Block 2</span>
+          </li>
+          <li
+            class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
+          >
+            <Image src={arrow} class="h-5 w-5" alt="hero-image" />
+            <span class="font-figtree font-normal text-[16px] leading-[20px]"
+              >Block 3</span>
+          </li>
+          <li
+            class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
+          >
+            <Image src={arrow} class="h-5 w-5" alt="hero-image" />
+            <span class="font-figtree font-normal text-[16px] leading-[20px]"
+              >Block 4</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+</BaseLayout>

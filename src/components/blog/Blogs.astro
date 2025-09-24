@@ -11,109 +11,31 @@ import blog7 from "../../assets/Image/blog7.jpg";
 import blog8 from "../../assets/Image/blog8.jpg";
 import blog9 from "../../assets/Image/blog9.jpg";
 import blog10 from "../../assets/Image/blog10.jpg";
+import { urlForImage } from "../../sanity/lib/url-for-image";
 
-const blogData = [
-  {
-    id: 1,
-    title: "Blog title heading will go here",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.",
-    date: "12 Aug 2025",
-    readTime: "5 min read",
-    category: "Category",
-    image: blog1,
-  },
-  {
-    id: 2,
-    title: "Long long long long blog title heading will go here",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.",
-    date: "12 Aug 2025",
-    readTime: "5 min read",
-    category: "Category",
-    image: blog2,
-  },
-  {
-    id: 3,
-    title: "blog title heading will go here",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.",
-    date: "12 Aug 2025",
-    readTime: "5 min read",
-    category: "Category",
-    image: blog3,
-  },
-  {
-    id: 4,
-    title: "blog title heading will go here",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.",
-    date: "12 Aug 2025",
-    readTime: "5 min read",
-    category: "Category",
-    image: blog4,
-  },
-  {
-    id: 5,
-    title: "blog title heading will go here",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.",
-    date: "12 Aug 2025",
-    readTime: "5 min read",
-    category: "Category",
-    image: blog5,
-  },
-  {
-    id: 6,
-    title: "blog title heading will go here",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.",
-    date: "12 Aug 2025",
-    readTime: "5 min read",
-    category: "Category",
-    image: blog6,
-  },
-  {
-    id: 7,
-    title: "blog title heading will go here",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.",
-    date: "12 Aug 2025",
-    readTime: "5 min read",
-    category: "Category",
-    image: blog7,
-  },
-  {
-    id: 8,
-    title: "blog title heading will go here",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.",
-    date: "12 Aug 2025",
-    readTime: "5 min read",
-    category: "Category",
-    image: blog8,
-  },
-  {
-    id: 9,
-    title: "blog title heading will go here",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.",
-    date: "12 Aug 2025",
-    readTime: "5 min read",
-    category: "Category",
-    image: blog9,
-  },
-  {
-    id: 10,
-    title: "blog title heading will go here",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.",
-    date: "12 Aug 2025",
-    readTime: "5 min read",
-    category: "Category",
-    image: blog10,
-  },
-];
+
+import { loadQuery } from "../../sanity/lib/load-query";
+import type { SanityDocument } from "@sanity/client";
+
+// Sare posts fetch karo
+const { data: posts } = await loadQuery<SanityDocument[]>({
+  query: `*[_type == "post"] | order(publishedAt desc) {
+    title,
+    slug,
+    publishedAt,
+    description,
+    categories[]->{title,slug},
+    mainImage
+  }`,
+});
+function formatDate(dateString: string) {
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(dateString));
+}
+
 ---
 
 <section class="lg:py-[112px] py-[48px]">
@@ -189,39 +111,44 @@ const blogData = [
         <div
           class="lg:mb-[28px] md:col-span-2 lg:col-span-3 min-w-[240px] md:max-w-full rounded-[20px] border border-cardColor flex flex-col md:flex-row md:items-center md:bg-secondary md:border-secondary"
         >
-          <a href="/post">
-            <Image
-              src={blogData[0].image}
-              alt="blog image"
+          <a href={`/post/${posts[0].slug.current}`}>
+            <img
+              src={`${urlForImage(posts[0].mainImage)}`}
+              alt={posts[0].mainImage.alt || "blog image"}
               class="lg:rounded-[24px] rounded-[20px] mb-[8px] md:mb-0 md:w-[350px] lg:w-[440px] md:h-[280px] lg:h-[312px] object-cover"
             />
           </a>
           <div class="p-[12px] md:py-[24px] md:pl-[48px] md:pr-[32px]">
-            <span
-              class="inline-block grid place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree font-normal text-[10px] leading-[14px] text-textPrimary inline-block"
-              >{blogData[0].category}</span
-            >
-            <a href="/post"
+            {
+              posts[0].categories && (
+                <span class="inline-block grid uppercase place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree font-normal text-[10px] leading-[14px] text-textPrimary">
+                  {posts[0].categories.map((cat) => cat.title).join(", ")}
+                </span>
+              )
+            }
+            <a href={`/post/${posts[0].slug.current}`}
               ><h3
                 class="mt-[12px] mb-[8px] font-figtree font-bold text-textPrimary text-lg leading-[22px] lg:font-black lg:text-[32px] lg:leading-[36px]"
               >
-                {blogData[0].title}
+                {posts[0].title}
               </h3></a
             >
             <p
               class="lg:mb-[32px] mb-[16px] font-figtree font-normal text-textPrimary text-base leading-[20px] lg:text-[18px] lg:leading-[22px]"
             >
-              {blogData[0].description}
+              {posts[0].description}
             </p>
             <div class="w-full flex items-center gap-2">
               <span
                 class="font-figtree font-normal text-sm leading-[18px] text-textSecondary"
-                >{blogData[0].date}</span
+              >
+                {formatDate(posts[0].publishedAt)}</span
               >
               <Image src={badge} alt="blog image" class="h-2 w-2" />
               <span
                 class="font-figtree font-normal text-sm leading-[18px] text-textSecondary"
-                >{blogData[0].readTime}</span
+              >
+                5 min read</span
               >
             </div>
           </div>
@@ -229,21 +156,24 @@ const blogData = [
         <!-- blog2 -->
 
         {
-          blogData.slice(1).map((item) => (
+          posts.slice(1).map((item) => (
             <div class="min-w-[240px] rounded-[20px] border border-cardColor flex flex-col">
-              <a href="/post">
-                <Image
-                  src={item.image}
-                  alt="blog image"
+              <a href={`/post/${item.slug.current}`}>
+                <img
+                  src={`${urlForImage(item.mainImage)}`}
+                  alt={item.mainImage.alt || "blog image"}
                   class="lg:rounded-[24px] rounded-[20px] mb-[8px] min-h-[231px] md:min-h-[293px] md:max-h-[293px]"
                 />
               </a>
 
               <div class="p-[12px] lg:py-4 lg:px-5">
-                <span class="inline-block grid uppercase place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree font-normal text-[10px] leading-[14px] text-textPrimary inline-block">
-                  {item.category}
-                </span>
-                <a href="/post">
+                {item.categories && (
+                  <span class="inline-block grid uppercase place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree font-normal text-[10px] leading-[14px] text-textPrimary">
+                    {item.categories.map((cat) => cat.title).join("")}
+                  </span>
+                )}
+
+                <a href={`/post/${item.slug.current}`}>
                   <h3 class="mt-[12px] mb-[8px] font-figtree font-bold text-textPrimary text-lg leading-[22px] lg:font-black lg:text-[20px] lg:leading-[24px]">
                     {item.title}
                   </h3>
@@ -253,11 +183,11 @@ const blogData = [
                 </p>
                 <div class="w-full flex items-center gap-2">
                   <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
-                    {item.date}
+                    {formatDate(item.publishedAt)}
                   </span>
                   <Image src={badge} alt="blog image" class="h-2 w-2" />
                   <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
-                    {item.readTime}
+                    5 min read
                   </span>
                 </div>
               </div>

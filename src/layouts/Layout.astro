@@ -4,6 +4,10 @@ import Footer from "../components/common/Footer.astro";
 import "aos/dist/aos.css";
 import "../styles/global.css";
 const { title = "Boutee - Home", description = "Find your perfect handcrafted ring by connecting directly with independent UK jewellers. Boutee helps you define your style, match with makers, and bring your ideas to life." } = Astro.props;
+import { VisualEditing } from "@sanity/astro/visual-editing";
+
+const visualEditingEnabled =
+  import.meta.env.PUBLIC_SANITY_VISUAL_EDITING_ENABLED == "true";
 ---
 
 <!doctype html>
@@ -23,7 +27,9 @@ const { title = "Boutee - Home", description = "Find your perfect handcrafted ri
     <!-- Page Content -->
     <main class="flex-1">
       <slot />
+      <VisualEditing enabled={visualEditingEnabled} />
     </main>
+
 
     <!-- Footer -->
     <Footer />
