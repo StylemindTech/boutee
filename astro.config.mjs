@@ -24,5 +24,6 @@ export default defineConfig({
         studioUrl: "/studio",
       },
     }),react()],
+     output: "server",
      adapter: vercel(),
 });
