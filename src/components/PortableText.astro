@@ -9,40 +9,33 @@ const components = {
     image: PortableTextImage,
   },
   block: {
-    h1: ({ children }) => <h1 class="text-4xl font-bold mb-6">{children}</h1>,
-    h2: ({ children }) => <h2 class="text-3xl font-semibold mt-8 mb-4">{children}</h2>,
-    h3: ({ children }) => <h3 class="text-2xl font-semibold mt-6 mb-3">{children}</h3>,
-    h4: ({ children }) => <h4 class="text-xl font-medium mt-4 mb-2">{children}</h4>,
-    blockquote: ({ children }) => (
-      <blockquote class="border-l-4 pl-4 italic text-gray-700 mb-4">
-        {children}
-      </blockquote>
-    ),
-    normal: ({ children }) => <p class="mb-3">{children}</p>,
+    h1: ({ children }) => `<h1 class="text-4xl font-bold mb-6">${children.map(c => c.text || "").join("")}</h1>`,
+    h2: ({ children }) => `<h2 class="text-3xl font-semibold mt-8 mb-4">${children.map(c => c.text || "").join("")}</h2>`,
+    h3: ({ children }) => `<h3 class="text-2xl font-semibold mt-6 mb-3">${children.map(c => c.text || "").join("")}</h3>`,
+    h4: ({ children }) => `<h4 class="text-xl font-medium mt-4 mb-2">${children.map(c => c.text || "").join("")}</h4>`,
+    blockquote: ({ children }) =>
+      `<blockquote class="border-l-4 pl-4 italic text-gray-700 mb-4">${children.map(c => c.text || "").join("")}</blockquote>`,
+    normal: ({ children }) => `<p class="mb-3">${children.map(c => c.text || "").join("")}</p>`,
   },
   list: {
-    bullet: ({ children }) => <ul class="list-disc list-inside mb-3">{children}</ul>,
-    number: ({ children }) => <ol class="list-decimal list-inside mb-3">{children}</ol>,
+    bullet: ({ children }) => `<ul class="list-disc list-inside mb-3">${children.map(c => c.text || "").join("")}</ul>`,
+    number: ({ children }) => `<ol class="list-decimal list-inside mb-3">${children.map(c => c.text || "").join("")}</ol>`,
   },
   listItem: {
-    bullet: ({ children }) => <li>{children}</li>,
-    number: ({ children }) => <li>{children}</li>,
+    bullet: ({ children }) => `<li>${children.map(c => c.text || "").join("")}</li>`,
+    number: ({ children }) => `<li>${children.map(c => c.text || "").join("")}</li>`,
   },
   marks: {
-    strong: ({ children }) => <strong class="font-bold">{children}</strong>,
-    em: ({ children }) => <em class="italic">{children}</em>,
-    code: ({ children }) => (
-      <code class="bg-gray-100 px-1.5 py-0.5 rounded text-pink-600">
-        {children}
-      </code>
-    ),
-    link: ({ children, value }) => (
-      <a href={value?.href} target="_blank" class="text-blue-600 underline hover:text-blue-800">
-        {children}
-      </a>
-    ),
+    strong: ({ children }) => `<strong class="font-bold">${children.map(c => c.text || "").join("")}</strong>`,
+    em: ({ children }) => `<em class="italic">${children.map(c => c.text || "").join("")}</em>`,
+    code: ({ children }) =>
+      `<code class="bg-gray-100 px-1.5 py-0.5 rounded text-pink-600">${children.map(c => c.text || "").join("")}</code>`,
+    link: ({ children, value }) =>
+      `<a href="${value?.href}" target="_blank" class="text-blue-600 underline hover:text-blue-800">${children.map(c => c.text || "").join("")}</a>`,
   },
 };
 ---
 
-<PortableTextInternal value={portableText} components={components} />
+<div class="font-figtree">
+  <PortableTextInternal value={portableText} components={components} />
+</div>
