@@ -81,7 +81,6 @@ const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
     categoryIds: post.categories.map((cat: any) => cat._id),
   },
 });
-console.log(relatedPosts, 444);
 ---
 
 <BaseLayout title=`Boutee - ${post.title}`>
