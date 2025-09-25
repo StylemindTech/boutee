@@ -207,12 +207,12 @@ const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
     [&>ul>li]:before:rounded-[40px]
     [&>ul>li]:before:bg-[linear-gradient(189.75deg,#F2F3F7_-1.71%,#EDEAEF_100.1%)]
     [&>ul>li]:before:content-[counter(li-counter)]
-    [&>ul>li]:before:counter-increment-li-counter    
+    [&>ul>li]:before:counter-increment-li-counter
         [&>blockquote]:py-3 [&>blockquote]:px-4 [&>blockquote]:bg-secondary [&>blockquote]:border [&>blockquote]:border-[#F2F3F7] [&>blockquote]:rounded-[16px] [&>blockquote]:italic [&>blockquote]:font-figtree [&>blockquote]:font-medium [&>blockquote]:text-[16px] [&>blockquote]:lg:text-[18px] [&>blockquote]:lg:leading-[22px] [&>blockquote]:leading-[20px] [&>blockquote]:text-textSecondary
         [&>h1]:mb-[24px] [&>h1]:font-figtree [&>h1]:font-normal [&>h1]:text-[28px] [&>h1]:leading-[32px] [&>h1]:text-textPrimary [&>h1]:lg:text-[40px] [&>h1]:lg:leading-[44px]
         [&>h2]:mb-[24px] [&>h2]:font-figtree [&>h2]:font-black [&>h2]:text-[22px] [&>h2]:leading-[26px] [&>h2]:text-textPrimary [&>h2]:lg:text-[32px] [&>h2]:lg:leading-[36px]
         [&>h3]:mb-[24px] [&>h3]:font-figtree [&>h3]:font-black [&>h3]:text-[20px] [&>h3]:leading-[24px] [&>h3]:text-textPrimary [&>h3]:lg:text-[28px] [&>h3]:lg:leading-[32px]
-        [&>h4]:mb-[24px] [&>h4]:font-figtree [&>h4]:font-black [&>h4]:text-[18px] [&>h4]:leading-[20px] [&>h4]:text-textPrimary [&>h4]:lg:text-[24px] [&>h4]:lg:leading-[28px]       
+        [&>h4]:mb-[24px] [&>h4]:font-figtree [&>h4]:font-black [&>h4]:text-[18px] [&>h4]:leading-[20px] [&>h4]:text-textPrimary [&>h4]:lg:text-[24px] [&>h4]:lg:leading-[28px]
         [&>p]:mb-[16px] [&>p]:font-figtree [&>p]:font-normal [&>p]:text-[16px] [&>p]:lg:text-[18px] [&>p]:lg:leading-[22px] [&>p]:leading-[20px] [&>p]:text-textPrimary"
         >
           <PortableText portableText={post.body} />

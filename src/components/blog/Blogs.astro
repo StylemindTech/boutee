@@ -25,7 +25,6 @@ const { data: categories } = await loadQuery<SanityDocument[]>({
   }`,
 });
 
-
 function formatDate(dateString: string) {
   return new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
@@ -33,7 +32,6 @@ function formatDate(dateString: string) {
     year: "numeric",
   }).format(new Date(dateString));
 }
-
 ---
 
 <section class="lg:py-[112px] py-[48px]">
@@ -66,13 +64,11 @@ function formatDate(dateString: string) {
         </button>
         {
           categories.map((cat) => (
-            <button
-              class="h-10 py-2 px-6 rounded-xl cursor-pointer font-figtree font-normal text-sm leading-[18px] text-textSecondary capitalize"
-            >
+            <button class="h-10 py-2 px-6 rounded-xl cursor-pointer font-figtree font-normal text-sm leading-[18px] text-textSecondary capitalize">
               {cat.title}
             </button>
           ))
-        }      
+        }
       </div>
 
       <div
@@ -88,11 +84,7 @@ function formatDate(dateString: string) {
           class="w-full font-figtree font-normal text-sm leading-[18px] text-textSecondary outline-none capitalize"
         >
           <option value="" class="">All</option>
-          {
-            categories.map((cat) => (
-              <option value="">{cat.title}</option>
-            ))
-          }
+          {categories.map((cat) => <option value="">{cat.title}</option>)}
         </select>
       </div>
 
@@ -192,14 +184,11 @@ function formatDate(dateString: string) {
 
       {
         posts.length < 10 ? null : (
-          <button
-        class="font-figtree font-medium text-base leading-5 text-textPrimary bg-cardColor py-[14px] px-[24px] h-12 rounded-[16px] lg:w-fit lg:mx-auto cursor-pointer"
-      >
-        View more
-      </button>
+          <button class="font-figtree font-medium text-base leading-5 text-textPrimary bg-cardColor py-[14px] px-[24px] h-12 rounded-[16px] lg:w-fit lg:mx-auto cursor-pointer">
+            View more
+          </button>
         )
       }
-      
     </div>
   </div>
 </section>
