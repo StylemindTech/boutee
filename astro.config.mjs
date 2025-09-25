@@ -17,7 +17,7 @@ export default defineConfig({
   },
 
   integrations: [sanity({
-      projectId: 'q7yn2bfx',
+      projectId: 'cvbiknat',
       dataset: 'production',
       useCdn: true, // See note on using the CDN
       apiVersion: "2025-01-28", // insert the current date to access the latest version of the API
