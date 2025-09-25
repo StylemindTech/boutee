@@ -184,30 +184,40 @@ console.log(relatedPosts, 444);
           </select>
         </div>
 
-        <div class="flex flex-col font-figtree">
+        <div
+          class="blog_content__list flex flex-col font-figtree
+    
+    [&>ul]:custom-counter-list
+    [&>ul]:custom-counter-list
+    [&>ul]:counter-reset-li-counter
+    [&>ul>li]:relative
+    [&>ul>li]:mb-3
+    [&>ul>li]:pl-[40px]
+    [&>ul>li]:font-figtree
+    [&>ul>li]:font-normal
+    [&>ul>li]:text-base
+    [&>ul>li]:text-textPrimary
+    [&>ul>li]:before:absolute
+    [&>ul>li]:before:left-0
+    [&>ul>li]:before:top-0
+    [&>ul>li]:before:flex
+    [&>ul>li]:before:items-center
+    [&>ul>li]:before:justify-center
+    [&>ul>li]:before:h-[28px]
+    [&>ul>li]:before:w-[28px]
+    [&>ul>li]:before:rounded-[40px]
+    [&>ul>li]:before:bg-[linear-gradient(189.75deg,#F2F3F7_-1.71%,#EDEAEF_100.1%)]
+    [&>ul>li]:before:content-[counter(li-counter)]
+    [&>ul>li]:before:counter-increment-li-counter    
+        [&>blockquote]:py-3 [&>blockquote]:px-4 [&>blockquote]:bg-secondary [&>blockquote]:border [&>blockquote]:border-[#F2F3F7] [&>blockquote]:rounded-[16px] [&>blockquote]:italic [&>blockquote]:font-figtree [&>blockquote]:font-medium [&>blockquote]:text-[16px] [&>blockquote]:lg:text-[18px] [&>blockquote]:lg:leading-[22px] [&>blockquote]:leading-[20px] [&>blockquote]:text-textSecondary
+        [&>h1]:mb-[24px] [&>h1]:font-figtree [&>h1]:font-normal [&>h1]:text-[28px] [&>h1]:leading-[32px] [&>h1]:text-textPrimary [&>h1]:lg:text-[40px] [&>h1]:lg:leading-[44px]
+        [&>h2]:mb-[24px] [&>h2]:font-figtree [&>h2]:font-black [&>h2]:text-[22px] [&>h2]:leading-[26px] [&>h2]:text-textPrimary [&>h2]:lg:text-[32px] [&>h2]:lg:leading-[36px]
+        [&>h3]:mb-[24px] [&>h3]:font-figtree [&>h3]:font-black [&>h3]:text-[20px] [&>h3]:leading-[24px] [&>h3]:text-textPrimary [&>h3]:lg:text-[28px] [&>h3]:lg:leading-[32px]
+        [&>h4]:mb-[24px] [&>h4]:font-figtree [&>h4]:font-black [&>h4]:text-[18px] [&>h4]:leading-[20px] [&>h4]:text-textPrimary [&>h4]:lg:text-[24px] [&>h4]:lg:leading-[28px]       
+        [&>p]:mb-[16px] [&>p]:font-figtree [&>p]:font-normal [&>p]:text-[16px] [&>p]:lg:text-[18px] [&>p]:lg:leading-[22px] [&>p]:leading-[20px] [&>p]:text-textPrimary"
+        >
           <PortableText portableText={post.body} />
         </div>
-        <!-- <div
-  class="prose prose-lg max-w-none font-figtree
-    prose-p:mb-3
-    prose-ul:list-disc prose-ul:list-inside
-    prose-ol:list-decimal prose-ol:list-inside
-    prose-blockquote:border-l-4 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-700   
-    prose-a:text-blue-600 prose-a:underline hover:prose-a:text-blue-800
-    prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-pink-600
-    prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:rounded-lg prose-pre:p-4
-    prose-table:table-auto prose-table:border prose-th:border prose-td:border prose-th:px-3 prose-td:px-3 prose-th:py-2 prose-td:py-2
-    prose-h1:text-4xl prose-h1:font-bold prose-h1:mb-6
-    prose-h2:text-3xl prose-h2:font-semibold prose-h2:mt-8 prose-h2:mb-4
-    prose-h3:text-2xl prose-h3:font-semibold prose-h3:mt-6 prose-h3:mb-3
-    prose-h4:text-xl prose-h4:font-medium prose-h4:mt-4 prose-h4:mb-2
-    prose-h5:text-lg prose-h5:font-medium prose-h5:mt-3 prose-h5:mb-1
-    prose-h6:text-base prose-h6:font-medium prose-h6:uppercase prose-h6:tracking-wide
-  "
->
-  <PortableText value={post.body} />
-</div> -->
-
 
         <div class="hidden lg:block">
           <h5

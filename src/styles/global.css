@@ -882,3 +882,24 @@ html {
     transform: translateY(0);
   }
 }
+
+
+  .blog_content__list>ul>li:before {
+  content: counter(counter);
+  counter-increment: counter;
+  color:  #171719;
+  background-color: linear-gradient(189.75deg,#F2F3F7 -1.71%,#EDEAEF 100.1%);
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  border-radius: 50%;
+}
+
+body {
+  /* Set "counter" to 0 */
+  counter-reset: counter;
+}
+
