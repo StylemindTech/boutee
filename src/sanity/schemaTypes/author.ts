@@ -18,6 +18,11 @@ export const authorType = defineType({
       },
     }),
     defineField({
+      name: "profession",  // <-- New Field
+      type: "string",
+      description: "Author's profession, e.g., Web Developer",
+    }),
+    defineField({
       name: "image",
       type: "image",
       options: {
@@ -46,6 +51,7 @@ export const authorType = defineType({
   preview: {
     select: {
       title: "name",
+      subtitle: "profession", // <-- show profession in Sanity preview
       media: "image",
     },
   },

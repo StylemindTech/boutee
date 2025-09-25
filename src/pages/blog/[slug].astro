@@ -81,6 +81,25 @@ const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
     categoryIds: post.categories.map((cat: any) => cat._id),
   },
 });
+
+
+const extractHeadings = (content) => {
+  return content
+    .filter(
+      (block) =>
+        block._type === "block" &&
+        (block.style === "h1" || block.style === "h2")
+    )
+    .map((block) => ({
+      id: block._key,
+      text: block.children.map((child) => child.text).join(""),
+      level: block.style === "h1" ? 1 : 2,
+    }));
+};
+
+const toc = extractHeadings(post.body);
+
+
 ---
 
 <BaseLayout title=`Boutee - ${post.title}`>
@@ -176,10 +195,18 @@ const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
             id=""
             class="w-full font-figtree font-bold text-[18px] leading-[22px] text-textPrimary outline-none"
           >
-            <option value="" class="">Block 1</option>
-            <option value="">Block 2</option>
-            <option value="">Block 3</option>
-            <option value="">Block 4</option>
+          {
+            toc?.length === 0 ? (
+              <option value="" class="">No headings found</option>
+            ) : (
+              toc?.map((heading) => (
+                <option value={heading?.id} class="">
+                  {heading?.text}
+                </option>
+              ))
+            )
+          }
+           
           </select>
         </div>
 
@@ -218,6 +245,9 @@ const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
           <PortableText portableText={post.body} />
         </div>
 
+
+    
+
         <div class="hidden lg:block">
           <h5
             class="mb-[24px] font-figtree font-bold text-[20px] leading-[24px] text-textPrimary"
@@ -225,41 +255,28 @@ const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
             Table of contents
           </h5>
           <ul>
-            <li
-              class="mb-[8px] flex px-3 py-2 gap-2 items-center bg-cardColor text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
-            >
-              <Image src={arrow} class="h-5 w-5" alt="hero-image" />
-              <span class="font-figtree font-normal text-[16px] leading-[20px]"
-                >Block 1</span
-              >
-            </li>
-            <li
+            {
+              toc?.length === 0 ? (
+                <p class="font-figtree font-normal text-base leading-[20px] text-textPrimary">
+                  No headings found.
+                </p>
+              ) : (
+                toc?.map((heading) => (
+                   <li
               class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
             >
               <Image src={arrow} class="h-5 w-5" alt="hero-image" />
               <span class="font-figtree font-normal text-[16px] leading-[20px]"
-                >Block 2</span
-              >
+                >{heading.text}</span              >
             </li>
-            <li
-              class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
-            >
-              <Image src={arrow} class="h-5 w-5" alt="hero-image" />
-              <span class="font-figtree font-normal text-[16px] leading-[20px]"
-                >Block 3</span
-              >
-            </li>
-            <li
-              class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
-            >
-              <Image src={arrow} class="h-5 w-5" alt="hero-image" />
-              <span class="font-figtree font-normal text-[16px] leading-[20px]"
-                >Block 4</span
-              >
-            </li>
+                ))  
+              )
+            }
+           
           </ul>
         </div>
       </div>
+  
     </div>
   </section>
 
