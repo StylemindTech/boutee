@@ -53,7 +53,6 @@ const { data: post } = await loadQuery({
   params,
 });
 
-
 function formatDate(dateString: string) {
   return new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
@@ -61,9 +60,31 @@ function formatDate(dateString: string) {
     year: "numeric",
   }).format(new Date(dateString));
 }
+
+const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
+  query: `*[_type == "post" 
+    && slug.current != $slug 
+    && count(categories[@._ref in $categoryIds]) > 0] 
+    | order(publishedAt desc)[0...3]{
+      title,
+      slug,
+      publishedAt,
+      description,
+      mainImage,
+      "categories": categories[]->{
+        _id,
+        title
+      }
+    }`,
+  params: {
+    slug: post.slug.current,
+    categoryIds: post.categories.map((cat: any) => cat._id),
+  },
+});
+console.log(relatedPosts, 444);
 ---
 
-<BaseLayout title="Boutee - Page not found">
+<BaseLayout title=`Boutee - ${post.title}`>
   <section class="md:pt-[112px] md:pb-[32px] pt-[24px]">
     <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto pb-[8px]">
       <div
@@ -143,74 +164,150 @@ function formatDate(dateString: string) {
     </div>
   </section>
 
-
-
-
-  
-<section class="md:py-[80px] pt-[16px] pb-[48px]">
-  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
-    <div class="flex flex-col justify-between lg:flex-row gap-10 lg:gap-20 xl:gap-[120px]">
+  <section class="md:py-[80px] pt-[16px] pb-[48px]">
+    <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
       <div
-        class="flex lg:hidden items-center w-full py-2 px-3 h-13 gap-1 bg-white border border-[#F2F3F7] acd-shadow rounded-[16px]"
+        class="flex flex-col justify-between lg:flex-row gap-10 lg:gap-20 xl:gap-[120px]"
       >
-        <select
-          name="category"
-          id=""
-          class="w-full font-figtree font-bold text-[18px] leading-[22px] text-textPrimary outline-none"
+        <div
+          class="flex lg:hidden items-center w-full py-2 px-3 h-13 gap-1 bg-white border border-[#F2F3F7] acd-shadow rounded-[16px]"
         >
-          <option value="" class="">Block 1</option>
-          <option value="">Block 2</option>
-          <option value="">Block 3</option>
-          <option value="">Block 4</option>
-        </select>
-      </div>
+          <select
+            name="category"
+            id=""
+            class="w-full font-figtree font-bold text-[18px] leading-[22px] text-textPrimary outline-none"
+          >
+            <option value="" class="">Block 1</option>
+            <option value="">Block 2</option>
+            <option value="">Block 3</option>
+            <option value="">Block 4</option>
+          </select>
+        </div>
 
-<div class="flex flex-col font-figtree
+        <div
+          class="flex flex-col font-figtree
             [&>ul]:list-disc [&>ul]:list-inside
             [&>ol]:list-decimal [&>ol]:list-inside
             [&>blockquote]:border-l-4 [&>blockquote]:pl-4 [&>blockquote]:italic
-            [&>p]:mb-2">
-  <PortableText portableText={post.body} />
-</div>
-
-      <div class="hidden lg:block">
-        <h5
-          class="mb-[24px] font-figtree font-bold text-[20px] leading-[24px] text-textPrimary"
+            [&>p]:mb-2"
         >
-          Table of contents
-        </h5>
-        <ul>
-          <li
-            class="mb-[8px] flex px-3 py-2 gap-2 items-center bg-cardColor text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
+          <PortableText portableText={post.body} />
+        </div>
+
+        <div class="hidden lg:block">
+          <h5
+            class="mb-[24px] font-figtree font-bold text-[20px] leading-[24px] text-textPrimary"
           >
-            <Image src={arrow} class="h-5 w-5" alt="hero-image" />
-            <span class="font-figtree font-normal text-[16px] leading-[20px]"
-              >Block 1</span>
-          </li>
-          <li
-            class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
-          >
-            <Image src={arrow} class="h-5 w-5" alt="hero-image" />
-            <span class="font-figtree font-normal text-[16px] leading-[20px]"
-              >Block 2</span>
-          </li>
-          <li
-            class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
-          >
-            <Image src={arrow} class="h-5 w-5" alt="hero-image" />
-            <span class="font-figtree font-normal text-[16px] leading-[20px]"
-              >Block 3</span>
-          </li>
-          <li
-            class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
-          >
-            <Image src={arrow} class="h-5 w-5" alt="hero-image" />
-            <span class="font-figtree font-normal text-[16px] leading-[20px]"
-              >Block 4</span>
-          </li>
-        </ul>
+            Table of contents
+          </h5>
+          <ul>
+            <li
+              class="mb-[8px] flex px-3 py-2 gap-2 items-center bg-cardColor text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
+            >
+              <Image src={arrow} class="h-5 w-5" alt="hero-image" />
+              <span class="font-figtree font-normal text-[16px] leading-[20px]"
+                >Block 1</span
+              >
+            </li>
+            <li
+              class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
+            >
+              <Image src={arrow} class="h-5 w-5" alt="hero-image" />
+              <span class="font-figtree font-normal text-[16px] leading-[20px]"
+                >Block 2</span
+              >
+            </li>
+            <li
+              class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
+            >
+              <Image src={arrow} class="h-5 w-5" alt="hero-image" />
+              <span class="font-figtree font-normal text-[16px] leading-[20px]"
+                >Block 3</span
+              >
+            </li>
+            <li
+              class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
+            >
+              <Image src={arrow} class="h-5 w-5" alt="hero-image" />
+              <span class="font-figtree font-normal text-[16px] leading-[20px]"
+                >Block 4</span
+              >
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <section class="lg:py-[112px] py-[48px]">
+    <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+      <div class="lg:mb-[80px] mb-[24px]">
+        <div class="flex justify-between items-center w-full">
+          <h2
+            class="lg:text-[52px] text-center md:text-start w-full text-[32px] lg:leading-[56px] leading-[36px] font-black font-figtree text-textPrimary"
+          >
+            Related posts
+          </h2>
+          <a
+            href="/blog"
+            class="hidden sm:flex font-figtree font-medium text-base w-[104px] leading-5 text-textPrimary bg-cardColor py-[0px] text-center items-center justify-center h-12 rounded-[16px] cursor-pointer"
+          >
+            View all
+          </a>
+        </div>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-[40px] gap-[20px]">
+        {
+          relatedPosts.length === 0 ? (
+            <p class="font-figtree font-normal text-base leading-[20px] text-textPrimary">
+              No related posts found.
+            </p>
+          ) : (
+            relatedPosts.map((post) => (
+              <div class="min-w-[240px] rounded-[20px] border border-cardColor flex flex-col">
+                <a href={`/post/${post.slug.current}`}>
+                  <img
+                    src={`${urlForImage(post.mainImage)}`}
+                    alt={post.mainImage.alt || "blog image"}
+                    class="rounded-[24px] mb-[8px] min-h-[231px] md:min-h-[293px] md:max-h-[293px]"
+                  />
+                </a>
+
+                <div class="p-[12px] lg:py-4 lg:px-5">
+                  {post.categories && (
+                    <span class="inline-block grid uppercase place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree font-normal text-[10px] leading-[14px] text-textPrimary">
+                      {post.categories.map((cat) => cat.title).join(", ")}
+                    </span>
+                  )}
+                  <a href={`/post/${post.slug.current}`}>
+                    <h3 class="mt-[12px] mb-[8px] font-figtree font-bold text-textPrimary text-lg leading-[22px] lg:font-black lg:text-[20px] lg:leading-[24px]">
+                      {post.title}
+                    </h3>
+                  </a>
+                  <p class="line-clamp-2 lg:mb-[32px] mb-[16px] font-figtree font-normal text-textPrimary text-base leading-[20px] lg:text-[18px] lg:leading-[22px]">
+                    {post.description}
+                  </p>
+                  <div class="w-full flex items-center gap-2">
+                    <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
+                      {formatDate(post.publishedAt)}
+                    </span>
+                    <Image src={badge} alt="blog image" class="h-2 w-2" />
+                    <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
+                      5 min read
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))
+          )
+        }
+      </div>
+
+      <button
+        class="mt-[24px] w-full sm:hidden font-figtree font-medium text-base leading-5 text-textPrimary bg-cardColor py-[14px] px-[24px] h-12 rounded-[16px] cursor-pointer"
+      >
+        View all
+      </button>
+    </div>
+  </section>
 </BaseLayout>

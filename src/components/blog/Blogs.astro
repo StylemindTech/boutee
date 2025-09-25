@@ -1,19 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import badge from "../../assets/icons/Badge-blog.svg";
-import blog1 from "../../assets/Image/blog1.jpg";
-import blog2 from "../../assets/Image/blog2.jpg";
-import blog3 from "../../assets/Image/blog3.jpg";
-import blog4 from "../../assets/Image/blog4.jpg";
-import blog5 from "../../assets/Image/blog5.jpg";
-import blog6 from "../../assets/Image/blog6.jpg";
-import blog7 from "../../assets/Image/blog7.jpg";
-import blog8 from "../../assets/Image/blog8.jpg";
-import blog9 from "../../assets/Image/blog9.jpg";
-import blog10 from "../../assets/Image/blog10.jpg";
 import { urlForImage } from "../../sanity/lib/url-for-image";
-
-
 import { loadQuery } from "../../sanity/lib/load-query";
 import type { SanityDocument } from "@sanity/client";
 
@@ -28,6 +16,16 @@ const { data: posts } = await loadQuery<SanityDocument[]>({
     mainImage
   }`,
 });
+
+const { data: categories } = await loadQuery<SanityDocument[]>({
+  query: `*[_type == "category"] | order(title asc) {
+    _id,
+    title,
+    description
+  }`,
+});
+
+
 function formatDate(dateString: string) {
   return new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
@@ -66,21 +64,15 @@ function formatDate(dateString: string) {
         >
           View all
         </button>
-        <button
-          class="h-10 py-2 px-6 rounded-xl cursor-pointer font-figtree font-normal text-sm leading-[18px] text-textSecondary"
-        >
-          Category one
-        </button>
-        <button
-          class="h-10 py-2 px-6 rounded-xl cursor-pointer font-figtree font-normal text-sm leading-[18px] text-textSecondary"
-        >
-          Category two
-        </button>
-        <button
-          class="h-10 py-2 px-6 rounded-xl cursor-pointer font-figtree font-normal text-sm leading-[18px] text-textSecondary"
-        >
-          Category three
-        </button>
+        {
+          categories.map((cat) => (
+            <button
+              class="h-10 py-2 px-6 rounded-xl cursor-pointer font-figtree font-normal text-sm leading-[18px] text-textSecondary capitalize"
+            >
+              {cat.title}
+            </button>
+          ))
+        }      
       </div>
 
       <div
@@ -93,12 +85,14 @@ function formatDate(dateString: string) {
         <select
           name="category"
           id=""
-          class="w-full font-figtree font-normal text-sm leading-[18px] text-textSecondary outline-none"
+          class="w-full font-figtree font-normal text-sm leading-[18px] text-textSecondary outline-none capitalize"
         >
           <option value="" class="">All</option>
-          <option value="">Category one</option>
-          <option value="">Category two</option>
-          <option value="">Category three</option>
+          {
+            categories.map((cat) => (
+              <option value="">{cat.title}</option>
+            ))
+          }
         </select>
       </div>
 
@@ -196,11 +190,16 @@ function formatDate(dateString: string) {
         }
       </div>
 
-      <button
+      {
+        posts.length < 10 ? null : (
+          <button
         class="font-figtree font-medium text-base leading-5 text-textPrimary bg-cardColor py-[14px] px-[24px] h-12 rounded-[16px] lg:w-fit lg:mx-auto cursor-pointer"
       >
         View more
       </button>
+        )
+      }
+      
     </div>
   </div>
 </section>
