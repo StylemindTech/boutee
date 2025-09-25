@@ -184,7 +184,7 @@ console.log(relatedPosts, 444);
           </select>
         </div>
 
-        <div
+        <!-- <div
           class="flex flex-col font-figtree
             [&>ul]:list-disc [&>ul]:list-inside
             [&>ol]:list-decimal [&>ol]:list-inside
@@ -192,7 +192,28 @@ console.log(relatedPosts, 444);
             [&>p]:mb-2"
         >
           <PortableText portableText={post.body} />
-        </div>
+        </div> -->
+        <div
+  class="prose prose-lg max-w-none font-figtree
+    prose-p:mb-3
+    prose-ul:list-disc prose-ul:list-inside
+    prose-ol:list-decimal prose-ol:list-inside
+    prose-blockquote:border-l-4 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-700   
+    prose-a:text-blue-600 prose-a:underline hover:prose-a:text-blue-800
+    prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-pink-600
+    prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:rounded-lg prose-pre:p-4
+    prose-table:table-auto prose-table:border prose-th:border prose-td:border prose-th:px-3 prose-td:px-3 prose-th:py-2 prose-td:py-2
+    prose-h1:text-4xl prose-h1:font-bold prose-h1:mb-6
+    prose-h2:text-3xl prose-h2:font-semibold prose-h2:mt-8 prose-h2:mb-4
+    prose-h3:text-2xl prose-h3:font-semibold prose-h3:mt-6 prose-h3:mb-3
+    prose-h4:text-xl prose-h4:font-medium prose-h4:mt-4 prose-h4:mb-2
+    prose-h5:text-lg prose-h5:font-medium prose-h5:mt-3 prose-h5:mb-1
+    prose-h6:text-base prose-h6:font-medium prose-h6:uppercase prose-h6:tracking-wide
+  "
+>
+  <PortableText value={post.body} />
+</div>
+
 
         <div class="hidden lg:block">
           <h5
