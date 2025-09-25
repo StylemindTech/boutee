@@ -97,7 +97,7 @@ function formatDate(dateString: string) {
         <div
           class="lg:mb-[28px] md:col-span-2 lg:col-span-3 min-w-[240px] md:max-w-full rounded-[20px] border border-cardColor flex flex-col md:flex-row md:items-center md:bg-secondary md:border-secondary"
         >
-          <a href={`/post/${posts[0].slug.current}`}>
+          <a href={`/blog/${posts[0].slug.current}`}>
             <img
               src={`${urlForImage(posts[0].mainImage)}`}
               alt={posts[0].mainImage.alt || "blog image"}
@@ -112,7 +112,7 @@ function formatDate(dateString: string) {
                 </span>
               )
             }
-            <a href={`/post/${posts[0].slug.current}`}
+            <a href={`/blog/${posts[0].slug.current}`}
               ><h3
                 class="mt-[12px] mb-[8px] font-figtree font-bold text-textPrimary text-lg leading-[22px] lg:font-black lg:text-[32px] lg:leading-[36px]"
               >
@@ -144,7 +144,7 @@ function formatDate(dateString: string) {
         {
           posts.slice(1).map((item) => (
             <div class="min-w-[240px] rounded-[20px] border border-cardColor flex flex-col">
-              <a href={`/post/${item.slug.current}`}>
+              <a href={`/blog/${item.slug.current}`}>
                 <img
                   src={`${urlForImage(item.mainImage)}`}
                   alt={item.mainImage.alt || "blog image"}
@@ -159,7 +159,7 @@ function formatDate(dateString: string) {
                   </span>
                 )}
 
-                <a href={`/post/${item.slug.current}`}>
+                <a href={`/blog/${item.slug.current}`}>
                   <h3 class="mt-[12px] mb-[8px] font-figtree font-bold text-textPrimary text-lg leading-[22px] lg:font-black lg:text-[20px] lg:leading-[24px]">
                     {item.title}
                   </h3>

@@ -289,7 +289,7 @@ const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
           ) : (
             relatedPosts.map((post) => (
               <div class="min-w-[240px] rounded-[20px] border border-cardColor flex flex-col">
-                <a href={`/post/${post.slug.current}`}>
+                <a href={`/blog/${post.slug.current}`}>
                   <img
                     src={`${urlForImage(post.mainImage)}`}
                     alt={post.mainImage.alt || "blog image"}
@@ -303,7 +303,7 @@ const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
                       {post.categories.map((cat) => cat.title).join(", ")}
                     </span>
                   )}
-                  <a href={`/post/${post.slug.current}`}>
+                  <a href={`/blog/${post.slug.current}`}>
                     <h3 class="mt-[12px] mb-[8px] font-figtree font-bold text-textPrimary text-lg leading-[22px] lg:font-black lg:text-[20px] lg:leading-[24px]">
                       {post.title}
                     </h3>
