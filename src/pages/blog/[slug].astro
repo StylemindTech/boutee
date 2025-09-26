@@ -179,11 +179,15 @@ function calculateReadTime(content: any[]): string {
             </div>
 
             {post?.mainImage && (
+              // <img
+              //   src={`${urlForImage(post.mainImage)}`}
+              //   alt={post?.mainImage?.alt || "blog image"}
+              //   class="rounded-[24px] w-full lg:min-w-[500px] lg:h-[380px] xl:min-w-[600px] xl:h-[425px]"
+              // />
               <img
-                src={`${urlForImage(post.mainImage)}`}
-                alt={post?.mainImage?.alt || "blog image"}
-                class="rounded-[24px] w-full lg:min-w-[500px] lg:h-[380px] xl:min-w-[600px] xl:h-[425px]"
-              />
+    src={`${urlForImage(post.mainImage)}`}
+    alt={post?.mainImage?.alt || "blog image"}
+    class="rounded-[24px] w-full h-auto object-cover max-w-xl lg:max-w-[500px] xl:max-w-[600px]" />
             )}
           </div>
         </div>
