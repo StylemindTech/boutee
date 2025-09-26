@@ -107,12 +107,14 @@ function calculateReadTime(body: any[]): string {
           class="w-full font-figtree font-normal text-sm leading-[18px] text-textSecondary outline-none capitalize"
         >
           <option value="all">All</option>
-          {categories?.map(
-            (cat) =>
-              cat?.slug?.current && (
-                <option value={cat?.slug?.current}>{cat?.title}</option>
-              )
-          )}
+         {categories?.map(
+      (cat) =>
+        cat?.title && (
+          <option value={cat.title}>
+            {cat.title}
+          </option>
+        )
+    )}
         </select>
       </div>
 
