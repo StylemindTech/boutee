@@ -3,6 +3,15 @@
 @import "tw-animate-css";
 @import "aos/dist/aos.css";
 
+@font-face {
+  font-family: "PPRadioGrotesk";
+  src:
+    url("/fonts/PPRadioGrotesk-Black.otf") format("otf"),
+    url("/fonts/PPRadioGrotesk-Black.ttf") format("ttf"),
+    url("/fonts/PPRadioGrotesk-Black.woff") format("woff"),
+    url("/fonts/PPRadioGrotesk-Black.woff2") format("woff2");
+}
+
 /* 🎨 Custom Theme */
 @theme {
   /* Colors */
@@ -16,26 +25,18 @@
 
   /* Fonts */
   --font-figtree: "Figtree", "sans-serif";
+  --font-ppradio: "PPRadioGrotesk", "Figtree", "sans-serif";
 
   /* Font Sizes */
-  --text-xs: 0.75rem;
-  /* 12px */
-  --text-sm: 0.875rem;
-  /* 14px */
-  --text-base: 1rem;
-  /* 16px */
-  --text-lg: 1.125rem;
-  /* 18px */
-  --text-xl: 1.25rem;
-  /* 20px */
-  --text-2xl: 1.5rem;
-  /* 24px */
-  --text-3xl: 1.875rem;
-  /* 30px */
-  --text-4xl: 2.25rem;
-  /* 36px */
-  --text-5xl: 3rem;
-  /* 48px */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5rem; /* 24px */
+  --text-3xl: 1.875rem; /* 30px */
+  --text-4xl: 2.25rem; /* 36px */
+  --text-5xl: 3rem; /* 48px */
 
   /* Radius */
   --radius-20px: 20px;
@@ -47,7 +48,6 @@
   --spacing-xs: 0.25rem;
 }
 
-
 /* Enable smooth scrolling */
 html {
   scroll-behavior: smooth;
@@ -55,31 +55,28 @@ html {
 
 /* For Webkit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-  width: 10px;               /* scrollbar width */
+  width: 10px; /* scrollbar width */
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;        /* track background */
+  background: #f1f1f1; /* track background */
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #B9F551;  /* your brand color */
+  background-color: #b9f551; /* your brand color */
   border-radius: 10px;
-  border: 2px solid #f1f1f1;  /* space around thumb */
+  border: 2px solid #f1f1f1; /* space around thumb */
 }
 
 /* For Firefox */
 * {
-  scrollbar-width: thin;                 /* "auto" or "thin" */
-  scrollbar-color: #B9F551 #f1f1f1;      /* thumb | track */
+  scrollbar-width: thin; /* "auto" or "thin" */
+  scrollbar-color: #b9f551 #f1f1f1; /* thumb | track */
 }
 
-
-
-
 ::selection {
-  background-color: #D6F99A;
+  background-color: #d6f99a;
 }
 
 @layer utilities {
@@ -883,12 +880,11 @@ html {
   }
 }
 
-
-  .blog_content__list>ul>li:before {
+.blog_content__list > ul > li:before {
   content: counter(counter);
   counter-increment: counter;
-  color:  #171719;
-  background-color: linear-gradient(189.75deg,#F2F3F7 -1.71%,#EDEAEF 100.1%);
+  color: #171719;
+  background-color: linear-gradient(189.75deg, #f2f3f7 -1.71%, #edeaef 100.1%);
   display: inline-flex;
   width: 28px;
   height: 28px;
@@ -902,4 +898,3 @@ body {
   /* Set "counter" to 0 */
   counter-reset: counter;
 }
-
