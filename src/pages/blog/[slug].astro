@@ -140,7 +140,7 @@ function calculateReadTime(content: any[]): string {
                     </span>
                   )}
                 </div>
-                <h1 class="font-figtree font-black text-textPrimary text-[32px] leading-[36px] md:text-[52px] md:leading-[56px]">
+                <h1 class="font-ppradio font-black text-textPrimary text-[32px] leading-[36px] md:text-[52px] md:leading-[56px]">
                   {post?.title}
                 </h1>
               </div>
@@ -231,10 +231,10 @@ function calculateReadTime(content: any[]): string {
               [&>ul>li]:before:content-[counter(li-counter)]
               [&>ul>li]:before:counter-increment-li-counter
               [&>blockquote]:py-3 [&>blockquote]:px-4 [&>blockquote]:bg-secondary [&>blockquote]:border [&>blockquote]:border-[#F2F3F7] [&>blockquote]:rounded-[16px] [&>blockquote]:italic [&>blockquote]:font-figtree [&>blockquote]:font-medium [&>blockquote]:text-[16px] [&>blockquote]:lg:text-[18px] [&>blockquote]:lg:leading-[22px] [&>blockquote]:leading-[20px] [&>blockquote]:text-textSecondary
-              [&>h1]:mb-[24px] [&>h1]:text-[28px] [&>h1]:lg:text-[40px]
-              [&>h2]:mb-[24px] [&>h2]:text-[22px] [&>h2]:lg:text-[32px]
-              [&>h3]:mb-[24px] [&>h3]:text-[20px] [&>h3]:lg:text-[28px]
-              [&>h4]:mb-[24px] [&>h4]:text-[18px] [&>h4]:lg:text-[24px]
+              [&>h1]:mb-[24px] [&>h1]:text-[28px] [&>h1]:lg:text-[40px] [&>h1]:font-ppradio [&>h1]:text-textPrimary [&>h1]:leading-[32px] [&>h1]:lg:leading-[44px]
+              [&>h2]:mb-[24px] [&>h2]:text-[22px] [&>h2]:lg:text-[32px] [&>h2]:font-ppradio [&>h2]:text-textPrimary [&>h2]:leading-[28px] [&>h2]:lg:leading-[40px]
+              [&>h3]:mb-[24px] [&>h3]:text-[20px] [&>h3]:lg:text-[28px] [&>h3]:font-ppradio [&>h3]:text-textPrimary [&>h3]:leading-[24px] [&>h3]:lg:leading-[36px]
+              [&>h4]:mb-[24px] [&>h4]:text-[18px] [&>h4]:lg:text-[24px] [&>h4]:font-ppradio [&>h4]:text-textPrimary [&>h4]:leading-[20px] [&>h4]:lg:leading-[32px]
               [&>p]:mb-[16px] [&>p]:text-[16px] [&>p]:lg:text-[18px]">
               <PortableText portableText={post?.body || []} />
             </div>
@@ -288,7 +288,7 @@ function calculateReadTime(content: any[]): string {
           <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
             <div class="lg:mb-[80px] mb-[24px]">
               <div class="flex justify-between items-center w-full">
-                <h2 class="lg:text-[52px] text-center md:text-start w-full text-[32px] lg:leading-[56px] leading-[36px] font-black font-figtree text-textPrimary">
+                <h2 class="lg:text-[52px] text-center md:text-start w-full text-[32px] lg:leading-[56px] leading-[36px] font-black font-ppradio text-textPrimary">
                   Related posts
                 </h2>
                 <a href="/blog" class="hidden sm:flex font-figtree font-medium text-base w-[104px] leading-5 text-textPrimary bg-cardColor h-12 rounded-[16px] justify-center items-center cursor-pointer">
