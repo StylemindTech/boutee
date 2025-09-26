@@ -37,7 +37,8 @@ const { data: post } = await loadQuery({
     "author": author->{
       _id,
       name,
-      image
+      image,
+      profession
     },
     "mainImage": mainImage{
       ...,
@@ -82,7 +83,6 @@ const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
   },
 });
 
-
 const extractHeadings = (content) => {
   return content
     .filter(
@@ -98,7 +98,6 @@ const extractHeadings = (content) => {
 };
 
 const toc = extractHeadings(post.body);
-
 
 ---
 
@@ -195,18 +194,19 @@ const toc = extractHeadings(post.body);
             id=""
             class="w-full font-figtree font-bold text-[18px] leading-[22px] text-textPrimary outline-none"
           >
-          {
-            toc?.length === 0 ? (
-              <option value="" class="">No headings found</option>
-            ) : (
-              toc?.map((heading) => (
-                <option value={heading?.id} class="">
-                  {heading?.text}
+            {
+              toc?.length === 0 ? (
+                <option value="" class="">
+                  No headings found
                 </option>
-              ))
-            )
-          }
-           
+              ) : (
+                toc?.map((heading) => (
+                  <option value={heading?.id} class="">
+                    {heading?.text}
+                  </option>
+                ))
+              )
+            }
           </select>
         </div>
 
@@ -245,9 +245,6 @@ const toc = extractHeadings(post.body);
           <PortableText portableText={post.body} />
         </div>
 
-
-    
-
         <div class="hidden lg:block">
           <h5
             class="mb-[24px] font-figtree font-bold text-[20px] leading-[24px] text-textPrimary"
@@ -262,21 +259,44 @@ const toc = extractHeadings(post.body);
                 </p>
               ) : (
                 toc?.map((heading) => (
-                   <li
-              class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
-            >
-              <Image src={arrow} class="h-5 w-5" alt="hero-image" />
-              <span class="font-figtree font-normal text-[16px] leading-[20px]"
-                >{heading.text}</span              >
-            </li>
-                ))  
+                  <li class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]">
+                    <Image src={arrow} class="h-5 w-5" alt="hero-image" />
+                    <span class="font-figtree font-normal text-[16px] leading-[20px]">
+                      {heading.text}
+                    </span>
+                  </li>
+                ))
               )
             }
-           
           </ul>
         </div>
       </div>
+
+      <!--  Author Details -->
+    { post?.author &&
+        <div
+  class="flex flex-row justify-start items-center gap-4 mt-4 md:mt-6"
+>
   
+  <img
+    src={urlForImage(post.author.image)}
+    alt={post?.author?.image?.alt || post?.author?.name}
+    class="w-8 h-8 sm:w-10 sm:h-10 md:h-16 md:w-16 rounded-full object-cover"
+  />
+
+  <!-- Author Info -->
+  <div class="text-center sm:text-left">
+    <h3 class="font-figtree font-medium text-textPrimary text-sm sm:text-base leading-5">
+      {post?.author?.name}
+    </h3>
+    {post?.author?.profession && (
+      <p class="font-figtree font-normal text-sm leading-4 text-textSecondary">
+        {post?.author?.profession}
+      </p>
+    )}
+  </div>
+</div>
+    }
     </div>
   </section>
 
