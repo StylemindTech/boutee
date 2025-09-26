@@ -13,18 +13,17 @@ import twitter from "../../assets/icons/X.svg";
 import arrow from "../../assets/icons/ArrowRight.svg";
 import { urlForImage } from "../../sanity/lib/url-for-image";
 import PortableText from "../../components/PortableText.astro";
+
 export async function getStaticPaths() {
   const { data: posts } = await loadQuery<SanityDocument[]>({
     query: `*[_type == "post"]`,
   });
 
-  return posts.map(({ slug }) => {
-    return {
-      params: {
-        slug: slug.current,
-      },
-    };
-  });
+  return posts
+    .filter((p) => p?.slug?.current) // avoid null slug
+    .map(({ slug }) => ({
+      params: { slug: slug.current },
+    }));
 }
 
 const { params } = Astro;
@@ -55,6 +54,7 @@ const { data: post } = await loadQuery({
 });
 
 function formatDate(dateString: string) {
+  if (!dateString) return "";
   return new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
     month: "short",
@@ -78,297 +78,276 @@ const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
       }
     }`,
   params: {
-    slug: post.slug.current,
-    categoryIds: post.categories.map((cat: any) => cat._id),
+    slug: post?.slug?.current,
+    categoryIds: post?.categories?.map((cat: any) => cat?._id) || [],
   },
 });
 
 const extractHeadings = (content) => {
+  if (!content) return [];
   return content
     .filter(
       (block) =>
-        block._type === "block" &&
-        (block.style === "h1" || block.style === "h2")
+        block?._type === "block" &&
+        (block?.style === "h1" || block?.style === "h2")
     )
     .map((block) => ({
-      id: block._key,
-      text: block.children.map((child) => child.text).join(""),
-      level: block.style === "h1" ? 1 : 2,
+      id: block?._key,
+      text: block?.children?.map((child) => child?.text).join("") || "",
+      level: block?.style === "h1" ? 1 : 2,
     }));
 };
 
-const toc = extractHeadings(post.body);
+const toc = extractHeadings(post?.body || []);
 
+
+
+
+function calculateReadTime(content: any[]): string {
+  if (!content || content.length === 0) return "1 min read";
+
+  // Extract all text from PortableText blocks
+  const text = content
+    .filter((block) => block?._type === "block" && block?.children)
+    .map((block) => block.children.map((child) => child.text).join(" "))
+    .join(" ");
+
+  const words = text.trim().split(/\s+/).length; // count words
+  const wordsPerMinute = 200; // avg reading speed
+  const minutes = Math.ceil(words / wordsPerMinute);
+
+  return `${minutes} min read`;
+}
 ---
 
-<BaseLayout title=`Boutee - ${post.title}`>
-  <section class="md:pt-[112px] md:pb-[32px] pt-[24px]">
-    <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto pb-[8px]">
-      <div
-        class="flex flex-col justify-between lg:flex-row lg:gap-10 xl:gap-20"
-      >
-        <div class="flex flex-col justify-between mb-[48px] lg:mb-0">
-          <div class="pb-[20px] md:pb-[24px] mb-[24px] md:mb-[20px]">
-            <div
-              class="mb-[20px] md:mb-[24px] flex justify-start items-center gap-1"
-            >
-              <a
-                href="/blog"
-                class="font-figtree font-normal text-[16px] leading-[20px] text-textSecondary"
-                >Blog</a
-              ><Image src={rightShift} class="h-3 w-3" alt="hero-image" />
-              {
-                post.categories && (
-                  <span class="font-figtree font-normal text-[16px] leading-[20px] text-textSecondary capitalize">
-                    {post.categories.map((cat) => cat.title).join(", ")}
-                  </span>
-                )
-              }
-            </div>
-            <h1
-              class="font-figtree font-black text-textPrimary text-[32px] leading-[36px] md:text-[52px] md:leading-[56px]"
-            >
-              {post.title}
-            </h1>
-          </div>
-          <div>
-            <div
-              class="mb-[16px] md:mb-[32px] w-full flex items-center gap-[12px]"
-            >
-              <span
-                class="font-figtree font-normal text-sm leading-[18px] text-textSecondary"
-                >{formatDate(post.publishedAt)}</span
-              >
-              <Image src={badge} alt="blog image" class="h-2 w-2" />
-              <span
-                class="font-figtree font-normal text-sm leading-[18px] text-textSecondary"
-                >5 min read</span
-              >
-            </div>
-
-            <div>
-              <p
-                class="font-figtree font-normal text-[16px] leading-[20px] text-textPrimary mb-[16px]"
-              >
-                Share this post
-              </p>
-              <div class="flex items-center gap-2">
-                <a href="" class="h-9 w-9 rounded-[12px] p-2 bg-cardColor">
-                  <Image src={link} alt="blog image" class="h-5 w-5" /></a
-                >
-                <a href="" class="h-9 w-9 rounded-[12px] p-2 bg-cardColor">
-                  <Image src={facebook} alt="blog image" class="h-5 w-5" /></a
-                >
-                <a href="" class="h-9 w-9 rounded-[12px] p-2 bg-cardColor">
-                  <Image src={linkedin} alt="blog image" class="h-5 w-5" /></a
-                >
-                <a href="" class="h-9 w-9 rounded-[12px] p-2 bg-cardColor">
-                  <Image src={twitter} alt="blog image" class="h-5 w-5" /></a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <img
-            src={`${urlForImage(post.mainImage)}`}
-            alt={post.mainImage.alt || "blog image"}
-            class="rounded-[24px] xl:w-[600px] xl:h-[425px]"
-          />
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="md:py-[80px] pt-[16px] pb-[48px]">
-    <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
-      <div
-        class="flex flex-col justify-between lg:flex-row gap-10 lg:gap-20 xl:gap-[120px]"
-      >
-        <div
-          class="flex lg:hidden items-center w-full py-2 px-3 h-13 gap-1 bg-white border border-[#F2F3F7] acd-shadow rounded-[16px]"
-        >
-          <select
-            name="category"
-            id=""
-            class="w-full font-figtree font-bold text-[18px] leading-[22px] text-textPrimary outline-none"
-          >
-            {
-              toc?.length === 0 ? (
-                <option value="" class="">
-                  No headings found
-                </option>
-              ) : (
-                toc?.map((heading) => (
-                  <option value={heading?.id} class="">
-                    {heading?.text}
-                  </option>
-                ))
-              )
-            }
-          </select>
-        </div>
-
-        <div
-          class="blog_content__list flex flex-col font-figtree
-    
-    [&>ul]:custom-counter-list
-    [&>ul]:custom-counter-list
-    [&>ul]:counter-reset-li-counter
-    [&>ul>li]:relative
-    [&>ul>li]:mb-3
-    [&>ul>li]:pl-[40px]
-    [&>ul>li]:font-figtree
-    [&>ul>li]:font-normal
-    [&>ul>li]:text-base
-    [&>ul>li]:text-textPrimary
-    [&>ul>li]:before:absolute
-    [&>ul>li]:before:left-0
-    [&>ul>li]:before:top-0
-    [&>ul>li]:before:flex
-    [&>ul>li]:before:items-center
-    [&>ul>li]:before:justify-center
-    [&>ul>li]:before:h-[28px]
-    [&>ul>li]:before:w-[28px]
-    [&>ul>li]:before:rounded-[40px]
-    [&>ul>li]:before:bg-[linear-gradient(189.75deg,#F2F3F7_-1.71%,#EDEAEF_100.1%)]
-    [&>ul>li]:before:content-[counter(li-counter)]
-    [&>ul>li]:before:counter-increment-li-counter
-        [&>blockquote]:py-3 [&>blockquote]:px-4 [&>blockquote]:bg-secondary [&>blockquote]:border [&>blockquote]:border-[#F2F3F7] [&>blockquote]:rounded-[16px] [&>blockquote]:italic [&>blockquote]:font-figtree [&>blockquote]:font-medium [&>blockquote]:text-[16px] [&>blockquote]:lg:text-[18px] [&>blockquote]:lg:leading-[22px] [&>blockquote]:leading-[20px] [&>blockquote]:text-textSecondary
-        [&>h1]:mb-[24px] [&>h1]:font-figtree [&>h1]:font-normal [&>h1]:text-[28px] [&>h1]:leading-[32px] [&>h1]:text-textPrimary [&>h1]:lg:text-[40px] [&>h1]:lg:leading-[44px]
-        [&>h2]:mb-[24px] [&>h2]:font-figtree [&>h2]:font-black [&>h2]:text-[22px] [&>h2]:leading-[26px] [&>h2]:text-textPrimary [&>h2]:lg:text-[32px] [&>h2]:lg:leading-[36px]
-        [&>h3]:mb-[24px] [&>h3]:font-figtree [&>h3]:font-black [&>h3]:text-[20px] [&>h3]:leading-[24px] [&>h3]:text-textPrimary [&>h3]:lg:text-[28px] [&>h3]:lg:leading-[32px]
-        [&>h4]:mb-[24px] [&>h4]:font-figtree [&>h4]:font-black [&>h4]:text-[18px] [&>h4]:leading-[20px] [&>h4]:text-textPrimary [&>h4]:lg:text-[24px] [&>h4]:lg:leading-[28px]
-        [&>p]:mb-[16px] [&>p]:font-figtree [&>p]:font-normal [&>p]:text-[16px] [&>p]:lg:text-[18px] [&>p]:lg:leading-[22px] [&>p]:leading-[20px] [&>p]:text-textPrimary"
-        >
-          <PortableText portableText={post.body} />
-        </div>
-
-        <div class="hidden lg:block">
-          <h5
-            class="mb-[24px] font-figtree font-bold text-[20px] leading-[24px] text-textPrimary"
-          >
-            Table of contents
-          </h5>
-          <ul>
-            {
-              toc?.length === 0 ? (
-                <p class="font-figtree font-normal text-base leading-[20px] text-textPrimary">
-                  No headings found.
-                </p>
-              ) : (
-                toc?.map((heading) => (
-                  <li class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]">
-                    <Image src={arrow} class="h-5 w-5" alt="hero-image" />
-                    <span class="font-figtree font-normal text-[16px] leading-[20px]">
-                      {heading.text}
-                    </span>
-                  </li>
-                ))
-              )
-            }
-          </ul>
-        </div>
-      </div>
-
-      <!--  Author Details -->
-    { post?.author &&
-        <div
-  class="flex flex-row justify-start items-center gap-4 mt-4 md:mt-6"
->
-  
-  <img
-    src={urlForImage(post.author.image)}
-    alt={post?.author?.image?.alt || post?.author?.name}
-    class="w-8 h-8 sm:w-10 sm:h-10 md:h-16 md:w-16 rounded-full object-cover"
-  />
-
-  <!-- Author Info -->
-  <div class="text-center sm:text-left">
-    <h3 class="font-figtree font-medium text-textPrimary text-sm sm:text-base leading-5">
-      {post?.author?.name}
-    </h3>
-    {post?.author?.profession && (
-      <p class="font-figtree font-normal text-sm leading-4 text-textSecondary">
-        {post?.author?.profession}
-      </p>
-    )}
-  </div>
-</div>
-    }
-    </div>
-  </section>
-
-  <section class="lg:py-[112px] py-[48px]">
-    <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
-      <div class="lg:mb-[80px] mb-[24px]">
-        <div class="flex justify-between items-center w-full">
-          <h2
-            class="lg:text-[52px] text-center md:text-start w-full text-[32px] lg:leading-[56px] leading-[36px] font-black font-figtree text-textPrimary"
-          >
-            Related posts
-          </h2>
-          <a
-            href="/blog"
-            class="hidden sm:flex font-figtree font-medium text-base w-[104px] leading-5 text-textPrimary bg-cardColor py-[0px] text-center items-center justify-center h-12 rounded-[16px] cursor-pointer"
-          >
-            View all
-          </a>
-        </div>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-[40px] gap-[20px]">
-        {
-          relatedPosts.length === 0 ? (
-            <p class="font-figtree font-normal text-base leading-[20px] text-textPrimary">
-              No related posts found.
-            </p>
-          ) : (
-            relatedPosts.map((post) => (
-              <div class="min-w-[240px] rounded-[20px] border border-cardColor flex flex-col">
-                <a href={`/blog/${post.slug.current}`}>
-                  <img
-                    src={`${urlForImage(post.mainImage)}`}
-                    alt={post.mainImage.alt || "blog image"}
-                    class="rounded-[24px] mb-[8px] min-h-[231px] md:min-h-[293px] md:max-h-[293px]"
-                  />
-                </a>
-
-                <div class="p-[12px] lg:py-4 lg:px-5">
-                  {post.categories && (
-                    <span class="inline-block grid uppercase place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree font-normal text-[10px] leading-[14px] text-textPrimary">
-                      {post.categories.map((cat) => cat.title).join(", ")}
+<BaseLayout title={`Boutee - ${post?.title || "Blog"}`}>
+  {post ? (
+    <>
+      {/* <!-- Post Header --> */}
+      <section class="md:pt-[112px] md:pb-[32px] pt-[24px]">
+        <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto pb-[8px]">
+          <div class="flex flex-col justify-between lg:flex-row lg:gap-10 xl:gap-20">
+            <div class="flex flex-col justify-between mb-[48px] lg:mb-0">
+              <div class="pb-[20px] md:pb-[24px] mb-[24px] md:mb-[20px]">
+                <div class="mb-[20px] md:mb-[24px] flex justify-start items-center gap-1">
+                  <a href="/blog" class="font-figtree font-normal text-[16px] leading-[20px] text-textSecondary">
+                    Blog
+                  </a>
+                  <Image src={rightShift} class="h-3 w-3" alt="arrow" />
+                  {post?.categories && (
+                    <span class="font-figtree font-normal text-[16px] leading-[20px] text-textSecondary capitalize">
+                      {post.categories.map((cat) => cat?.title).join(", ")}
                     </span>
                   )}
-                  <a href={`/blog/${post.slug.current}`}>
-                    <h3 class="mt-[12px] mb-[8px] font-figtree font-bold text-textPrimary text-lg leading-[22px] lg:font-black lg:text-[20px] lg:leading-[24px]">
-                      {post.title}
-                    </h3>
-                  </a>
-                  <p class="line-clamp-2 lg:mb-[32px] mb-[16px] font-figtree font-normal text-textPrimary text-base leading-[20px] lg:text-[18px] lg:leading-[22px]">
-                    {post.description}
+                </div>
+                <h1 class="font-figtree font-black text-textPrimary text-[32px] leading-[36px] md:text-[52px] md:leading-[56px]">
+                  {post?.title}
+                </h1>
+              </div>
+
+              <div>
+                <div class="mb-[16px] md:mb-[32px] w-full flex items-center gap-[12px]">
+                  <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
+                    {formatDate(post?.publishedAt)}
+                  </span>
+                  <Image src={badge} alt="dot" class="h-2 w-2" />
+                  <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
+                      {calculateReadTime(post?.body)}
+                  </span>
+                </div>
+
+                <div>
+                  <p class="font-figtree font-normal text-[16px] leading-[20px] text-textPrimary mb-[16px]">
+                    Share this post
                   </p>
-                  <div class="w-full flex items-center gap-2">
-                    <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
-                      {formatDate(post.publishedAt)}
-                    </span>
-                    <Image src={badge} alt="blog image" class="h-2 w-2" />
-                    <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
-                      5 min read
-                    </span>
+                  <div class="flex items-center gap-2">
+                    <a href="#" class="h-9 w-9 rounded-[12px] p-2 bg-cardColor">
+                      <Image src={link} alt="link" class="h-5 w-5" />
+                    </a>
+                    <a href="#" class="h-9 w-9 rounded-[12px] p-2 bg-cardColor">
+                      <Image src={facebook} alt="fb" class="h-5 w-5" />
+                    </a>
+                    <a href="#" class="h-9 w-9 rounded-[12px] p-2 bg-cardColor">
+                      <Image src={linkedin} alt="linkedin" class="h-5 w-5" />
+                    </a>
+                    <a href="#" class="h-9 w-9 rounded-[12px] p-2 bg-cardColor">
+                      <Image src={twitter} alt="twitter" class="h-5 w-5" />
+                    </a>
                   </div>
                 </div>
               </div>
-            ))
-          )
-        }
-      </div>
+            </div>
 
-      <button
-        class="mt-[24px] w-full sm:hidden font-figtree font-medium text-base leading-5 text-textPrimary bg-cardColor py-[14px] px-[24px] h-12 rounded-[16px] cursor-pointer"
-      >
-        View all
-      </button>
-    </div>
-  </section>
+            {post?.mainImage && (
+              <img
+                src={`${urlForImage(post.mainImage)}`}
+                alt={post?.mainImage?.alt || "blog image"}
+                class="rounded-[24px] w-full lg:min-w-[500px] lg:h-[380px] xl:min-w-[600px] xl:h-[425px]"
+              />
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* <!-- Blog Content --> */}
+      <section class="md:py-[80px] pt-[16px] pb-[48px]">
+        <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+          <div class="flex flex-col justify-between lg:flex-row gap-10 lg:gap-20 xl:gap-[120px]">
+            
+            {/* <!-- Mobile TOC --> */}
+            {toc?.length > 0 && (
+              <div class="flex lg:hidden items-center w-full py-2 px-3 h-13 gap-1 bg-white border border-[#F2F3F7] acd-shadow rounded-[16px]">
+                <select
+                  name="category"
+                  class="w-full font-figtree font-bold text-[18px] leading-[22px] text-textPrimary outline-none"
+                >
+                  {toc.map((heading) => (
+                    <option value={heading?.id}>{heading?.text}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {/* <!-- Blog Content --> */}
+            <div class="blog_content__list flex flex-col font-figtree
+              [&>ul]:custom-counter-list
+              [&>ul]:counter-reset-li-counter
+              [&>ul>li]:relative
+              [&>ul>li]:mb-3
+              [&>ul>li]:pl-[40px]
+              [&>ul>li]:font-normal
+              [&>ul>li]:text-base
+              [&>ul>li]:text-textPrimary
+              [&>ul>li]:before:absolute
+              [&>ul>li]:before:left-0
+              [&>ul>li]:before:top-0
+              [&>ul>li]:before:flex
+              [&>ul>li]:before:items-center
+              [&>ul>li]:before:justify-center
+              [&>ul>li]:before:h-[28px]
+              [&>ul>li]:before:w-[28px]
+              [&>ul>li]:before:rounded-[40px]
+              [&>ul>li]:before:bg-[linear-gradient(189.75deg,#F2F3F7_-1.71%,#EDEAEF_100.1%)]
+              [&>ul>li]:before:content-[counter(li-counter)]
+              [&>ul>li]:before:counter-increment-li-counter
+              [&>blockquote]:py-3 [&>blockquote]:px-4 [&>blockquote]:bg-secondary [&>blockquote]:border [&>blockquote]:border-[#F2F3F7] [&>blockquote]:rounded-[16px] [&>blockquote]:italic [&>blockquote]:font-figtree [&>blockquote]:font-medium [&>blockquote]:text-[16px] [&>blockquote]:lg:text-[18px] [&>blockquote]:lg:leading-[22px] [&>blockquote]:leading-[20px] [&>blockquote]:text-textSecondary
+              [&>h1]:mb-[24px] [&>h1]:text-[28px] [&>h1]:lg:text-[40px]
+              [&>h2]:mb-[24px] [&>h2]:text-[22px] [&>h2]:lg:text-[32px]
+              [&>h3]:mb-[24px] [&>h3]:text-[20px] [&>h3]:lg:text-[28px]
+              [&>h4]:mb-[24px] [&>h4]:text-[18px] [&>h4]:lg:text-[24px]
+              [&>p]:mb-[16px] [&>p]:text-[16px] [&>p]:lg:text-[18px]">
+              <PortableText portableText={post?.body || []} />
+            </div>
+
+            {/* <!-- Desktop TOC --> */}
+            {toc?.length > 0 && (
+              <div class="hidden lg:block">
+                <h5 class="mb-[24px] font-figtree font-bold text-[20px] leading-[24px] text-textPrimary">
+                  Table of contents
+                </h5>
+                <ul>
+                  {toc.map((heading) => (
+                    <li class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]">
+                      <Image src={arrow} class="h-5 w-5" alt="arrow" />
+                      <span class="font-figtree text-[16px]">{heading.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
+          {/* <!-- Author --> */}
+          {post?.author && (
+            <div class="flex flex-row justify-start items-center gap-4 mt-4 md:mt-6">
+              {post?.author?.image && (
+                <img
+                  src={urlForImage(post.author.image)}
+                  alt={post?.author?.name || "author"}
+                  class="w-8 h-8 sm:w-10 sm:h-10 md:h-16 md:w-16 rounded-full object-cover"
+                />
+              )}
+              <div class="text-center sm:text-left">
+                <h3 class="font-figtree font-medium text-textPrimary text-sm sm:text-base leading-5">
+                  {post?.author?.name}
+                </h3>
+                {post?.author?.profession && (
+                  <p class="font-figtree text-sm text-textSecondary">
+                    {post.author.profession}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* <!-- Related posts --> */}
+      {relatedPosts?.length > 0 && (
+        <section class="lg:py-[112px] py-[48px]">
+          <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+            <div class="lg:mb-[80px] mb-[24px]">
+              <div class="flex justify-between items-center w-full">
+                <h2 class="lg:text-[52px] text-center md:text-start w-full text-[32px] lg:leading-[56px] leading-[36px] font-black font-figtree text-textPrimary">
+                  Related posts
+                </h2>
+                <a href="/blog" class="hidden sm:flex font-figtree font-medium text-base w-[104px] leading-5 text-textPrimary bg-cardColor h-12 rounded-[16px] justify-center items-center cursor-pointer">
+                  View all
+                </a>
+              </div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-[40px] gap-[20px]">
+              {relatedPosts.map(
+                (rp) =>
+                  rp?.slug?.current && (
+                    <div class="min-w-[240px] rounded-[20px] border border-cardColor flex flex-col">
+                      <a href={`/blog/${rp.slug.current}`}>
+                        <img
+                          src={`${urlForImage(rp.mainImage)}`}
+                          alt={rp?.mainImage?.alt || "blog image"}
+                          class="rounded-[24px] mb-[8px] min-h-[231px] md:min-h-[293px] md:max-h-[293px]  w-full"
+                        />
+                      </a>
+                      <div class="p-[12px] lg:py-4 lg:px-5">
+                        {rp?.categories && (
+                          <span class="inline-block grid uppercase place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree text-[10px] text-textPrimary">
+                            {rp.categories.map((cat) => cat?.title).join(", ")}
+                          </span>
+                        )}
+                        <a href={`/blog/${rp.slug.current}`}>
+                          <h3 class="mt-[12px] mb-[8px] font-figtree font-bold text-textPrimary text-lg lg:text-[20px]">
+                            {rp?.title}
+                          </h3>
+                        </a>
+                        <p class="line-clamp-2 mb-[16px] lg:mb-[32px] font-figtree text-base text-textPrimary">
+                          {rp?.description}
+                        </p>
+                        <div class="w-full flex items-center gap-2">
+                          <span class="font-figtree text-sm text-textSecondary">
+                            {formatDate(rp?.publishedAt)}
+                          </span>
+                          <Image src={badge} alt="dot" class="h-2 w-2" />
+                          <span class="font-figtree text-sm text-textSecondary">
+                           {calculateReadTime(rp?.body || [])}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )
+              )}
+            </div>
+
+            <button class="mt-[24px] w-full sm:hidden font-figtree font-medium text-base text-textPrimary bg-cardColor h-12 rounded-[16px] cursor-pointer">
+              View all
+            </button>
+          </div>
+        </section>
+      )}
+    </>
+  ) : (
+    <p class="text-center py-20 font-figtree text-lg text-textSecondary">
+      Post not found.
+    </p>
+  )}
 </BaseLayout>

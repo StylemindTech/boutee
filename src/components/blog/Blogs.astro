@@ -5,23 +5,29 @@ import { urlForImage } from "../../sanity/lib/url-for-image";
 import { loadQuery } from "../../sanity/lib/load-query";
 import type { SanityDocument } from "@sanity/client";
 
-// Sare posts fetch karo
+// Fetch all posts
 const { data: posts } = await loadQuery<SanityDocument[]>({
   query: `*[_type == "post"] | order(publishedAt desc) {
     title,
     slug,
     publishedAt,
     description,
+    body, 
     categories[]->{title,slug},
-    mainImage
+    mainImage{
+      asset->{url},
+      alt
+    }
   }`,
 });
 
+// Fetch all categories
 const { data: categories } = await loadQuery<SanityDocument[]>({
   query: `*[_type == "category"] | order(title asc) {
     _id,
     title,
-    description
+    description,
+    slug
   }`,
 });
 
@@ -32,6 +38,23 @@ function formatDate(dateString: string) {
     year: "numeric",
   }).format(new Date(dateString));
 }
+
+function calculateReadTime(body: any[]): string {
+  if (!body || body.length === 0) return "1 min read";
+
+  // Extract all text from PortableText blocks
+  const text = body
+    .filter((block) => block._type === "block" && block.children)
+    .map((block) => block.children.map((child) => child.text).join(" "))
+    .join(" ");
+
+  const words = text.trim().split(/\s+/).length;
+  const wordsPerMinute = 200;
+  const minutes = Math.ceil(words / wordsPerMinute);
+
+  return `${minutes} min read`;
+}
+
 ---
 
 <section class="lg:py-[112px] py-[48px]">
@@ -52,25 +75,26 @@ function formatDate(dateString: string) {
 
     <!-- Blogs -->
     <div class="flex flex-col">
+      <!-- Category buttons -->
       <div
         id="buttonGroup"
         class="mb-[32px] hidden md:inline-flex items-center justify-center bg-cardColor rounded-2xl mx-auto h-12 p-1"
       >
-        <!-- Default active -->
         <button
           class="h-10 py-2 px-6 rounded-xl cursor-pointer font-figtree font-normal text-sm leading-[18px] bg-white acd-shadow text-textPrimary"
         >
           View all
         </button>
-        {
-          categories.map((cat) => (
-            <button class="h-10 py-2 px-6 rounded-xl cursor-pointer font-figtree font-normal text-sm leading-[18px] text-textSecondary capitalize">
-              {cat.title}
-            </button>
-          ))
-        }
+        {categories?.map((cat) => (
+          <button
+            class="h-10 py-2 px-6 rounded-xl cursor-pointer font-figtree font-normal text-sm leading-[18px] text-textSecondary capitalize"
+          >
+            {cat?.title}
+          </button>
+        ))}
       </div>
 
+      <!-- Category dropdown (mobile) -->
       <div
         class="mb-[32px] flex md:hidden items-center w-full py-2 px-3 h-13 gap-1 bg-white border border-[#F2F3F7] acd-shadow rounded-[16px]"
       >
@@ -80,115 +104,132 @@ function formatDate(dateString: string) {
         >
         <select
           name="category"
-          id=""
           class="w-full font-figtree font-normal text-sm leading-[18px] text-textSecondary outline-none capitalize"
         >
-          <option value="" class="">All</option>
-          {categories.map((cat) => <option value="">{cat.title}</option>)}
+          <option value="all">All</option>
+          {categories?.map(
+            (cat) =>
+              cat?.slug?.current && (
+                <option value={cat?.slug?.current}>{cat?.title}</option>
+              )
+          )}
         </select>
       </div>
 
-      <!-- blog  -->
-
+      <!-- Blogs grid -->
       <div
         class="mb-[48px] lg:mb-[80px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5"
       >
-        <!-- blog1 -->
-        <div
-          class="lg:mb-[28px] md:col-span-2 lg:col-span-3 min-w-[240px] md:max-w-full rounded-[20px] border border-cardColor flex flex-col md:flex-row md:items-center md:bg-secondary md:border-secondary"
-        >
-          <a href={`/blog/${posts[0].slug.current}`}>
-            <img
-              src={`${urlForImage(posts[0].mainImage)}`}
-              alt={posts[0].mainImage.alt || "blog image"}
-              class="lg:rounded-[24px] rounded-[20px] mb-[8px] md:mb-0 md:w-[350px] lg:w-[440px] md:h-[280px] lg:h-[312px] object-cover"
-            />
-          </a>
-          <div class="p-[12px] md:py-[24px] md:pl-[48px] md:pr-[32px]">
-            {
-              posts[0].categories && (
-                <span class="inline-block grid uppercase place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree font-normal text-[10px] leading-[14px] text-textPrimary">
-                  {posts[0].categories.map((cat) => cat.title).join(", ")}
+        <!-- Featured blog (first post) -->
+        {posts?.length > 0 && posts[0]?.slug?.current && (
+          <div
+            class="lg:mb-[28px] md:col-span-2 lg:col-span-3 min-w-[240px] md:max-w-full rounded-[20px] border border-cardColor flex flex-col md:flex-row md:items-center md:bg-secondary md:border-secondary"
+          >
+            <a href={`/blog/${posts[0]?.slug?.current}`} class="md:min-w-[400px] lg:min-w-[440px]">
+              <img
+                src={urlForImage(posts[0]?.mainImage)}
+                alt={posts[0]?.mainImage?.alt || posts[0]?.title || "blog image"}
+                class="lg:rounded-[24px] rounded-[20px] mb-[8px] md:mb-0 md:w-[350px] lg:w-[440px] md:h-[280px] lg:h-[312px] object-cover"
+              />
+            </a>
+            <div class="p-[12px] md:py-[24px] md:pl-[48px] md:pr-[32px]">
+              {posts[0]?.categories && (
+                <span
+                  class="inline-block grid uppercase place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree font-normal text-[10px] leading-[14px] text-textPrimary"
+                >
+                  {posts[0]?.categories.map((cat) => cat?.title).join(", ")}
                 </span>
-              )
-            }
-            <a href={`/blog/${posts[0].slug.current}`}
-              ><h3
-                class="mt-[12px] mb-[8px] font-figtree font-bold text-textPrimary text-lg leading-[22px] lg:font-black lg:text-[32px] lg:leading-[36px]"
-              >
-                {posts[0].title}
-              </h3></a
-            >
-            <p
-              class="lg:mb-[32px] mb-[16px] font-figtree font-normal text-textPrimary text-base leading-[20px] lg:text-[18px] lg:leading-[22px]"
-            >
-              {posts[0].description}
-            </p>
-            <div class="w-full flex items-center gap-2">
-              <span
-                class="font-figtree font-normal text-sm leading-[18px] text-textSecondary"
-              >
-                {formatDate(posts[0].publishedAt)}</span
-              >
-              <Image src={badge} alt="blog image" class="h-2 w-2" />
-              <span
-                class="font-figtree font-normal text-sm leading-[18px] text-textSecondary"
-              >
-                5 min read</span
-              >
-            </div>
-          </div>
-        </div>
-        <!-- blog2 -->
-
-        {
-          posts.slice(1).map((item) => (
-            <div class="min-w-[240px] rounded-[20px] border border-cardColor flex flex-col">
-              <a href={`/blog/${item.slug.current}`}>
-                <img
-                  src={`${urlForImage(item.mainImage)}`}
-                  alt={item.mainImage.alt || "blog image"}
-                  class="lg:rounded-[24px] rounded-[20px] mb-[8px] min-h-[231px] md:min-h-[293px] md:max-h-[293px]"
-                />
+              )}
+              <a href={`/blog/${posts[0]?.slug?.current}`}>
+                <h3
+                  class="mt-[12px] mb-[8px] font-figtree font-bold text-textPrimary text-lg leading-[22px] lg:font-black lg:text-[32px] lg:leading-[36px]"
+                >
+                  {posts[0]?.title}
+                </h3>
               </a>
-
-              <div class="p-[12px] lg:py-4 lg:px-5">
-                {item.categories && (
-                  <span class="inline-block grid uppercase place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree font-normal text-[10px] leading-[14px] text-textPrimary">
-                    {item.categories.map((cat) => cat.title).join("")}
-                  </span>
-                )}
-
-                <a href={`/blog/${item.slug.current}`}>
-                  <h3 class="mt-[12px] mb-[8px] font-figtree font-bold text-textPrimary text-lg leading-[22px] lg:font-black lg:text-[20px] lg:leading-[24px]">
-                    {item.title}
-                  </h3>
-                </a>
-                <p class="line-clamp-2 lg:mb-[32px] mb-[16px] font-figtree font-normal text-textPrimary text-base leading-[20px] lg:text-[18px] lg:leading-[22px]">
-                  {item.description}
-                </p>
-                <div class="w-full flex items-center gap-2">
-                  <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
-                    {formatDate(item.publishedAt)}
-                  </span>
-                  <Image src={badge} alt="blog image" class="h-2 w-2" />
-                  <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
-                    5 min read
-                  </span>
-                </div>
+              <p
+                class="line-clamp-2 md:line-clamp-3 lg:line-clamp-4 lg:mb-[32px] mb-[16px] font-figtree font-normal text-textPrimary text-base leading-[20px] lg:text-[18px] lg:leading-[22px]"
+              >
+                {posts[0]?.description}
+              </p>
+              <div class="w-full flex items-center gap-2">
+                <span
+                  class="font-figtree font-normal text-sm leading-[18px] text-textSecondary"
+                >
+                  {posts[0]?.publishedAt && formatDate(posts[0]?.publishedAt)}
+                </span>
+                <Image src={badge} alt="blog image" class="h-2 w-2" />
+                <span
+                  class="font-figtree font-normal text-sm leading-[18px] text-textSecondary"
+                >
+                 {calculateReadTime(posts[0]?.body)}
+                </span>
               </div>
             </div>
-          ))
-        }
+          </div>
+        )}
+
+        <!-- Other blogs -->
+        {posts?.slice(1).map(
+          (item) =>
+            item?.slug?.current && (
+              <div
+                class="min-w-[240px] rounded-[20px] border border-cardColor flex flex-col"
+              >
+                <a href={`/blog/${item?.slug?.current}`}>
+                  <img
+                    src={urlForImage(item?.mainImage)}
+                    alt={item?.mainImage?.alt || item?.title || "blog image"}
+                    class="lg:rounded-[24px] rounded-[20px] mb-[8px] min-h-[231px] md:min-h-[293px] md:max-h-[293px] w-full"
+                  />
+                </a>
+                <div class="p-[12px] lg:py-4 lg:px-5">
+                  {item?.categories && (
+                    <span
+                      class="inline-block grid uppercase place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree font-normal text-[10px] leading-[14px] text-textPrimary"
+                    >
+                      {item?.categories?.map((cat) => cat?.title).join(", ")}
+                    </span>
+                  )}
+                  <a href={`/blog/${item?.slug?.current}`}>
+                    <h3
+                      class="mt-[12px] mb-[8px] font-figtree font-bold text-textPrimary text-lg leading-[22px] lg:font-black lg:text-[20px] lg:leading-[24px]"
+                    >
+                      {item?.title}
+                    </h3>
+                  </a>
+                  <p
+                    class="line-clamp-2 lg:mb-[32px] mb-[16px] font-figtree font-normal text-textPrimary text-base leading-[20px] lg:text-[18px] lg:leading-[22px]"
+                  >
+                    {item?.description}
+                  </p>
+                  <div class="w-full flex items-center gap-2">
+                    <span
+                      class="font-figtree font-normal text-sm leading-[18px] text-textSecondary"
+                    >
+                      {item?.publishedAt && formatDate(item?.publishedAt)}
+                    </span>
+                    <Image src={badge} alt="blog image" class="h-2 w-2" />
+                    <span
+                      class="font-figtree font-normal text-sm leading-[18px] text-textSecondary"
+                    >
+                       {calculateReadTime(item?.body)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )
+        )}
       </div>
 
-      {
-        posts.length < 10 ? null : (
-          <button class="font-figtree font-medium text-base leading-5 text-textPrimary bg-cardColor py-[14px] px-[24px] h-12 rounded-[16px] lg:w-fit lg:mx-auto cursor-pointer">
-            View more
-          </button>
-        )
-      }
+      <!-- View more button -->
+      {posts?.length >= 10 && (
+        <button
+          class="font-figtree font-medium text-base leading-5 text-textPrimary bg-cardColor py-[14px] px-[24px] h-12 rounded-[16px] lg:w-fit lg:mx-auto cursor-pointer"
+        >
+          View more
+        </button>
+      )}
     </div>
   </div>
 </section>
@@ -198,13 +239,11 @@ function formatDate(dateString: string) {
 
   buttons.forEach((btn) => {
     btn.addEventListener("click", () => {
-      // remove active style from all
       buttons.forEach((b) => {
         b.classList.remove("bg-white", "acd-shadow", "text-textPrimary");
         b.classList.add("text-textSecondary");
       });
 
-      // add active style to clicked
       btn.classList.add("bg-white", "acd-shadow", "text-textPrimary");
       btn.classList.remove("text-textSecondary");
     });
