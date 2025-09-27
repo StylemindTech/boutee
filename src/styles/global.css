@@ -12,16 +12,21 @@
     url("/fonts/PPRadioGrotesk-Black.woff2") format("woff2");
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: "PPRadioGrotesk", "Figtree", sans-serif;
   /* Modern shorthand for stylistic sets and ligatures */
   font-variant-ligatures: discretionary-ligatures;
   font-variant-alternates: stylistic;
   /* Legacy / explicit OpenType features */
-  font-feature-settings: 
-    "ss01" 1,   /* Alternative A (check Pangram demo which ssXX is used) */
-    "dlig" 1,   /* Discretionary ligatures */
-    "calt" 1;   /* Round dots / contextual alternates */
+  font-feature-settings:
+    "ss01" 1,
+    /* Alternative A (check Pangram demo which ssXX is used) */ "dlig" 1,
+    /* Discretionary ligatures */ "calt" 1; /* Round dots / contextual alternates */
 }
 /* 🎨 Custom Theme */
 @theme {
