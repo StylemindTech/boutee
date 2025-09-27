@@ -255,6 +255,6 @@ Sanity Studio is the backend interface for managing content.
 ---
 
 ## 7. 📚Support & References
-- [Sanity + Astro Blog Guide](https://www.sanity.io/docs/developer-guides/sanity-astro-blog)  
+- [Sanity + Astro Blog Guide](https://www.sanity.io/docs/developer-guides/sanity-astro-blog)  – Guide for step by step setup
 - [Sanity Studio Documentation](https://www.sanity.io/docs) – Guide for content management  
 - [Astro Documentation](https://docs.astro.build) – Guide for website behavior
