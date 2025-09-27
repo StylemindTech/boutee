@@ -74,20 +74,29 @@ function calculateReadTime(body: any[]): string {
     <!-- Blogs -->
     <div class="flex flex-col">
       <!-- Category buttons -->
+
       <div
         id="buttonGroup"
-        class="mb-[32px] hidden md:inline-flex items-center justify-center bg-cardColor rounded-2xl mx-auto h-12 p-1"
+        class="relative mb-[32px] hidden md:inline-flex items-center justify-center bg-cardColor rounded-2xl mx-auto h-12 p-1"
       >
+        <!-- Slider behind buttons -->
+        <div
+          id="slider"
+          class="absolute top-1 left-0 h-10 bg-white rounded-xl shadow-md transition-all duration-300 z-0"
+        >
+        </div>
+
         <button
-          class="h-10 py-2 px-6 rounded-xl cursor-pointer font-figtree font-normal text-sm leading-[18px] bg-white acd-shadow text-textPrimary"
+          class="relative z-10 h-10 py-2 px-6 rounded-xl cursor-pointer font-figtree font-normal text-sm leading-[18px] text-textPrimary"
           data-category="all"
         >
           View all
         </button>
+
         {
           categories?.map((cat) => (
             <button
-              class="h-10 py-2 px-6 rounded-xl cursor-pointer font-figtree font-normal text-sm leading-[18px] text-textSecondary capitalize"
+              class="relative z-10 h-10 py-2 px-6 rounded-xl cursor-pointer font-figtree font-normal text-sm leading-[18px] text-textSecondary capitalize"
               data-category={cat?.slug?.current || cat?.title}
             >
               {cat?.title}
@@ -237,44 +246,76 @@ function calculateReadTime(body: any[]): string {
 </section>
 
 <script>
-  // Desktop buttons
-  const buttons = document.querySelectorAll("#buttonGroup button");
-  const posts = document.querySelectorAll(".post-item");
+  document.addEventListener("DOMContentLoaded", () => {
+    const buttonGroup = document.getElementById("buttonGroup");
+    const buttons = buttonGroup?.querySelectorAll("button") || [];
+    const posts = document.querySelectorAll(".post-item");
+    const slider = document.getElementById("slider");
+    const mobileSelect = document.getElementById("mobileCategory");
 
-  buttons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const category = btn.dataset.category;
-
-      // Highlight active button
-      buttons.forEach((b) => {
-        b.classList.remove("bg-white", "acd-shadow", "text-textPrimary");
-        b.classList.add("text-textSecondary");
-      });
-      btn.classList.add("bg-white", "acd-shadow", "text-textPrimary");
-      btn.classList.remove("text-textSecondary");
-
-      // Filter posts
+    // Filter posts by category
+    const filterPosts = (category) => {
       posts.forEach((post) => {
-        const postCategories = post.dataset.category.split(" ");
-        if (category === "all" || postCategories.includes(category)) {
-          post.style.display = "flex";
-        } else {
-          post.style.display = "none";
-        }
+        const postCategories = post.dataset.category?.split(" ") || [];
+        post.style.display =
+          category === "all" || postCategories.includes(category)
+            ? "flex"
+            : "none";
       });
-    });
-  });
+    };
 
-  // Mobile select
-  const select = document.getElementById("mobileCategory");
-  select.addEventListener("change", () => {
-    const category = select.value;
-    posts.forEach((post) => {
-      const postCategories = post.dataset.category.split(" ");
-      post.style.display =
-        category === "all" || postCategories.includes(category)
-          ? "flex"
-          : "none";
+    // Move slider under the active button
+    const moveSlider = (button) => {
+      if (!slider || !button) return;
+      slider.style.width = `${button.offsetWidth}px`;
+      slider.style.transform = `translateX(${button.offsetLeft}px)`;
+    };
+
+    // Update active button styling
+    const setActiveButton = (activeBtn) => {
+      buttons.forEach((btn) => {
+        btn.classList.remove("text-textPrimary");
+        btn.classList.add("text-textSecondary");
+        btn.classList.remove("acd-shadow");
+      });
+      if (activeBtn) {
+        activeBtn.classList.remove("text-textSecondary");
+        activeBtn.classList.add("text-textPrimary");
+        activeBtn.classList.add("acd-shadow");
+      }
+    };
+
+    // Handle button click
+    const handleButtonClick = (btn) => {
+      const category = btn.dataset.category;
+      filterPosts(category);
+      moveSlider(btn);
+      setActiveButton(btn);
+
+      // Update mobile select if exists
+      if (mobileSelect) mobileSelect.value = category;
+    };
+
+    // Event listeners for buttons
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => handleButtonClick(btn));
     });
+
+    // Event listener for mobile dropdown
+    if (mobileSelect) {
+      mobileSelect.addEventListener("change", () => {
+        const selectedCategory = mobileSelect.value;
+        filterPosts(selectedCategory);
+
+        const matchingButton = Array.from(buttons).find(
+          (btn) => btn.dataset.category === selectedCategory
+        );
+        moveSlider(matchingButton);
+        setActiveButton(matchingButton);
+      });
+    }
+
+    // Initialize
+    if (buttons[0]) handleButtonClick(buttons[0]);
   });
 </script>
