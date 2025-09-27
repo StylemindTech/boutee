@@ -45,10 +45,12 @@ All commands are run from the root of the project, from a terminal:
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
 
+---
+---
 
 
 
-# Sanity + Astro Setup
+# Sanity + Astro Setup 
 
 This project uses **Sanity** as a headless CMS and **Astro** as the frontend framework.  
 Content is managed in Sanity Studio, while Astro fetches and renders it on the site.  
@@ -75,7 +77,7 @@ Content is managed in Sanity Studio, while Astro fetches and renders it on the s
 │   ├── sanity/
 │   │   ├── lib/
 │   │   │   ├── load-query.ts
-│   │   │   ├── url-for-image.ts
+│   │   │   └── url-for-image.ts
 │   │   │  
 │   │   └── schemaTypes/
 │   │       ├── author.ts
