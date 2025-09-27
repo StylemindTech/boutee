@@ -46,10 +46,3 @@ All commands are run from the root of the project, from a terminal:
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
 
 
-src/
- ├─ components/    # Reusable UI parts (buttons, cards, navbar, footer)
- ├─ layouts/       # Page layouts (header + footer wrappers)
- ├─ pages/         # Each .astro/.md/.mdx file is a route
- ├─ content/       # Markdown/MDX collections (blogs, products, etc.)
- ├─ styles/        # Global styles / Tailwind config overrides
- └─ lib/           # Utils, helpers, API functions
