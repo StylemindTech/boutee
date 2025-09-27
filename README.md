@@ -171,8 +171,90 @@ Example GROQ query:
 
 ---
 
-## 📚 References
 
+
+
+# Sanity + Astro Setup — Handover Document
+
+## 1. Project Overview
+
+This project is a **Boutee website** built with:
+
+- **Sanity CMS** – A content management system where all posts, authors, categories, and images are managed.
+- **Astro** – The website framework that fetches content from Sanity and displays it on the website.
+
+**Key Benefits for You:**
+
+- You can add, edit, or delete blog posts through Sanity Studio.  
+- Visual Editing lets you preview changes on the website before publishing.  
+- The system is structured so content updates automatically appear on the website after publishing.
+
+---
+
+## 2. Content Management (Sanity Studio)
+
+Sanity Studio is the backend interface for managing content.  
+
+- Accessible via a web browser (usually at `/studio` when running the site locally, or a hosted link after deployment).  
+
+**Key content types:**
+
+- **Posts** – Blog articles  
+- **Authors** – Information about writers  
+- **Categories** – Grouping posts by topics  
+- **Images & Text Blocks** – For visual and formatted content  
+
+**Workflow:**
+
+1. Log into Sanity Studio.  
+2. Click “New Post” or select an existing one.  
+3. Fill in title, content, category, images, and author.  
+4. Preview your changes.  
+5. Publish when ready – the website updates automatically after sometime.
+
+---
+
+## 3. Website Integration
+
+- The website automatically fetches content from Sanity in real-time.  
+- Every blog post is displayed dynamically on the site without needing manual updates.  
+- Images, text formatting, and links are rendered exactly as designed.  
+
+**Visual Editing:**  
+- This feature allows you to see how a draft post looks on the actual site before publishing.  
+- Changes in Sanity Studio reflect live on the website preview.
+
+---
+
+## 4. How the System Works
+
+1. **Content Creation:** You create content in Sanity Studio.  
+2. **Data Fetching:** The website reads the content from Sanity automatically.  
+3. **Rendering:** The website displays the content in the correct format with images, text, and categories.  
+4. **Publishing:** Once published, content is live on the website.  
+
+> This process ensures a smooth, no-code workflow for managing your blog.
+
+---
+
+## 5. Deployment & Hosting
+
+- The website is deployed (Vercel).  
+- Sanity’s content updates automatically reflect on the live site.  
+
+
+---
+
+## 6. ✅Best Practices & Recommendations
+
+- **Drafts:** Always preview your post before publishing.  
+- **Images:** Use properly sized images for faster page load.  
+- **Categories & Tags:** Keep them consistent for better organization.  
+- **Content Updates:** The system is designed for easy updates – regular publishing will keep your blog fresh.
+
+---
+
+## 7. 📚Support & References
 - [Sanity + Astro Blog Guide](https://www.sanity.io/docs/developer-guides/sanity-astro-blog)  
-- [Astro Docs](https://docs.astro.build)  
-- [Sanity Docs](https://www.sanity.io/docs)
+- [Sanity Studio Documentation](https://www.sanity.io/docs) – Guide for content management  
+- [Astro Documentation](https://docs.astro.build) – Guide for website behavior
