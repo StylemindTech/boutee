@@ -14,9 +14,6 @@ import { loadEnv } from "vite";
 const { PUBLIC_SANITY_PROJECT_ID } = loadEnv(process.env.PUBLIC_SANITY_PROJECT_ID, process.cwd(), "");
 const { PUBLIC_SANITY_DATASET } = loadEnv(process.env.PUBLIC_SANITY_DATASET, process.cwd(), "");
 
-console.log("Sanity Project ID:", PUBLIC_SANITY_PROJECT_ID);
-console.log("Sanity Dataset:", PUBLIC_SANITY_DATASET);
-
 // https://astro.build/config
 export default defineConfig({
    output: "server", // important for SSR
