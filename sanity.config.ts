@@ -3,8 +3,8 @@ import { structureTool } from "sanity/structure";
 import { schema } from "./src/sanity/schemaTypes";
 
 export default defineConfig({
-  projectId:"we90e4mg",
-  dataset:"production",
+  projectId: import.meta.env.SANITY_PROJECT_ID, // server-only
+  dataset: import.meta.env.SANITY_DATASET,     // server-only
   plugins: [
     structureTool(),
   ],

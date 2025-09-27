@@ -8,7 +8,10 @@ import react from '@astrojs/react';
 import sanity from "@sanity/astro";
 
 import vercel from '@astrojs/vercel';
-// import vercel from '@astrojs/vercel/server';
+import { loadEnv } from "vite";
+const { PUBLIC_SANITY_PROJECT_ID } = loadEnv(process.env.PUBLIC_SANITY_PROJECT_ID, process.cwd(), "");
+const { PUBLIC_SANITY_DATASET } = loadEnv(process.env.PUBLIC_SANITY_DATASET, process.cwd(), "");
+
 // https://astro.build/config
 export default defineConfig({
    output: "server", // important for SSR
@@ -17,14 +20,13 @@ export default defineConfig({
   },
 
   integrations: [sanity({
-      projectId: 'we90e4mg',
-      dataset: 'production',
+      projectId: PUBLIC_SANITY_PROJECT_ID,
+      dataset: PUBLIC_SANITY_DATASET,
       useCdn: true, // See note on using the CDN
       apiVersion: "2025-01-28", // insert the current date to access the latest version of the API
       studioBasePath: '/studio',
       stega: {
-        studioUrl: "/studio",
-        // studioUrl: "https://boutee.vercel.app/studio",
+        studioUrl: "/studio",      
       },
     }),react()],    
      adapter: vercel(),
