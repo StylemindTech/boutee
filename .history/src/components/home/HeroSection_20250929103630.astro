@@ -1,0 +1,95 @@
+---
+import { Image } from "astro:assets";
+import heroImg1 from "../../assets/Image/home-hero1.png";
+import heroImg2 from "../../assets/Image/home-hero2.png";
+import heroImg3 from "../../assets/Image/home-hero3.png";
+import userJewellers from "../../assets/Image/Jewellers-avtar.png";
+import loctionIcon from "../../assets/Image/loction-icon.svg";
+import starIcon from "../../assets/Image/Star.png";
+import btnIcon from "../../assets/icons/btn-icon.svg";
+import heroRating from "../../assets/icons/hero-rating.svg";
+---
+
+<section class="md:py-[112px] pt-[40px] pb-[24px]">
+  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+    <div class="grid xl:grid-cols-2 lg:gap-20 gap-[20px] items-center">
+      <!-- LEFT CONTENT -->
+      <div>
+        <div class="flex md:flex-row flex-col items-center gap-2 md:mb-20 mb-[36px]">
+          <Image src={userJewellers} alt="" />
+          <p class="md:text-base text-textPrimary text-[14px] font-figtree">
+            100+ jewellers on the platform
+          </p>
+        </div>
+
+        <h1 class="md:text-[80px] text-[48px] text-center md:text-start leading-[42px] text-textPrimary font-black md:leading-[84px] font-ppradio md:mb-6 mb-[16px]">
+          More quality.<br />Less mark-up.
+        </h1>
+
+        <p class="md:text-xl text-[16px] text-center md:text-start leading-[20px] md:leading-[24px] text-textSecondary font-figtree mb-12">
+          We match you with the perfect independent jeweller for your style and budget. Work directly with them to create a ring, without the traditional overhead.
+        </p>
+
+        <button
+          type="button"         
+          class="spinBtn cursor-pointer bg-btnPrimary btn-after text-white text-base leading-5 py-2 mx-auto md:ml-0 md:min-h-[56px] min-h-[48px] min-w-[212px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+        >
+          <Image src={btnIcon} class=" btnIcon w-5 h-5 transition-transform duration-500" alt="image" />
+          Find Your Jeweller
+        </button>
+
+        <div class="md:mt-20 mt-[36px]">
+          <Image alt="image" src={heroRating} class="max-w-[235px] mx-auto md:ml-0 md:max-w-none" />
+        </div>
+      </div>
+
+      <!-- RIGHT CONTENT (FLOATING + PARALLAX) -->
+      <div class="flex justify-center xl:justify-end xl:pr-[7rem] md:mt-[3rem] lg:mt-0">
+        <div class="card-container xl:mt-[-8rem] mt-[4rem] mb-[5rem] md:mb-0 md:mt-[0px] xl:ml-[-5rem]">
+
+          <!-- Top Left Image -->
+          <div class="corner-img top-left floating" data-speed="0.2" data-float="2">
+            <Image src={heroImg1} alt="Ring" />
+          </div>
+
+          <!-- Profile Card -->
+          <div class="card-detail floating" data-speed="0.4" data-float="6">
+            <div class="profile-img">
+              <span class="match-badge font-normal font-figtree text-textPrimary text-[18px] leading-5">93% match</span>
+              <Image src={heroImg2} alt="Ring" />
+            </div>
+            <div class="profile-info">
+              <h2 class="font-figtree font-bold text-textPrimary uppercase text-[20px] md:text-[22px] leading-6 md:leading-[26px]">GEORGE WILLIAMS</h2>
+              <p class="flex gap-1 items-center font-figtree font-normal text-base md:text-[18px] leading-[22px] text-textSecondary ">
+                <Image src={loctionIcon} alt="" />
+                Perthshire
+              </p>
+            </div>
+          </div>
+
+          <!-- Stats Card -->
+          <div class="stats-box flex gap-[12px] floating" data-speed="0.6" data-float="1">
+            <div class="orders-box text-center font-figtree font-bold text-base md:text-[18px] leading-[22px] text-textPrimary">
+              25+ 
+              <div class="review-other font-normal text-textSecondary text-base md:text-[18px] leading-5 font-figtree">orders</div>
+            </div>
+            <div class="border-r border-[#F2F3F7]"></div>
+            <div class="orders-box">
+              <div class="flex gap-1 items-baseline justify-center font-figtree font-bold text-base md:text-[18px] leading-[22px] text-textPrimary">
+                5 <Image alt="image" src={starIcon} />
+              </div>
+              <div class="review-other block text-center font-normal text-textSecondary text-base md:text-[18px] leading-5 font-figtree">reviews</div>
+            </div>
+          </div>
+
+          <!-- Bottom Right Image -->
+          <div class="corner-img bottom-right floating" data-speed="0.3" data-float="4">
+            <Image src={heroImg3} alt="Ring" />
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

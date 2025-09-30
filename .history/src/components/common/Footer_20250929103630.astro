@@ -1,0 +1,123 @@
+---
+import { Image } from "astro:assets";
+import logo from "../../assets/Logo.svg";
+import facebook from "../../assets/icons/facebook-icon.svg";
+import instagram from "../../assets/icons/instagram-icon.svg";
+---
+
+<footer class="bg-secondary px-6 lg:py-[80px] py-[40px] lg:p-20">
+  <div class="max-w-screen-2xl mx-auto">
+    <div class="flex flex-col md:gap-[80px] gap-[40px]">
+    <div class="flex flex-col md:flex-row gap-12 md:gap-8 md:justify-between">
+      <div class="flex flex-col gap-[56px] md:justify-between">
+        <div class="flex flex-col gap-4">
+          <a href="/"><Image src={logo} alt="icon" class="" /></a>
+          
+          <p class="font-figtree font-normal text-[14px] leading-4.5 md:w-2/3">
+            Boutee gives you access to the best independent jewellers from
+            around Britain, all in one place.
+          </p>
+        </div>
+        <div class="flex gap-2 flex-items-end">
+          <a
+            href="https://instagram.com"
+            aria-label="Boutee on Facebook"
+            target="_blank"
+          >
+            <Image
+              src={facebook}
+              alt="boutee facebook"
+              class="cursor-pointer"
+            /></a
+          >
+          <a
+            href="https://instagram.com"
+            aria-label="Boutee on Instagram"
+            target="_blank"
+          >
+            <Image
+              src={instagram}
+              alt="boutee instagram"
+              class="cursor-pointer"
+            /></a
+          >
+        </div>
+      </div>
+
+      <nav class="flex gap-6 md:gap-8" aria-label="Footer Navigation">
+        <ul class="flex flex-col md:w-[180px]">
+          <li
+            class="font-figtree font-normal text-base leading-5 text-textPrimary p-2 cursor-pointer"
+          >
+            <a href="/how-it-works" class="hover:border-b border-[#2C2C30] transition-all duration-200">How It Works</a>
+          </li>
+          <li
+            class="font-figtree font-normal text-base leading-5 text-textPrimary p-2 cursor-pointer"
+          >
+            <a href="/inspiration" class="hover:border-b border-[#2C2C30] transition-all duration-200">Inspiration</a>
+          </li>
+          <li
+            class="font-figtree font-normal text-base leading-5 text-textPrimary p-2 cursor-pointer"
+          >
+            <a href="/our-technology" class="hover:border-b border-[#2C2C30] transition-all duration-200">Our Technology</a>
+          </li>
+          <li
+            class="font-figtree font-normal text-base leading-5 text-textPrimary p-2 cursor-pointer"
+          >
+            <a href="/our-jewellers" class="hover:border-b border-[#2C2C30] transition-all duration-200">Our Jewellers</a>
+          </li>
+          <li
+            class="font-figtree font-normal text-base leading-5 text-textPrimary p-2 cursor-pointer"
+          >
+            <a href="/contact-us" class="hover:border-b border-[#2C2C30] transition-all duration-200">Contact</a>
+          </li>
+        </ul>
+        <ul class="flex flex-col md:w-28">
+          <li
+            class="font-figtree font-normal text-base leading-5 text-textPrimary p-2 cursor-pointer"
+          >
+            <a href="/for-jewellers" class="hover:border-b border-[#2C2C30] transition-all duration-200">For Jewellers</a>
+          </li>
+          <li
+            class="font-figtree font-normal text-base leading-5 text-textPrimary p-2 cursor-pointer"
+          >
+            <a href="/about-us" class="hover:border-b border-[#2C2C30] transition-all duration-200">About Us</a>
+          </li>
+          <li
+            class="font-figtree font-normal text-base leading-5 text-textPrimary p-2 cursor-pointer"
+          >
+            <a href="/faq" class="hover:border-b border-[#2C2C30] transition-all duration-200">FAQs</a>
+          </li>
+          <li
+            class="font-figtree font-normal text-base leading-5 text-textPrimary p-2 cursor-pointer"
+          >
+            <a href="/blog" class="hover:border-b border-[#2C2C30] transition-all duration-200">Blog</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="border-t border-[#A9A9B7]">
+      <div class="pt-[34px] flex flex-col-reverse md:flex-row gap-5 justify-between">
+        <p
+          class="font-normal font-figtree leading-3.5 text-text-secondary text-[12px] text-textSecondary"
+        >
+          © {new Date().getFullYear()} Boutee.
+        </p>
+        <div class="flex gap-6">
+          <a
+            href="/privacy-policy"
+            class="font-normal text-textSecondary font-figtree text-sm text-text-secondary underline underline-offset-3 leading-4.5"
+            >Privacy Policy</a
+          >
+          <a
+            href="/terms-of-service"
+            class="font-normal text-textSecondary font-figtree text-sm text-text-secondary underline underline-offset-3 leading-4.5"
+            >Terms of Service</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</footer>
