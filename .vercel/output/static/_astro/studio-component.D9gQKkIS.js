@@ -1,0 +1,1 @@
+import{af as n}from"./studio-component.DBJ1XNP8.js";import"./jsx-runtime.D_zvdyIk.js";import"./index.BzYBkEav.js";import"./_commonjsHelpers.D6-XlEtG.js";import"./index.BwQH2Ez3.js";import"./index.DCNugQIC.js";import"./proxy.D8ogka_w.js";import"./client._42cMryT.js";export{n as StudioComponent};

@@ -1,0 +1,557 @@
+---
+// ./src/pages/post/[slug].astro
+import type { SanityDocument } from "@sanity/client";
+import { loadQuery } from "../../sanity/lib/load-query";
+import BaseLayout from "../../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import rightShift from "../../assets/icons/right-shift.png";
+import badge from "../../assets/icons/Badge-blog.svg";
+import link from "../../assets/icons/Link.svg";
+import linkedin from "../../assets/icons/Linkedin.svg";
+import facebook from "../../assets/icons/Facebook.svg";
+import twitter from "../../assets/icons/X.svg";
+import arrow from "../../assets/icons/ArrowRight.svg";
+import { urlForImage } from "../../sanity/lib/url-for-image";
+
+export async function getStaticPaths() {
+  const { data: posts } = await loadQuery<SanityDocument[]>({
+    query: `*[_type == "post"]`,
+  });
+
+  return posts
+    .filter((p) => p?.slug?.current)
+    .map(({ slug }) => ({
+      params: { slug: slug.current },
+    }));
+}
+
+const { params } = Astro;
+
+const { data: post } = await loadQuery({
+  query: `*[_type == "post" && slug.current == $slug][0]{
+    title,
+    description,
+    slug,
+    "author": author->{
+      _id,
+      name,
+      image,
+      profession
+    },
+    "mainImage": mainImage{ ..., "url": asset->url },
+    "categories": categories[]->{ _id, title },
+    publishedAt,
+    body
+  }`,
+  params,
+});
+
+function formatDate(dateString: string) {
+  if (!dateString) return "";
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(dateString));
+}
+
+const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
+  query: `*[_type == "post" && slug.current != $slug && count(categories[@._ref in $categoryIds]) > 0] 
+    | order(publishedAt desc)[0...3]{
+      title,
+      slug,
+      publishedAt,
+      description,
+      mainImage,
+      "categories": categories[]->{ _id, title }
+    }`,
+  params: {
+    slug: post?.slug?.current,
+    categoryIds: post?.categories?.map((cat: any) => cat?._id) || [],
+  },
+});
+
+const extractHeadings = (content) => {
+  if (!content) return [];
+  return content
+    .filter(
+      (block) =>
+        block?._type === "block" &&
+        (block?.style === "h1" || block?.style === "h2")
+    )
+    .map((block) => ({
+      id: block?._key,
+      text: block?.children?.map((child) => child?.text).join("") || "",
+      level: block?.style === "h1" ? 1 : 2,
+    }));
+};
+
+const toc = extractHeadings(post?.body || []);
+
+function calculateReadTime(content: any[]): string {
+  if (!content || content.length === 0) return "1 min read";
+
+  const text = content
+    .filter((block) => block?._type === "block" && block?.children)
+    .map((block) => block.children.map((child) => child.text).join(" "))
+    .join(" ");
+
+  const words = text.trim().split(/\s+/).length;
+  const wordsPerMinute = 200;
+  const minutes = Math.ceil(words / wordsPerMinute);
+
+  return `${minutes} min read`;
+}
+---
+
+<BaseLayout title={`Boutee - ${post?.title || "Blog"}`}>
+  {
+    post ? (
+      <>
+        {/* <!-- Post Header --> */}
+        <section class="md:pt-[112px] md:pb-[32px] pt-[24px]">
+          <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto pb-[8px]">
+            <div class="flex flex-col justify-between lg:flex-row lg:gap-10 xl:gap-20">
+              <div class="flex flex-col justify-between mb-[48px] lg:mb-0">
+                <div class="pb-[20px] md:pb-[24px] mb-[24px] md:mb-[20px]">
+                  <div class="mb-[20px] md:mb-[24px] flex justify-start items-center gap-1">
+                    <a
+                      href="/blog"
+                      class="font-figtree font-normal text-[16px] leading-[20px] text-textSecondary"
+                    >
+                      Blog
+                    </a>
+                    <Image src={rightShift} class="h-3 w-3" alt="arrow" />
+                    {post?.categories && (
+                      <span class="font-figtree font-normal text-[16px] leading-[20px] text-textSecondary capitalize">
+                        {post.categories.map((cat) => cat?.title).join(", ")}
+                      </span>
+                    )}
+                  </div>
+                  <h1 class="font-ppradio font-black text-textPrimary text-[32px] leading-[36px] md:text-[52px] md:leading-[56px]">
+                    {post?.title}
+                  </h1>
+                </div>
+
+                <div>
+                  <div class="mb-[16px] md:mb-[32px] w-full flex items-center gap-[12px]">
+                    <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
+                      {formatDate(post?.publishedAt)}
+                    </span>
+                    <Image src={badge} alt="dot" class="h-2 w-2" />
+                    <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
+                      {calculateReadTime(post?.body)}
+                    </span>
+                  </div>
+
+                  <div>
+                    <p class="font-figtree font-normal text-[16px] leading-[20px] text-textPrimary mb-[16px]">
+                      Share this post
+                    </p>
+                    <div class="flex items-center gap-2">
+                      <a
+                        href="#"
+                        class="h-9 w-9 rounded-[12px] p-2 bg-cardColor"
+                      >
+                        <Image src={link} alt="link" class="h-5 w-5" />
+                      </a>
+                      <a
+                        href="#"
+                        class="h-9 w-9 rounded-[12px] p-2 bg-cardColor"
+                      >
+                        <Image src={facebook} alt="fb" class="h-5 w-5" />
+                      </a>
+                      <a
+                        href="#"
+                        class="h-9 w-9 rounded-[12px] p-2 bg-cardColor"
+                      >
+                        <Image src={linkedin} alt="linkedin" class="h-5 w-5" />
+                      </a>
+                      <a
+                        href="#"
+                        class="h-9 w-9 rounded-[12px] p-2 bg-cardColor"
+                      >
+                        <Image src={twitter} alt="twitter" class="h-5 w-5" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {post?.mainImage && (
+                <img
+                  src={`${urlForImage(post.mainImage)}`}
+                  alt={post?.mainImage?.alt || "blog image"}
+                  class="rounded-[24px] 
+                  w-full h-full 
+                  lg:w-[450px] lg:h-[380px]
+                  xl:w-[600px] xl:h-[425px] 
+                  object-cover"
+                />
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* <!-- Blog Content --> */}
+        <section class="md:py-[40px] lg:py-[80px] pt-[16px] pb-[48px]">
+          <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+            <div class="flex flex-col justify-between lg:flex-row gap-10 lg:gap-20 xl:gap-[120px]">
+              {/* <!-- Mobile TOC --> */}
+              {toc?.length > 0 && (
+                <div class="flex lg:hidden items-center w-full py-2 px-3 h-13 gap-1 bg-white border border-[#F2F3F7] acd-shadow rounded-[16px]">
+                  <select
+                    id="mobile-toc"
+                    name="category"
+                    class="w-full font-figtree font-bold text-[18px] leading-[22px] text-textPrimary outline-none"
+                  >
+                    {toc.map((heading) => (
+                      <option value={heading?.id}>{heading?.text}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {/* <!-- Blog Content --> */}
+              <div
+                class="blog_content__list flex flex-col font-figtree
+    [&>ul]:custom-counter-list
+    [&>ul]:counter-reset-li-counter
+    [&>ul>li]:relative
+    [&>ul>li]:mb-3
+    [&>ul>li]:pl-[40px]
+    [&>ul>li]:font-normal
+    [&>ul>li]:text-base
+    [&>ul>li]:text-textPrimary
+    [&>ul>li]:before:absolute
+    [&>ul>li]:before:left-0
+    [&>ul>li]:before:top-0
+    [&>ul>li]:before:flex
+    [&>ul>li]:before:items-center
+    [&>ul>li]:before:justify-center
+    [&>ul>li]:before:h-[28px]
+    [&>ul>li]:before:w-[28px]
+    [&>ul>li]:before:rounded-[40px]
+    [&>ul>li]:before:bg-[linear-gradient(189.75deg,#F2F3F7_-1.71%,#EDEAEF_100.1%)]
+    [&>ul>li]:before:content-[counter(li-counter)]
+    [&>ul>li]:before:counter-increment-li-counter
+    [&>blockquote]:py-3 [&>blockquote]:px-4 [&>blockquote]:bg-secondary [&>blockquote]:border [&>blockquote]:border-[#F2F3F7] [&>blockquote]:rounded-[16px] [&>blockquote]:italic [&>blockquote]:font-figtree [&>blockquote]:font-medium [&>blockquote]:text-[16px] [&>blockquote]:lg:text-[18px] [&>blockquote]:lg:leading-[22px] [&>blockquote]:leading-[20px] [&>blockquote]:text-textSecondary
+    [&>h1]:mb-[24px] [&>h1]:text-[28px] [&>h1]:lg:text-[40px] [&>h1]:font-ppradio [&>h1]:text-textPrimary [&>h1]:leading-[32px] [&>h1]:lg:leading-[44px]
+    [&>h2]:mb-[24px] [&>h2]:text-[22px] [&>h2]:lg:text-[32px] [&>h2]:font-ppradio [&>h2]:text-textPrimary [&>h2]:leading-[28px] [&>h2]:lg:leading-[40px]
+    [&>h3]:mb-[24px] [&>h3]:text-[20px] [&>h3]:lg:text-[28px] [&>h3]:font-ppradio [&>h3]:text-textPrimary [&>h3]:leading-[24px] [&>h3]:lg:leading-[36px]
+    [&>h4]:mb-[24px] [&>h4]:text-[18px] [&>h4]:lg:text-[24px] [&>h4]:font-ppradio [&>h4]:text-textPrimary [&>h4]:leading-[20px] [&>h4]:lg:leading-[32px]
+    [&>p]:mb-[16px] [&>p]:text-[16px] [&>p]:lg:text-[18px]"
+              >
+                {(() => {
+                  // ✅ Render inline marks (bold, italic, code, link)
+                  const renderChildren = (children, markDefs = []) =>
+                    children.map((c) => {
+                      let node = c.text;
+
+                      if (c.marks?.includes("strong")) {
+                        node = <strong class="font-bold">{node}</strong>;
+                      }
+                      if (c.marks?.includes("em")) {
+                        node = <em class="italic">{node}</em>;
+                      }
+                      if (c.marks?.includes("code")) {
+                        node = (
+                          <code class="bg-gray-100 px-1 rounded">{node}</code>
+                        );
+                      }
+                      if (c.marks?.length) {
+                        const def = markDefs.find((d) =>
+                          c.marks.includes(d._key)
+                        );
+                        if (def?.href) {
+                          node = (
+                            <a
+                              href={def.href}
+                              class="text-blue-600 underline"
+                              target="_blank"
+                            >
+                              {node}
+                            </a>
+                          );
+                        }
+                      }
+                      return node;
+                    });
+
+                  // ✅ Group blocks into lists
+                  const elements = [];
+                  let currentList = null;
+
+                  post?.body?.forEach((block) => {
+                    if (block._type === "block" && block.listItem) {
+                      // Inside a list
+                      if (
+                        !currentList ||
+                        currentList.style !== block.listItem
+                      ) {
+                        if (currentList) {
+                          elements.push(currentList.el);
+                        }
+                        currentList = {
+                          style: block.listItem,
+                          items: [],
+                          el: null,
+                        };
+                      }
+                      currentList.items.push(
+                        <li key={block._key}>
+                          {renderChildren(block.children, block.markDefs)}
+                        </li>
+                      );
+                    } else {
+                      // Close list if switching back to normal content
+                      if (currentList) {
+                        currentList.el =
+                          currentList.style === "bullet" ? (
+                            <ul key={block._key}>{currentList.items}</ul>
+                          ) : (
+                            <ol key={block._key}>{currentList.items}</ol>
+                          );
+                        elements.push(currentList.el);
+                        currentList = null;
+                      }
+
+                      // ✅ Normal content blocks
+                      if (block._type === "block") {
+                        const content = renderChildren(
+                          block.children,
+                          block.markDefs
+                        );
+
+                        if (block.style === "h1")
+                          elements.push(<h1 id={block._key}>{content}</h1>);
+                        else if (block.style === "h2")
+                          elements.push(<h2 id={block._key}>{content}</h2>);
+                        else if (block.style === "h3")
+                          elements.push(<h3 id={block._key}>{content}</h3>);
+                        else if (block.style === "h4")
+                          elements.push(<h4 id={block._key}>{content}</h4>);
+                        else if (block.style === "blockquote")
+                          elements.push(<blockquote>{content}</blockquote>);
+                        else elements.push(<p>{content}</p>);
+                      }
+
+                      // ✅ Image blocks
+                      if (block._type === "image" && block.asset?._ref) {
+                        const url = urlForImage(block).url();
+                        elements.push(
+                          <figure>
+                            <img
+                              src={url}
+                              alt={block.alt || "Blog image"}
+                              class="rounded-[24px] lg:h-[589px] w-full mb-[8px]"
+                            />
+                            {block.caption && (
+                              <figcaption>{block.caption}</figcaption>
+                            )}
+                          </figure>
+                        );
+                      }
+
+                      // ✅ Code blocks
+                      if (block._type === "code") {
+                        elements.push(
+                          <pre class="bg-gray-900 text-white p-4 rounded-lg overflow-x-auto">
+                            <code>{block.code}</code>
+                          </pre>
+                        );
+                      }
+                    }
+                  });
+
+                  // ✅ Close last list if still open
+                  if (currentList) {
+                    currentList.el =
+                      currentList.style === "bullet" ? (
+                        <ul key="last">{currentList.items}</ul>
+                      ) : (
+                        <ol key="last">{currentList.items}</ol>
+                      );
+                    elements.push(currentList.el);
+                  }
+
+                  return elements;
+                })()}
+              </div>
+
+              {/* <!-- Desktop TOC --> */}
+              {toc?.length > 0 && (
+                <div class="hidden lg:block sticky top-16 h-fit md:max-h-[300px] lg:max-h-[400px]  xl:max-h-[450px] overflow-y-auto min-w-fit pr-2">
+                  <h5 class="mb-[24px] font-figtree font-bold text-[20px] leading-[24px] text-textPrimary">
+                    Table of contents
+                  </h5>
+                  <ul id="toc-list">
+                    {toc.map((heading) => (
+                      <li
+                        class="mb-[8px] flex px-3 py-2 gap-2 items-center hover:bg-cardColor text-textSecondary hover:text-textPrimary rounded-[12px] cursor-pointer min-w-[320px]"
+                        data-id={heading.id}
+                      >
+                        <Image src={arrow} class="h-5 w-5" alt="arrow" />
+                        <span class="font-figtree text-[16px]">
+                          {heading.text}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            {/* <!-- Author --> */}
+            {post?.author && (
+              <div class="flex flex-row justify-start items-center gap-2 md:gap-4 mt-4 md:mt-6">
+                {post?.author?.image && (
+                  <img
+                    src={urlForImage(post.author.image)}
+                    alt={post?.author?.name || "author"}
+                    class="w-12 h-12 sm:w-14 sm:h-14 md:h-16 md:w-16 rounded-full object-cover"
+                  />
+                )}
+                <div class="text-center sm:text-left">
+                  <h3 class="font-figtree font-medium text-textPrimary text-start text-sm sm:text-base leading-5">
+                    {post?.author?.name}
+                  </h3>
+                  {post?.author?.profession && (
+                    <p class="font-figtree text-sm text-textSecondary">
+                      {post.author.profession}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* <!-- Related posts --> */}
+        {relatedPosts?.length > 0 && (
+          <section class="lg:py-[112px] py-[48px]">
+            <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+              <div class="lg:mb-[80px] mb-[24px]">
+                <div class="flex justify-between items-center w-full">
+                  <h2 class="lg:text-[52px] text-center md:text-start w-full text-[32px] lg:leading-[56px] leading-[36px] font-black font-ppradio text-textPrimary">
+                    Related posts
+                  </h2>
+                  <a
+                    href="/blog"
+                    class="hidden sm:flex font-figtree font-medium text-base w-[104px] leading-5 text-textPrimary bg-cardColor h-12 rounded-[16px] justify-center items-center cursor-pointer"
+                  >
+                    View all
+                  </a>
+                </div>
+              </div>
+
+              <div class="grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-[40px] gap-[20px]">
+                {relatedPosts.map(
+                  (rp) =>
+                    rp?.slug?.current && (
+                      <div class="min-w-[240px] rounded-[20px] border border-cardColor flex flex-col">
+                        <a href={`/blog/${rp.slug.current}`}>
+                          <img
+                            src={`${urlForImage(rp.mainImage)}`}
+                            alt={rp?.mainImage?.alt || "blog image"}
+                            class="rounded-[24px] mb-[8px] min-h-[231px] md:min-h-[293px] md:max-h-[293px]  w-full"
+                          />
+                        </a>
+                        <div class="p-[12px] lg:py-4 lg:px-5">
+                          {rp?.categories && (
+                            <span class="inline-block grid uppercase place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree text-[10px] text-textPrimary">
+                              {rp.categories
+                                .map((cat) => cat?.title)
+                                .join(", ")}
+                            </span>
+                          )}
+                          <a href={`/blog/${rp.slug.current}`}>
+                            <h3 class="mt-[12px] mb-[8px] font-figtree font-bold text-textPrimary text-lg lg:text-[20px]">
+                              {rp?.title}
+                            </h3>
+                          </a>
+                          <p class="line-clamp-2 mb-[16px] lg:mb-[32px] font-figtree text-base text-textPrimary">
+                            {rp?.description}
+                          </p>
+                          <div class="w-full flex items-center gap-2">
+                            <span class="font-figtree text-sm text-textSecondary">
+                              {formatDate(rp?.publishedAt)}
+                            </span>
+                            <Image src={badge} alt="dot" class="h-2 w-2" />
+                            <span class="font-figtree text-sm text-textSecondary">
+                              {/* fallback since relatedPosts has no body */}
+                              {calculateReadTime(post?.body || [])}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                )}
+              </div>
+
+              <button class="mt-[24px] w-full sm:hidden font-figtree font-medium text-base text-textPrimary bg-cardColor h-12 rounded-[16px] cursor-pointer">
+                View all
+              </button>
+            </div>
+          </section>
+        )}
+      </>
+    ) : (
+      <p class="text-center py-20 font-figtree text-lg text-textSecondary">
+        Post not found.
+      </p>
+    )
+  }
+  <script type="module">
+    window.addEventListener("DOMContentLoaded", () => {
+      const headings = document.querySelectorAll(
+        ".blog_content__list h1, .blog_content__list h2"
+      );
+      const tocItems = document.querySelectorAll("ul li[data-id]");
+      const mobileSelect = document.getElementById("mobile-toc");
+
+      function clearActive() {
+        tocItems.forEach((li) =>
+          li.classList.remove("text-textPrimary", "bg-cardColor")
+        );
+      }
+
+      function onScroll() {
+        let currentId = "";
+        headings.forEach((heading) => {
+          const rect = heading.getBoundingClientRect();
+          if (rect.top <= 120) currentId = heading.id;
+        });
+        if (!currentId) return;
+        clearActive();
+        const activeItem = document.querySelector(
+          `ul li[data-id="${currentId}"]`
+        );
+        if (activeItem)
+          activeItem.classList.add("text-textPrimary", "bg-cardColor");
+        if (mobileSelect) mobileSelect.value = currentId;
+      }
+
+      window.addEventListener("scroll", onScroll);
+
+      tocItems.forEach((li) => {
+        li.addEventListener("click", (e) => {
+          e.preventDefault();
+          const id = li.getAttribute("data-id");
+          const heading = document.getElementById(id);
+          if (heading)
+            heading.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+
+      if (mobileSelect) {
+        mobileSelect.addEventListener("change", (e) => {
+          const id = e.target.value;
+          const heading = document.getElementById(id);
+          if (heading)
+            heading.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
+    });
+  </script>
+</BaseLayout>
