@@ -1,4 +1,4 @@
-import { s as sanityClient } from './page-ssr_FgztEUp9.mjs';
+import { s as sanityClient } from './page-ssr_C231QJuk.mjs';
 import { c as createSvgComponent } from './Layout_BxXzLk-R.mjs';
 import imageUrlBuilder from '@sanity/image-url';
 
