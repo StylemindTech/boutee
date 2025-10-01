@@ -1,0 +1,1 @@
+const s={src:"/_astro/ins1.Dg6J740W.png",width:854,height:854,format:"png"},t={src:"/_astro/ins6.CmuCwYhL.png",width:1e3,height:1e3,format:"png"},n={src:"/_astro/ins5.f8zu7xqq.png",width:1e3,height:1001,format:"png"},r={src:"/_astro/ins2.BfNTs9BY.png",width:500,height:500,format:"png"};export{t as a,n as b,r as c,s as r};

@@ -1,0 +1,75 @@
+---
+import { Image } from "astro:assets";
+import Grow1 from "../../assets/icons/grow-1.svg";
+import Grow2 from "../../assets/icons/grow-2.svg";
+import Grow3 from "../../assets/icons/grow-3.svg";
+---
+
+<section class="lg:py-[112px] py-[48px]">
+    <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+         
+  <!-- Heading -->
+  <div class=" ">
+       <h2 class="lg:text-[52px] text-[32px] lg:leading-[56px] leading-[36px] font-black text-center font-ppradio md:text-start md:mb-[16px] mb-[20px]">
+             A smarter way <br class="hidden md:block"/> to grow your business
+                </h2>
+    <p class="font-figtree lg:text-[20px] text-[18px] text-center md:text-start lg:leading-[24px] leading-[22px] text-textSecondary ">
+     A few reasons jewellers love working with us
+    </p>
+  </div>
+
+  <!-- Cards -->
+  <div class="grid md:grid-cols-3 lg:gap-[40px] gap-[20px] lg:mt-[80px] mt-[24px]">
+    <!-- Card 1 -->
+    <div class="bg-cardColor rounded-[40px] p-[24px]">
+      <div class="w-[64px] h-[64px] flex items-center justify-center bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] rounded-[20px] mb-[24px]">
+        <Image src={Grow1} alt='icon' class='w-[32px] h-[32px]' />
+      </div>
+      <h3 class="lg:text-[32px] text-[22px] lg:leading-[36px] leading-[26px] font-black mb-[12px] text-textPrimary font-ppradio">
+        Receive qualified, <br/> style-matched leads
+      </h3>
+      <p class="lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary font-figtree">
+        Stop wasting time on mismatched enquiries.
+      </p>
+      <p class="lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary font-figtree mt-6">
+        Our technology analyzes a client’s unique style profile, ensuring the introductions we send are already a strong creative fit.
+      </p>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="bg-cardColor rounded-[40px] p-[24px]">
+      <div class="w-[64px] h-[64px] flex items-center justify-center bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] rounded-[20px] mb-[24px]">
+               <Image src={Grow2} alt='icon' class='w-[32px] h-[32px]' />
+
+      </div>
+      <h3 class="lg:text-[32px] text-[22px] lg:leading-[36px] leading-[26px] font-black mb-[12px] t text-textPrimary font-ppradio">
+        Stand out <br/> from the crowd
+      </h3>
+      <p class="lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary font-figtree">
+        You won’t get lost in a sea of listings.
+      </p>
+      <p class="lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary font-figtree mt-6">
+        Boutee is a curated platform where clients see the jewellers most relevant to them, ensuring your unique work gets seen by the right people.
+      </p>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="bg-cardColor rounded-[40px] p-[24px]">
+      <div class="w-[64px] h-[64px] flex items-center justify-center bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] rounded-[20px] mb-[24px]">
+               <Image src={Grow3} alt='icon' class='w-[32px] h-[32px]' />
+
+      </div>
+      <h3 class="lg:text-[32px] text-[22px] lg:leading-[36px] leading-[26px] font-black mb-[12px] text-textPrimary font-ppradio">
+        Keep your process, <br/> your way
+      </h3>
+      <p class="lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary font-figtree">
+        Stop wasting time on mismatched enquiries.
+      </p>
+      <p class="lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary font-figtree mt-6">
+        Our technology analyzes a client’s unique style profile, ensuring the introductions we send are already a strong creative fit.
+      </p>
+    </div>
+</div>
+
+    </div>
+</section>

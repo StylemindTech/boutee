@@ -1,0 +1,140 @@
+---
+import { Image } from "astro:assets";
+import smsImg from "../../assets/Image/sms-icon.svg";
+import our1 from "../../assets/Image/our1.png";
+import our2 from "../../assets/Image/our2.png";
+import our3 from "../../assets/Image/our3.png";
+import our4 from "../../assets/Image/our4.png";
+import our5 from "../../assets/Image/our5.png";
+import userJewellers from "../../assets/Image/Jewellers-avtar.png";
+import btnIcon from "../../assets/icons/btn-icon.svg";
+import heroRating from "../../assets/icons/hero-rating.svg";
+import "../../styles/forJewellers.css";
+---
+
+<section class="md:py-[112px] pt-[36px] pb-[24px]">
+  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+    <div class="grid xl:grid-cols-2 md:gap-20 gap-[60px] items-center">
+      <div>
+        <div class="flex md:flex-row flex-col items-center gap-2">
+          <div>
+            <Image src={userJewellers} alt="" />
+          </div>
+          <p class="md:text-base text-textPrimary text-[14px] font-figtree">
+            100+ jewellers on the platform
+          </p>
+        </div>
+
+        <h1
+          class="md:text-[80px] mt-[36px] md:mt-0 text-[48px] lg:max-w-[599px] text-center md:text-start leading-[42px] text-textPrimary md:font-black md:leading-[84px] font-ppradio md:mb-6 mb-[16px]"
+        >
+          Connect with customers who are looking for you
+        </h1>
+
+        <p
+          class="md:text-xl text-[16px] text-center md:text-start leading-[20px] md:leading-[24px] text-textSecondary font-figtree md:mb-[48px] mb-[32px]"
+        >
+          Boutee is a matchmaking service dedicated to introducing discerning
+          clients to Britain's best independent jewellers. We are not a crowded
+          marketplace. Our focus is on quality over quantity, using our
+          technology to bring you style-matched clients so you can spend less
+          time finding work and more time creating it.
+        </p>
+        <div
+          class="flex flex-wrap justify-center md:justify-start md:gap-[16px] gap-[8px] items-center"
+        >
+          <button
+            type="button"
+            class="spinBtn cursor-pointer bg-btnPrimary text-white text-base leading-5 py-2 min-h-[56px] min-w-[167px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+          >
+            <Image src={btnIcon} class="btnIcon w-5 h-5" alt="image" />
+            Join Boutee
+          </button>
+          <button
+            type="button"
+            class="cursor-pointer bg-transparent border border-borderOutline text-text-textPrimary text-base leading-5 py-2 md:ml-0 min-h-[56px] min-w-[152px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+          >
+            Jeweller Login
+          </button>
+        </div>
+      </div>
+
+      <div class="flex justify-center xl:justify-end">
+        <div
+          class="md:max-w-[600px] max-w-[315px] w-full relative h-full max-h-[600px] min-h-[415px] md:min-h-[600px]"
+        >
+          <div class="side absolute top-left floating" data-speed="0.5" data-float="4">
+            <Image src={our2} class="" alt="image" />
+          </div>
+          <div class="side absolute top-right floating" data-speed="0.6" data-float="1">
+            <Image src={our3} class="" alt="image" />
+          </div>
+          <div class="side absolute bottom-left floating" data-speed="0.3" data-float="6">
+            <Image src={our4} class="img-profile" alt="image" />
+          </div>
+          <div class="side absolute bottom-right floating" data-speed="0.4" data-float="3">
+            <Image src={our5} class="img-profile" alt="image" />
+          </div>
+          <div class="main-profile " >
+            <Image src={our1} class="img-profile" alt="image" />
+            <div class="px-[8.76px] w-full">
+              <h3
+                class="md:mt-[16px] mt-[12px] mb-[4.5px] md:text-[21px] text-[14px] leading-[26px] font-bold text-[#2B2E37]"
+              >
+                MICHAEL BENNETT
+              </h3>
+              <div
+                class="bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)]
+         px-[10px] py-[5px] md:py-[8px]
+         rounded-full
+         md:text-[20px] text-[12px] md:leading-[24px] leading-[16px] font-normal
+         text-[#171719]"
+              >
+                85% match
+              </div>
+            </div>
+          </div>
+          <div
+            class="chat top absolute bg-white
+         md:px-[11.62px] px-[8px] md:py-[9.68px] py-[6.68px]
+         md:rounded-[16px] rounded-[10px] rounded-br-none
+         text-[14px] leading-[18px]
+         max-w-[211px] text-textPrimary
+         shadow-[0_2.85px_5.69px_0px_#1F21280F,0_1.42px_3.56px_0px_#1F212805] floating" data-speed="0.5" data-float="4"
+          >
+            You match my style perfectly. <br /> I want to order a ring, can we discuss
+            the details?
+          </div>
+          <div
+            class="chat bottom absolute bg-white
+         md:px-[11.62px] px-[8px] md:py-[9.68px] py-[6.68px]
+         md:rounded-[16px] rounded-[10px] rounded-tl-none
+         text-[14px] leading-[18px] text-textPrimary
+         max-w-[211px]
+         shadow-[0_2.85px_5.69px_0px_#1F21280F,0_1.42px_3.56px_0px_#1F212805]  floating"
+           data-speed="0.3" data-float="6">
+            Hi! You make fantastic rings. Can you make one for me?
+          </div>
+          <div class="msg-icon left absolute">
+            <Image src={smsImg} class="w-[54px] h-[54px]" alt="image" />
+          </div>
+          <div class="msg-icon right absolute">
+            <Image src={smsImg} class="w-[54px] h-[54px]" alt="image" />
+          </div>
+          <div
+            class="md:w-[284px] md:h-[190px] w-[180px] h-[120px] bg-[#F702FF0F] blur-[88px] absolute top-[300px] left-[59px] z-[-9] pointer-events-none"
+          >
+          </div>
+          <div
+            class="md:w-[284px] md:h-[190px] w-[180px] h-[120px] bg-[#F6D89547] blur-[88px] absolute top-[331px] right-[8px] z-[-9] pointer-events-none"
+          >
+          </div>
+          <div
+            class="md:w-[338px] md:h-[156px] w-[220px] h-[120px] rotate-[-18.22deg] bg-[#B9F55147] blur-[88px] absolute md:top-[28px] top-[15px] right-[58px] z-[-9] pointer-events-none"
+          >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
