@@ -10,42 +10,42 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
 import heroRating from "../../assets/icons/hero-rating.svg";
 ---
 
-<section class="md:py-[112px] pt-[40px] pb-[24px]">
-  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
-    <div class="grid xl:grid-cols-2 lg:gap-20 gap-[20px] items-center">
+<section class="md:py-section-padding-desktop pt-component-gap-medium pb-container-padding-mobile">
+  <div class="max-w-container-max-width px-container-padding-mobile lg:px-container-padding-desktop mx-auto">
+    <div class="grid xl:grid-cols-2 lg:gap-grid-gap-desktop gap-m items-center">
       <!-- LEFT CONTENT -->
       <div>
-        <div class="flex md:flex-row flex-col items-center gap-2 md:mb-20 mb-[36px]">
+        <div class="flex md:flex-row flex-col items-center gap-xxs md:mb-20 mb-[36px]">
           <Image src={userJewellers} alt="" />
-          <p class="md:text-base text-textPrimary text-[14px] font-figtree">
-            100+ jewellers on the platform
+          <p class="md:text-body-mobile text-textPrimary text-small font-figtree">
+            60+ jewellers are on Boutee
           </p>
         </div>
 
-        <h1 class="md:text-[80px] text-[48px] text-center md:text-start leading-[42px] text-textPrimary font-black md:leading-[84px] font-ppradio md:mb-6 mb-[16px]">
+        <h1 class="md:text-hero-desktop text-hero-mobile text-center md:text-start leading-hero-mobile text-textPrimary font-black md:leading-hero-desktop font-ppradio md:mb-text-gap-medium mb-text-gap-small">
           More quality.<br />Less mark-up.
         </h1>
 
-        <p class="md:text-xl text-[16px] text-center md:text-start leading-[20px] md:leading-[24px] text-textSecondary font-figtree mb-12">
+        <p class="md:text-large-desktop text-body-mobile text-center md:text-start leading-body-mobile md:leading-large-desktop text-textSecondary font-figtree mb-12">
           We match you with the perfect independent jeweller for your style and budget. Work directly with them to create a ring, without the traditional overhead.
         </p>
 
-        <button
-          type="button"         
-          class="spinBtn cursor-pointer bg-btnPrimary btn-after text-white text-base leading-5 py-2 mx-auto md:ml-0 md:min-h-[56px] min-h-[48px] min-w-[212px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
-        >
-          <Image src={btnIcon} class=" btnIcon w-5 h-5 transition-transform duration-500" alt="image" />
+        <button type="button" class="spinBtn cursor-pointer bg-btnPrimary btn-after text-white text-body-mobile leading-body-mobile py-button-padding-y mx-auto md:ml-0 md:min-h-[56px] min-h-[48px] min-w-[212px] px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3">
+          <Image src={btnIcon} class="btnIcon w-5 h-5 transition-transform duration-500" alt="image" />
           Find Your Jeweller
         </button>
 
-        <div class="md:mt-20 mt-[36px]">
-          <Image alt="image" src={heroRating} class="max-w-[235px] mx-auto md:ml-0 md:max-w-none" />
+        <div class="md:mt-20 mt-[36px] text-center md:text-left">
+          <a href="https://www.trustpilot.com/review/boutee.co.uk" target="_blank" rel="noopener noreferrer" class="inline-block">
+            <Image alt="image" src={heroRating} class="max-w-[235px] mx-auto md:ml-0 md:max-w-none" />
+          </a>
         </div>
       </div>
 
       <!-- RIGHT CONTENT (FLOATING + PARALLAX) -->
       <div class="flex justify-center xl:justify-end xl:pr-[7rem] md:mt-[3rem] lg:mt-0">
         <div class="card-container xl:mt-[-8rem] mt-[4rem] mb-[5rem] md:mb-0 md:mt-[0px] xl:ml-[-5rem]">
+          <div class="extra-blur"></div>
 
           <!-- Top Left Image -->
           <div class="corner-img top-left floating" data-speed="0.2" data-float="2">
@@ -55,30 +55,30 @@ import heroRating from "../../assets/icons/hero-rating.svg";
           <!-- Profile Card -->
           <div class="card-detail floating" data-speed="0.4" data-float="6">
             <div class="profile-img">
-              <span class="match-badge font-normal font-figtree text-textPrimary text-[18px] leading-5">93% match</span>
+              <span class="match-badge font-normal font-figtree text-textPrimary text-body-desktop leading-body-mobile">93% match</span>
               <Image src={heroImg2} alt="Ring" />
             </div>
             <div class="profile-info">
-              <h2 class="font-figtree font-bold text-textPrimary uppercase text-[20px] md:text-[22px] leading-6 md:leading-[26px]">GEORGE WILLIAMS</h2>
-              <p class="flex gap-1 items-center font-figtree font-normal text-base md:text-[18px] leading-[22px] text-textSecondary ">
+              <h2 class="font-figtree font-bold text-textPrimary uppercase text-large-desktop md:text-[22px] leading-6 md:leading-[26px]">Callum Hughes</h2>
+              <p class="flex gap-1 items-center font-figtree font-normal text-body-mobile md:text-body-desktop leading-large-mobile text-textSecondary">
                 <Image src={loctionIcon} alt="" />
-                Perthshire
+                Oxfordshire
               </p>
             </div>
           </div>
 
           <!-- Stats Card -->
-          <div class="stats-box flex gap-[12px] floating" data-speed="0.6" data-float="1">
-            <div class="orders-box text-center font-figtree font-bold text-base md:text-[18px] leading-[22px] text-textPrimary">
+          <div class="stats-box flex gap-xxs floating" data-speed="0.6" data-float="1">
+            <div class="orders-box text-center font-figtree font-bold text-body-mobile md:text-body-desktop leading-large-mobile text-textPrimary">
               25+ 
-              <div class="review-other font-normal text-textSecondary text-base md:text-[18px] leading-5 font-figtree">orders</div>
+              <div class="review-other font-normal text-textSecondary text-body-mobile md:text-body-desktop leading-body-mobile font-figtree">orders</div>
             </div>
             <div class="border-r border-[#F2F3F7]"></div>
             <div class="orders-box">
-              <div class="flex gap-1 items-baseline justify-center font-figtree font-bold text-base md:text-[18px] leading-[22px] text-textPrimary">
+              <div class="flex gap-1 items-baseline justify-center font-figtree font-bold text-body-mobile md:text-body-desktop leading-large-mobile text-textPrimary">
                 5 <Image alt="image" src={starIcon} />
               </div>
-              <div class="review-other block text-center font-normal text-textSecondary text-base md:text-[18px] leading-5 font-figtree">reviews</div>
+              <div class="review-other block text-center font-normal text-textSecondary text-body-mobile md:text-body-desktop leading-body-mobile font-figtree">reviews</div>
             </div>
           </div>
 
@@ -92,4 +92,3 @@ import heroRating from "../../assets/icons/hero-rating.svg";
     </div>
   </div>
 </section>
-

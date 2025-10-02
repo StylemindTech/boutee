@@ -11,11 +11,12 @@ import heroImgSet7 from "../../assets/Image/img-set8.png";
 ---
 
 <section
-  class="md:pt-[112px] md:pb-[160px] pt-[124px] pb-[124px] overflow-hidden"
+  class="md:pt-[192px] pt-[124px] md:pb-[160px] pb-[124px] overflow-hidden"
 >
   <div
-    class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto relative md:pb-[96px] pb-0"
+    class="max-w-container-max-width px-container-padding-mobile lg:px-container-padding-desktop mx-auto relative md:pb-[96px] pb-0"
   >
+    <!-- Keep floating images as-is since they're animation-specific -->
     <Image
       src={heroImgSet}
       alt="image"
@@ -74,7 +75,7 @@ import heroImgSet7 from "../../assets/Image/img-set8.png";
     />
     <div class="text-center items-center max-w-[990px] mx-auto">
       <div
-        class="md:text-[16px] text-[10px] font-medium md:leading-[20px] leading-[14px] text-textPrimary bg-cardColor md:py-[8.5px] py-[5px] md:px-[16px] px-[12px] font-figtree rounded-[40px] inline"
+        class="md:text-body-mobile text-tiny font-medium md:leading-body-mobile leading-small text-textPrimary bg-cardColor md:py-badge-padding-y py-[5px] md:px-badge-padding-x px-s font-figtree rounded-xxxl inline"
       >
         ABOUT US
       </div>
@@ -82,7 +83,7 @@ import heroImgSet7 from "../../assets/Image/img-set8.png";
         data-aos="fade-up"
         data-aos-duration="500"
         data-aos-delay="100"
-        class="xl:text-[80px] lg:text-[60px] md:mt-[48px] about-head-p mt-[32px] text-[48px] text-center leading-[42px] lg:leading-[64px] text-textPrimary md:font-black xl:leading-[84px] font-ppradio mb-[24px]"
+        class="xl:text-hero-desktop lg:text-[60px] md:mt-heading-margin-top-desktop about-head-p mt-heading-margin-top-mobile text-hero-mobile text-center leading-hero-mobile lg:leading-[64px] text-textPrimary md:font-black xl:leading-hero-desktop font-ppradio mb-text-gap-medium"
       >
         We knew there had to be a better way to find a ring
       </h1>
@@ -91,7 +92,7 @@ import heroImgSet7 from "../../assets/Image/img-set8.png";
         data-aos="fade-up"
         data-aos-duration="700"
         data-aos-delay="200"
-        class="md:text-xl text-[16px] lg:px-5 about-head-p text-center leading-[20px] md:leading-[24px] text-textSecondary font-figtree"
+        class="md:text-large-desktop text-body-mobile lg:px-5 about-head-p text-center leading-body-mobile md:leading-large-desktop text-textSecondary font-figtree"
       >
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
         varius enim in eros elementum tristique. Duis cursus, mi quis viverra
@@ -100,4 +101,3 @@ import heroImgSet7 from "../../assets/Image/img-set8.png";
     </div>
   </div>
 </section>
-

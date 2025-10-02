@@ -10,65 +10,66 @@ import img3 from "../../assets/Image/ourJewHero-3.jpg";
 import "../../styles/ourJewellers.css";
 ---
 
-<section class="md:py-[112px] pt-[36px] pb-[24px]">
-  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
-    <div class="grid xl:grid-cols-2 xl:gap-20 gap-[48px] items-center">
+<section class="md:py-section-padding-desktop pt-section-padding-mobile pb-container-padding-mobile">
+  <div class="max-w-container-max-width px-container-padding-mobile lg:px-container-padding-desktop mx-auto">
+    <div class="grid xl:grid-cols-2 xl:gap-grid-gap-desktop gap-section-padding-mobile items-center">
       <div
         class="flex flex-col items-center md:items-start md:justify-start justify-center"
       >
         <div
-          class="md:text-[16px] text-[10px] font-medium md:leading-[20px] leading-[14px] text-textPrimary bg-cardColor md:py-[8px] py-[5px] md:px-[16px] px-[12px] font-figtree rounded-[40px] inline"
+          class="md:text-body-mobile text-tiny font-medium md:leading-body-mobile leading-small text-textPrimary bg-cardColor md:py-badge-padding-y py-[5px] md:px-badge-padding-x px-s font-figtree rounded-xxxl inline"
         >
           OUR JEWELLERS
         </div>
 
         <h1
-          class="md:text-[80px] md:mt-[48px] mt-[32px] text-[48px] text-center md:text-start leading-[42px] text-textPrimary font-black md:leading-[84px] font-ppradio md:mb-6 mb-[16px]"
+          class="md:text-hero-desktop md:mt-heading-margin-top-desktop mt-heading-margin-top-mobile text-hero-mobile text-center md:text-start leading-hero-mobile text-textPrimary font-black md:leading-hero-desktop font-ppradio md:mb-text-gap-medium mb-text-gap-small"
         >
           The difference <br /> is the maker
         </h1>
 
         <p
-          class="md:text-xl text-[16px] text-center md:text-start leading-[20px] md:leading-[24px] text-textSecondary font-figtree md:mb-12 mb-[36px]"
+          class="md:text-large-desktop text-body-mobile text-center md:text-start leading-body-mobile md:leading-large-desktop text-textSecondary font-figtree md:mb-12 mb-[36px]"
         >
-          A truly exceptional ring is born from a partnership between a
-          visionary client and a skilled artist. We've built our private
-          community by seeking out the most talented independent jewellers in
-          Britain.
+        An exceptional ring comes from the right partnership — your ideas, 
+        brought to life by a skilled independent jeweller. 
+        That’s why we’ve built a community of Britain’s most talented makers.
         </p>
         <button
           type="button"
-          class="spinBtn cursor-pointer bg-btnPrimary relative btn-after-jewellers z-[9] text-white text-base leading-5 py-2 mx-auto md:ml-0 md:min-h-[56px] min-h-[48px] min-w-[212px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+          class="spinBtn cursor-pointer bg-btnPrimary relative btn-after-jewellers z-[9] text-white text-body-mobile leading-body-mobile py-button-padding-y mx-auto md:ml-0 md:min-h-[56px] min-h-[48px] min-w-[212px] px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3"
         >
           <Image src={btnIcon} class="btnIcon w-5 h-5" alt="image" />
           Find Your Jeweller
         </button>
 
         <div
-          class="flex md:mt-[84px] mt-[52px] md:flex-row flex-col items-center gap-2"
+          class="flex md:mt-[84px] mt-[52px] md:flex-row flex-col items-center gap-xxs"
         >
           <div>
             <Image src={userJewellers} alt="" />
           </div>
-          <p class="md:text-base text-textPrimary text-[14px] font-figtree">
-            100+ jewellers on the platform
+          <p class="md:text-body-mobile text-textPrimary text-small font-figtree">
+            60+ jewellers are on Boutee
           </p>
         </div>
       </div>
 
       <div class="flex justify-center xl:justify-end w-full xl:mt-[-15rem]">
+        <!-- Keep the complex floating card structure as-is since it's animation-specific -->
         <div
           class="md:max-w-[600px] max-w-[320px] lg:min-h-[400px] min-h-[350px] md:min-h-[480px] xl:min-h-none relative h-full w-full"
         >
+          <!-- Internal card structure remains unchanged as it's tied to animations -->
           <div class="card user-card floating" data-speed="0.2" data-float="2">
             <Image
               src={img1}
               class="user-card-img ourImg object-cover object-top"
               alt="image"
             />
-            <div class="user-text px-2 pt-3 md:pt-4">
+            <div class="user-text px-xxs pt-3 md:pt-4">
               <p
-                class="text-[10px] md:text-base leading-4 md:leading-5 font-figtree text-textSecondary font-normal"
+                class="text-tiny md:text-body-mobile leading-4 md:leading-body-mobile font-figtree text-textSecondary font-normal"
               >
                 Hey! I need a special ring for a special occasion.
               </p>
@@ -79,22 +80,22 @@ import "../../styles/ourJewellers.css";
           <div class="info-box floating" data-speed="0.4" data-float="6">
             <div class="w-[65px] sm:w-[75px] md:w-[89px] text-center">
               <span
-                class="font-figtree font-bold text-textPrimary text-sm md:text-base lg:text-[18px] leading-4 md:leading-[22px] text-center"
+                class="font-figtree font-bold text-textPrimary text-small md:text-body-mobile lg:text-body-desktop leading-4 md:leading-large-mobile text-center"
               >
                 £1500
               </span><span
-                class="font-figtree text-textSecondary text-xs md:text-[18px] leading-4 md:leading-[22px] text-center block font-normal"
+                class="font-figtree text-textSecondary text-xs md:text-body-desktop leading-4 md:leading-large-mobile text-center block font-normal"
                 >budget</span>
             </div>
             <span class="border-r border-[#F2F3F7]"></span>
             <div class="w-[65px] sm:w-[75px] md:w-[89px] text-center">
               <span
-                class="font-figtree font-bold text-textPrimary text-sm md:text-base lg:text-[18px] leading-4 md:leading-[22px] text-center"
+                class="font-figtree font-bold text-textPrimary text-small md:text-body-mobile lg:text-body-desktop leading-4 md:leading-large-mobile text-center"
               >
                 5-6
               </span>
               <span
-                class="font-figtree text-textSecondary text-xs md:text-[18px] leading-4 md:leading-[22px] text-center block font-normal"
+                class="font-figtree text-textSecondary text-xs md:text-body-desktop leading-4 md:leading-large-mobile text-center block font-normal"
                 >weeks</span>
             </div>
           </div>
@@ -113,16 +114,16 @@ import "../../styles/ourJewellers.css";
               class="jeweller-card-img ourImg object-cover object-top"
               alt="image"
             />
-            <div class="pt-4 px-2">
+            <div class="pt-4 px-xxs">
               <h3
                 class="font-figtree font-bold text-[12px] md:text-[21px] leading-5 md:leading-[26px] uppercase text-textPrimary mb-1"
               >
                 LEONOR JEWELLERY
               </h3>
               <p
-                class="text-[10px] md:text-base leading-4 md:leading-5 font-figtree text-textSecondary font-normal -tracking-normal"
+                class="text-tiny md:text-body-mobile leading-4 md:leading-body-mobile font-figtree text-textSecondary font-normal -tracking-normal"
               >
-                I’ll make the perfect one for you!
+                I'll make the perfect one for you!
               </p>
             </div>
           </div>

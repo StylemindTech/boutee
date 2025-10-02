@@ -3,31 +3,21 @@ import { Image } from "astro:assets";
 import btnIcon from "../../assets/icons/btn-icon.svg";
 ---
 
-<section class="lg:py-[112px] py-[48px]">
-  <div
-    class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto"
-  >
-  <div class="text-center bg-cardColor rounded-[48px] lg:px-[150px] lg:py-[88px] py-[64px] px-[24px] ">
-      <h3
-      class="lg:text-[52px] text-center mb-[24px] text-[32px] md:text-[28px] leading-[36px] lg:leading-[56px] font-black  text-textPrimary font-ppradio"
-    >
-  Your onboarding, supported
-    </h3>
-    <p
-      class="text-[16px] text-center mb-[48px] md:text-[18px] leading-[20px] lg:leading-[22px] max-w-[880px] mx-auto font-normal text-textPrimary font-figtree"
-    >
-      A real person will be there to guide you through the entire setup. <br>
-Most of our jewellers are fully onboarded and live on the platform with about  <br>
-<span class="font-bold">2 hours of work, spread over a week.</span>
-    </p>
-     <button
-      type="button"
-      class="spinBtn cursor-pointer bg-btnPrimary mx-auto text-white text-base leading-5 py-2 min-h-[56px]  min-w-[167px] px-6 rounded-full font-figtree font-medium flex items-center gap-3 btn-cta"
-    >
-          <Image src={btnIcon} class="btnIcon w-5 h-5" alt="image" />
-
-     Join Boutee
-    </button>
-  </div>
+<section class="py-section-padding-mobile lg:py-section-padding-desktop">
+  <div class="max-w-container-max-width px-container-padding-mobile lg:px-container-padding-desktop mx-auto">
+    <div class="text-center bg-cardColor rounded-xxxl lg:px-[150px] lg:py-[88px] py-grid-gap-mobile px-container-padding-mobile">
+      <h3 class="lg:text-heading-desktop text-center mb-text-gap-medium text-heading-mobile md:text-subheading-mobile leading-heading-mobile lg:leading-heading-desktop font-black text-textPrimary font-ppradio">
+        Your onboarding, supported
+      </h3>
+      <p class="text-body-mobile text-center mb-heading-margin-top-desktop md:text-body-desktop leading-body-mobile lg:leading-large-mobile max-w-[880px] mx-auto font-normal text-textPrimary font-figtree">
+        A real person will be there to guide you through the entire setup. <br>
+        Most of our jewellers are fully onboarded and live on the platform with about <br>
+        <span class="font-bold">2 hours of work, spread over a week.</span>
+      </p>
+      <button type="button" class="spinBtn cursor-pointer bg-btnPrimary mx-auto text-white text-body-mobile leading-body-mobile py-button-padding-y min-h-[56px] min-w-[167px] px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3 btn-cta">
+        <Image src={btnIcon} class="btnIcon w-5 h-5" alt="image" />
+        Join Boutee
+      </button>
+    </div>
   </div>
 </section>

@@ -3,28 +3,28 @@ import { Image } from "astro:assets";
 import whoImg from "../../assets/Image/cta-img.png";
 ---
 
-<section class="lg:py-[112px] py-[48px]">
-  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+<section class="py-section-padding-mobile lg:py-section-padding-desktop">
+  <div class="max-w-container-max-width px-container-padding-mobile lg:px-container-padding-desktop mx-auto">
     <div
-      class="bg-cardColor rounded-[40px] grid md:grid-cols-2 lg:gap-[80px] md:gap-[10px] gap-[8px] overflow-hidden"
+      class="bg-cardColor rounded-xxxl grid md:grid-cols-2 lg:gap-grid-gap-desktop md:gap-[10px] gap-xxs overflow-hidden"
     >
       <div
-        class="flex flex-col lg:pl-[80px] justify-center md:py-[0px] py-[48px] p-[24px]"
+        class="flex flex-col lg:pl-grid-gap-desktop justify-center md:py-[0px] py-section-padding-mobile p-container-padding-mobile"
       >
         <h2
-          class="lg:text-[52px] text-center md:text-start text-[32px] md:text-[28px] leading-[36px] lg:leading-[56px] lg:font-black font-normal text-textPrimary font-ppradio"
+          class="lg:text-heading-desktop text-center md:text-start text-heading-mobile md:text-subheading-mobile leading-heading-mobile lg:leading-heading-desktop lg:font-black font-normal text-textPrimary font-ppradio"
         >
           Ready to begin?
         </h2>
         <p
-          class="text-textPrimary text-center md:text-start text-[20px] leading-[24px] font-figtree mt-[24px] lg:mb-[64px] mb-[48px]"
+          class="text-textPrimary text-center md:text-start text-large-desktop leading-large-desktop font-figtree mt-text-gap-medium lg:mb-grid-gap-mobile mb-heading-margin-top-desktop"
         >
           The first step is finding your style. It's free and easy to get
           started.
         </p>
         <button
           type="button"
-          class="cursor-pointer bg-btnPrimary howBtn-after relative text-white text-base leading-5 py-2 mx-auto md:ml-0 min-h-[56px] min-w-[194px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+          class="cursor-pointer bg-btnPrimary howBtn-after relative text-white text-body-mobile leading-body-mobile py-button-padding-y mx-auto md:ml-0 min-h-[56px] min-w-[194px] px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3"
         >
           Get Started for Free
         </button>
@@ -33,7 +33,7 @@ import whoImg from "../../assets/Image/cta-img.png";
         <Image
           src={whoImg}
           alt="Ring"
-          class="max-w-full md:h-auto lg:max-h-none max-h-[261px] object-cover rounded-[40px]"
+          class="max-w-full md:h-auto lg:max-h-none max-h-[261px] object-cover rounded-xxxl"
         />
       </div>
     </div>

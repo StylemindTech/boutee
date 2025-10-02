@@ -8,7 +8,16 @@ import closeMenuIcon from "../../assets/icons/close.svg"
 import arrow from "../../assets/icons/dropdown-arrow.svg"
 import navMenu from "../../assets/icons/toggle-nav.svg"
 
+// SIMPLIFIED LINKS - CURRENT VERSION
 const links = [
+  { name: "How It Works", href: "/how-it-works" },
+  { name: "Our Jewellers", href: "/our-jewellers" },
+  { name: "Our Technology", href: "/our-technology" },
+  { name: "About Us", href: "/about-us" },
+]
+
+// ORIGINAL LINKS WITH DROPDOWNS - SAVED FOR FUTURE RELEASE
+const originalLinks = [
   { name: "How It Works", href: "/how-it-works" },
   { name: "Inspiration", href: "/inspiration" },
   {
@@ -28,19 +37,19 @@ const menuVariants = {
   visible: {
     clipPath: "circle(150% at 50% 50%)",
     opacity: 1,
-    transition: { type: "spring", stiffness: 30, restDelta: 2 },
+    transition: { type: "spring", stiffness: 80, restDelta: 2 },
   },
   exit: {
     clipPath: "circle(0% at 100% 0%)",
     opacity: 0,
-    transition: { duration: 0.4 },
+    transition: { duration: 0.2 },
   },
 }
 
 const listVariants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.3 },
+    transition: { staggerChildren: 0.05, delayChildren: 0.1 },
   },
 }
 
@@ -51,6 +60,9 @@ const itemVariants = {
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  
+  // Set this to true when ready to use dropdown menu
+  const useDropdownMenu = false
 
   return (
     <header className="bg-white md:pt-[12px] lg:px-[48px] pt-[8px] px-[12px] md:px-[24px] relative z-50">
@@ -67,37 +79,55 @@ export default function Header() {
         {/* Desktop Menu */}
         <div className="hidden lg:flex gap-8">
           <div className="flex gap-8 items-center">
-            {links.map((link, idx) =>
-              link.dropdown ? (
-                <div key={idx} className="relative group">
-                  <button className="flex items-center gap-1 cursor-pointer font-figtree text-textPrimary">
-                    {link.name}
-                    <img
-                      src={arrow.src}
-                      alt="arrow"
-                      className="transition-transform duration-300 rotate-180 group-hover:rotate-0"
-                    />
-                  </button>
-                  <div className="absolute -left-8 mt-2 w-40 bg-white border border-[#F0F1F5] rounded-2xl p-2 flex flex-col items-center gap-2 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all">
-                    {link.dropdown.map((sublink, sidx) => (
-                      <a
-                        key={sidx}
-                        href={sublink.href}
-                        className="py-2 hover:bg-secondary w-full text-center rounded-sm text-base font-figtree text-textPrimary"
-                      >
-                        {sublink.name}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              ) : (
+            {!useDropdownMenu ? (
+              // SIMPLIFIED VERSION - NO DROPDOWNS
+              links.map((link, idx) => (
                 <a
                   key={idx}
                   href={link.href}
-                  className="text-base font-figtree text-textPrimary hover:border-b border-[#2C2C30] transition-all duration-150"
+                  className="text-base font-figtree text-textPrimary border-b border-transparent hover:border-[#2C2C30] transition-colors duration-150"
                 >
                   {link.name}
                 </a>
+              ))
+            ) : (
+              // ORIGINAL VERSION WITH DROPDOWNS
+              originalLinks.map((link, idx) =>
+                link.dropdown ? (
+                  <div key={idx} className="relative group">
+                    <button 
+                      className="flex items-center gap-1 cursor-pointer font-figtree text-textPrimary"
+                      aria-expanded="false"
+                      aria-haspopup="true"
+                    >
+                      {link.name}
+                      <img
+                        src={arrow.src}
+                        alt=""
+                        className="transition-transform duration-300 rotate-180 group-hover:rotate-0"
+                      />
+                    </button>
+                    <div className="absolute -left-8 mt-2 w-40 bg-white border border-[#F0F1F5] rounded-2xl p-2 flex flex-col items-center gap-2 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all">
+                      {link.dropdown.map((sublink, sidx) => (
+                        <a
+                          key={sidx}
+                          href={sublink.href}
+                          className="py-2 hover:bg-secondary w-full text-center rounded-sm text-base font-figtree text-textPrimary"
+                        >
+                          {sublink.name}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <a
+                    key={idx}
+                    href={link.href}
+                    className="text-base font-figtree text-textPrimary border-b border-transparent hover:border-[#2C2C30] transition-colors duration-150"
+                  >
+                    {link.name}
+                  </a>
+                )
               )
             )}
           </div>
@@ -115,8 +145,12 @@ export default function Header() {
 
         {/* Mobile Hamburger */}
         <div className="lg:hidden">
-          <button onClick={() => setIsOpen(true)} className="focus:outline-none cursor-pointer">
-            <img src={navMenu.src} alt="menu" />
+          <button 
+            onClick={() => setIsOpen(true)} 
+            className="focus:outline-none cursor-pointer"
+            aria-label="Open menu"
+          >
+            <img src={navMenu.src} alt="" />
           </button>
         </div>
       </nav>
@@ -140,16 +174,17 @@ export default function Header() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="fixed inset-0 z-50 flex flex-col justify-between bg-secondary rounded-2xl m-3 sm:m-4 pt-2 pl-3 pr-2 pb-8 "
+              className="fixed inset-0 z-50 flex flex-col justify-between bg-secondary rounded-2xl m-3 sm:m-4 pt-2 pl-3 pr-2 pb-8"
             >
               {/* Top bar */}
-              <div className="flex justify-between items-center">
-                <img src={mobileLogo.src} alt="Boutee logo" />
+              <div className="flex justify-between items-center pl-[8px]">
+                <img src={localBirdImage.src} alt="Boutee logo" className="h-auto w-full max-w-[60px]" />
                 <button
                   onClick={() => setIsOpen(false)}
                   className="focus:outline-none cursor-pointer"
+                  aria-label="Close menu"
                 >
-                  <img src={closeMenuIcon.src} alt="close "/>
+                  <img src={closeMenuIcon.src} alt="" />
                 </button>
               </div>
 
@@ -160,28 +195,75 @@ export default function Header() {
                 animate="visible"
                 className="flex flex-col items-center gap-4 text-lg font-figtree py-10 text-textPrimary"
               >
-                {links.map((link, idx) =>
-                  link.dropdown ? (
-                    link.dropdown.map((sublink, sidx) => (
+                {!useDropdownMenu ? (
+                  // SIMPLIFIED MOBILE MENU
+                  <>
+                    {links.map((link, idx) => (
                       <motion.a
-                        key={sidx}
-                        href={sublink.href}
+                        key={idx}
+                        href={link.href}
                         variants={itemVariants}
-                        className="w-full text-center p-2 font-figtree font-normal text-base leading-5 text-textPrimary "
+                        className="w-full text-center p-2 font-figtree font-normal text-base leading-5 text-textPrimary"
                       >
-                        {sublink.name}
+                        {link.name}
                       </motion.a>
-                    ))
-                  ) : (
+                    ))}
                     <motion.a
-                      key={idx}
-                      href={link.href}
+                      href="/faqs"
                       variants={itemVariants}
-                      className="w-full text-center p-2 font-figtree font-normal text-base leading-5 text-textPrimary "
+                      className="w-full text-center p-2 font-figtree font-normal text-base leading-5 text-textPrimary"
                     >
-                      {link.name}
+                      FAQs
                     </motion.a>
-                  )
+                    <motion.a
+                      href="/contact"
+                      variants={itemVariants}
+                      className="w-full text-center p-2 font-figtree font-normal text-base leading-5 text-textPrimary"
+                    >
+                      Contact
+                    </motion.a>
+                  </>
+                ) : (
+                  // ORIGINAL MOBILE MENU WITH DROPDOWN ITEMS
+                  <>
+                    {originalLinks.map((link, idx) =>
+                      link.dropdown ? (
+                        link.dropdown.map((sublink, sidx) => (
+                          <motion.a
+                            key={`${idx}-${sidx}`}
+                            href={sublink.href}
+                            variants={itemVariants}
+                            className="w-full text-center p-2 font-figtree font-normal text-base leading-5 text-textPrimary"
+                          >
+                            {sublink.name}
+                          </motion.a>
+                        ))
+                      ) : (
+                        <motion.a
+                          key={idx}
+                          href={link.href}
+                          variants={itemVariants}
+                          className="w-full text-center p-2 font-figtree font-normal text-base leading-5 text-textPrimary"
+                        >
+                          {link.name}
+                        </motion.a>
+                      )
+                    )}
+                    <motion.a
+                      href="/faqs"
+                      variants={itemVariants}
+                      className="w-full text-center p-2 font-figtree font-normal text-base leading-5 text-textPrimary"
+                    >
+                      FAQs
+                    </motion.a>
+                    <motion.a
+                      href="/contact"
+                      variants={itemVariants}
+                      className="w-full text-center p-2 font-figtree font-normal text-base leading-5 text-textPrimary"
+                    >
+                      Contact
+                    </motion.a>
+                  </>
                 )}
               </motion.div>
 
