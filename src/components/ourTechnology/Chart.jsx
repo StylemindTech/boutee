@@ -212,16 +212,17 @@ const RingStyleAnalyzer = () => {
           />
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "6px",
-            marginTop: "20px",
-            flexWrap: "wrap",
-          }}
-          className="card-chart"
-        >
+          
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "6px", // Could use var(--spacing-xxs)
+              marginTop: "var(--spacing-m)", // Using 40px
+              flexWrap: "wrap",
+            }}
+            className="card-chart"
+          >
           {ringImages.map((img, index) => (
             <div
               key={index}

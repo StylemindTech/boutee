@@ -3,19 +3,19 @@ import { Image } from "astro:assets";
 import btnIcon from "../../assets/icons/btn-icon.svg";
 ---
 
-<section class="lg:py-[112px] py-[48px]">
-  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
-    <div class="grid md:grid-cols-2 md:gap-[80px] items-start">
+<section class="py-section-padding-mobile lg:py-section-padding-desktop">
+  <div class="max-w-container-max-width px-container-padding-mobile lg:px-container-padding-desktop mx-auto">
+    <div class="grid md:grid-cols-2 md:gap-grid-gap-desktop items-start">
       <div>
         <h2
-          class="lg:text-[52px] font-ppradio text-[32px] lg:leading-[56px] leading-[36px] lg:font-black font-normal text-center md:text-start md:mb-[40px] mb-[24px]"
+          class="lg:text-heading-desktop font-ppradio text-heading-mobile lg:leading-heading-desktop leading-heading-mobile lg:font-black font-normal text-center md:text-start md:mb-component-gap-medium mb-text-gap-medium"
         >
           The Jeweller Process
         </h2>
         <div class="hidden md:block">
           <button
             type="button"
-            class="spinBtn cursor-pointer bg-btnPrimary relative text-white text-base leading-5 py-2 mx-auto md:ml-0 md:min-h-[56px] min-w-[212px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+            class="spinBtn cursor-pointer bg-btnPrimary relative text-white text-body-mobile leading-body-mobile py-button-padding-y mx-auto md:ml-0 md:min-h-[56px] min-w-[212px] px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3"
           >
             <Image src={btnIcon} class="btnIcon w-5 h-5" alt="image" />
             Find Your Jeweller
@@ -23,59 +23,57 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
         </div>
       </div>
 
-      <div class="space-y-[16px]">
-        <div class="flex gap-[40px]">
-          <div class="flex flex-col gap-[16px] items-center">
+      <div class="space-y-text-gap-small timeline-container" data-aos="fade-up" data-aos-once="true">
+        <div class="flex gap-component-gap-medium">
+          <div class="flex flex-col gap-text-gap-small items-center">
             <div
-              class="bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] font-figtree text-textPrimary lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] font-bold lg:w-[40px] w-[38px] lg:h-[40px] h-[38px] rounded-full flex items-center justify-center"
+              class="bg-brand-green font-figtree text-textPrimary lg:text-large-desktop text-body-desktop lg:leading-large-desktop leading-large-mobile font-bold lg:w-[40px] w-[38px] lg:h-[40px] h-[38px] rounded-full flex items-center justify-center"
             >
               1
             </div>
             <div
               class="w-[1px] lg:min-h-[68px] min-h-[92px] flex-1 overflow-hidden"
-              data-aos="line-animate"
             >
-              <div class="line-fill w-full h-0 bg-textPrimary"></div>
+              <div class="timeline-line-1 w-full h-0 bg-textPrimary"></div>
             </div>
           </div>
           <div>
             <h3
-              class="font-bold lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] text-black font-figtree"
+              class="font-bold lg:text-large-desktop text-body-desktop lg:leading-large-desktop leading-large-mobile text-black font-figtree"
             >
               The Consultation
             </h3>
             <p
-              class="font-figtree lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textSecondary lg:mt-[16px] mt-[12px]"
+              class="font-figtree lg:text-body-desktop text-body-mobile lg:leading-large-mobile leading-body-mobile text-textSecondary lg:mt-text-gap-small mt-s"
             >
-              You’ll have an initial chat with your jeweller (online or in
+              You'll have an initial chat with your jeweller (online or in
               person) to discuss your ideas, timeline, and budget in more
               detail.
             </p>
           </div>
         </div>
 
-        <div class="flex gap-[40px]">
-          <div class="flex flex-col gap-[16px] items-center">
+        <div class="flex gap-component-gap-medium">
+          <div class="flex flex-col gap-text-gap-small items-center">
             <div
-              class="bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] font-figtree text-textPrimary lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] font-bold lg:w-[40px] w-[38px] lg:h-[40px] h-[38px] rounded-full flex items-center justify-center"
+              class="bg-brand-green font-figtree text-textPrimary lg:text-large-desktop text-body-desktop lg:leading-large-desktop leading-large-mobile font-bold lg:w-[40px] w-[38px] lg:h-[40px] h-[38px] rounded-full flex items-center justify-center"
             >
               2
             </div>
             <div
               class="w-[1px] lg:min-h-[68px] min-h-[92px] flex-1 overflow-hidden"
-              data-aos="line-animate"
             >
-              <div class="line-fill w-full h-0 bg-textPrimary"></div>
+              <div class="timeline-line-2 w-full h-0 bg-textPrimary"></div>
             </div>
           </div>
           <div>
             <h3
-              class="font-bold lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] text-black font-figtree"
+              class="font-bold lg:text-large-desktop text-body-desktop lg:leading-large-desktop leading-large-mobile text-black font-figtree"
             >
               Design & Sourcing
             </h3>
             <p
-              class="font-figtree lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textSecondary lg:mt-[16px] mt-[12px]"
+              class="font-figtree lg:text-body-desktop text-body-mobile lg:leading-large-mobile leading-body-mobile text-textSecondary lg:mt-text-gap-small mt-s"
             >
               Your jeweller will create initial design sketches and source a
               selection of gemstones for you to choose from. You'll work
@@ -84,28 +82,27 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
           </div>
         </div>
 
-        <div class="flex gap-[40px]">
-          <div class="flex flex-col gap-[16px] items-center">
+        <div class="flex gap-component-gap-medium">
+          <div class="flex flex-col gap-text-gap-small items-center">
             <div
-              class="bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] font-figtree text-textPrimary lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] font-bold lg:w-[40px] w-[38px] lg:h-[40px] h-[38px] rounded-full flex items-center justify-center"
+              class="bg-brand-green font-figtree text-textPrimary lg:text-large-desktop text-body-desktop lg:leading-large-desktop leading-large-mobile font-bold lg:w-[40px] w-[38px] lg:h-[40px] h-[38px] rounded-full flex items-center justify-center"
             >
               3
             </div>
             <div
               class="w-[1px] lg:min-h-[68px] min-h-[92px] flex-1 overflow-hidden"
-              data-aos="line-animate"
             >
-              <div class="line-fill w-full h-0 bg-textPrimary"></div>
+              <div class="timeline-line-3 w-full h-0 bg-textPrimary"></div>
             </div>
           </div>
           <div>
             <h3
-              class="font-bold lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] text-black font-figtree"
+              class="font-bold lg:text-large-desktop text-body-desktop lg:leading-large-desktop leading-large-mobile text-black font-figtree"
             >
               Creation & Hallmarking
             </h3>
             <p
-              class="font-figtree lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textSecondary lg:mt-[16px] mt-[12px]"
+              class="font-figtree lg:text-body-desktop text-body-mobile lg:leading-large-mobile leading-body-mobile text-textSecondary lg:mt-text-gap-small mt-s"
             >
               Once you approve the final design, your jeweller will get to work
               handcrafting your ring. It will then be sent to the Assay Office
@@ -114,22 +111,22 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
           </div>
         </div>
 
-        <div class="flex gap-[40px]">
-          <div class="flex flex-col gap-[16px] items-center">
+        <div class="flex gap-component-gap-medium">
+          <div class="flex flex-col gap-text-gap-small items-center">
             <div
-              class="bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] font-figtree text-textPrimary lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] font-bold lg:w-[40px] w-[38px] lg:h-[40px] h-[38px] rounded-full flex items-center justify-center"
+              class="bg-brand-green font-figtree text-textPrimary lg:text-large-desktop text-body-desktop lg:leading-large-desktop leading-large-mobile font-bold lg:w-[40px] w-[38px] lg:h-[40px] h-[38px] rounded-full flex items-center justify-center"
             >
               4
             </div>
           </div>
           <div>
             <h3
-              class="font-bold lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] text-black font-figtree"
+              class="font-bold lg:text-large-desktop text-body-desktop lg:leading-large-desktop leading-large-mobile text-black font-figtree"
             >
               The Final Ring
             </h3>
             <p
-              class="font-figtree lg:text-[18px] text-[16px] lg:leading-[22px] leading-[20px] text-textSecondary lg:mt-[16px] mt-[12px]"
+              class="font-figtree lg:text-body-desktop text-body-mobile lg:leading-large-mobile leading-body-mobile text-textSecondary lg:mt-text-gap-small mt-s"
             >
               Your finished ring is ready! It will be delivered to you, ready
               for your special moment.
@@ -141,7 +138,7 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
       <div class="md:hidden mt-[44px]">
         <button
           type="button"
-          class="spinBtn cursor-pointer bg-btnPrimary relative text-white text-base leading-5 py-2 mx-auto md:ml-0 min-h-[56px] min-w-[212px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+          class="spinBtn cursor-pointer bg-btnPrimary relative text-white text-body-mobile leading-body-mobile py-button-padding-y mx-auto md:ml-0 min-h-[56px] min-w-[212px] px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3"
         >
           <Image src={btnIcon} class="btnIcon w-5 h-5" alt="image" />
           Find Your Jeweller
@@ -150,3 +147,45 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
     </div>
   </div>
 </section>
+
+<style>
+  /* Sequential line animations */
+  .timeline-container.aos-animate .timeline-line-1 {
+    animation: growLine 0.6s ease-out forwards;
+  }
+  
+  .timeline-container.aos-animate .timeline-line-2 {
+    animation: growLine 0.6s ease-out 0.6s forwards;
+  }
+  
+  .timeline-container.aos-animate .timeline-line-3 {
+    animation: growLine 0.6s ease-out 1.2s forwards;
+  }
+
+  @keyframes growLine {
+    from {
+      height: 0;
+    }
+    to {
+      height: 100%;
+    }
+  }
+</style>
+
+<script>
+  // Optional: If you want more control, you can trigger via JavaScript
+  // This ensures the animation only plays once when the section comes into view
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-timeline');
+        observer.unobserve(entry.target); // Stop observing after animation triggers
+      }
+    });
+  }, { threshold: 0.3 }); // Trigger when 30% of the section is visible
+
+  // Observe all timeline containers
+  document.querySelectorAll('.timeline-container').forEach(el => {
+    observer.observe(el);
+  });
+</script>

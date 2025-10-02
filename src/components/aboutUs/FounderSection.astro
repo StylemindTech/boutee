@@ -6,116 +6,72 @@ import socialImg from "../../assets/icons/social-1.svg";
 import socialImg1 from "../../assets/icons/social-2.svg";
 ---
 
-<section class="lg:py-[112px] py-[48px]">
-  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto overflow-hidden">
+<section class="py-section-padding-mobile lg:py-section-padding-desktop">
+  <div class="max-w-container-max-width px-container-padding-mobile lg:px-container-padding-desktop mx-auto overflow-hidden">
     <h2
       data-aos="fade-up"
-      class="text-center lg:text-[52px] text-[32px] lg:leading-[56px] leading-[36px] font-black lg:mb-[80px] mb-[24px] font-ppradio text-textPrimary"
+      class="text-center lg:text-heading-desktop text-heading-mobile lg:leading-heading-desktop leading-heading-mobile font-black lg:mb-grid-gap-desktop mb-text-gap-medium font-ppradio text-textPrimary"
     >
       Meet the brothers behind Boutee
     </h2>
-    <div class="grid md:gap-6 gap-[48px] sm:grid-cols-1 md:grid-cols-2">
+    <div class="grid md:gap-text-gap-medium gap-section-padding-mobile sm:grid-cols-1 md:grid-cols-2">
       <!-- Card 1 -->
-      <div
-        class="flex bg-white xl:flex-row flex-col xl:items-center gap-[32px] overflow-hidden"
-      >
-        <div class="relative min-w-[294px] w-full rounded-[32px]">
+      <div class="flex bg-white xl:flex-row flex-col xl:items-center gap-s overflow-hidden">
+        <div class="relative min-w-[294px] w-full rounded-xxl">
           <Image
             src={meetImg}
             alt="Billy Ward"
-            class="w-full object-cover rounded-[32px]"
+            class="w-full object-cover rounded-xxl"
           />
         </div>
         <div class="lg:max-w-[290px]">
-          <h2
-            class="lg:text-[32px] text-[22px] text-textPrimary mb-[4px] font-black font-ppradio lg:leading-[36px] leading-[26px]"
-          >
+          <h2 class="lg:text-heading-mobile text-[22px] text-textPrimary mb-xxs font-black font-ppradio lg:leading-heading-mobile leading-[26px]">
             Billy Ward
           </h2>
-          <p
-            class="lg:text-[18px] text-[16px] text-textSecondary font-figtree lg:leading-[22px] leading-[20px]"
-          >
+          <p class="lg:text-body-desktop text-body-mobile text-textSecondary font-figtree lg:leading-large-mobile leading-body-mobile">
             Job title
           </p>
-          <p
-            class="lg:text-[16px] text-[14px] text-textPrimary font-figtree lg:leading-[20px] leading-[18px] md:mt-[20px] mt-[12px]"
-          >
+          <p class="lg:text-body-mobile text-small text-textPrimary font-figtree lg:leading-body-mobile leading-[18px] md:mt-m mt-s">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
             varius enim in eros elementum tristique.
           </p>
-          <div class="flex mt-[24px] space-x-[8px]">
-            <a
-              href="#"
-              class="flex items-center justify-center w-[36px] h-[36px] bg-cardColor rounded-[12px]"
-            >
-              <Image
-                src={socialImg1}
-                alt="Billy Ward"
-                class="w-[20px] h-[20px]"
-              />
+          <div class="flex mt-text-gap-medium space-x-xxs">
+            <a href="#" class="flex items-center justify-center w-[36px] h-[36px] bg-cardColor rounded-s">
+              <Image src={socialImg1} alt="LinkedIn" class="w-[20px] h-[20px]" />
             </a>
-            <a
-              href="#"
-              class="flex items-center justify-center w-[36px] h-[36px] bg-cardColor rounded-[12px]"
-            >
-              <Image
-                src={socialImg}
-                alt="Billy Ward"
-                class="w-[20px] h-[20px]"
-              />
+            <a href="#" class="flex items-center justify-center w-[36px] h-[36px] bg-cardColor rounded-s">
+              <Image src={socialImg} alt="Twitter" class="w-[20px] h-[20px]" />
             </a>
           </div>
         </div>
       </div>
 
       <!-- Card 2 -->
-      <div
-        class="flex bg-white xl:flex-row flex-col xl:items-center gap-[32px] overflow-hidden"
-      >
-        <div class="relative min-w-[294px] w-full rounded-[32px]">
+      <div class="flex bg-white xl:flex-row flex-col xl:items-center gap-s overflow-hidden">
+        <div class="relative min-w-[294px] w-full rounded-xxl">
           <Image
             src={meetImg1}
-            alt="Billy Ward"
-            class="w-full object-cover rounded-[32px]"
+            alt="Ethan Ward"
+            class="w-full object-cover rounded-xxl"
           />
         </div>
         <div class="lg:max-w-[290px]">
-          <h2
-            class="lg:text-[32px] text-[22px] text-textPrimary mb-[4px] font-black font-ppradio lg:leading-[36px] leading-[26px]"
-          >
+          <h2 class="lg:text-heading-mobile text-[22px] text-textPrimary mb-xxs font-black font-ppradio lg:leading-heading-mobile leading-[26px]">
             Ethan Ward
           </h2>
-          <p
-            class="lg:text-[18px] text-[16px] text-textSecondary font-figtree lg:leading-[22px] leading-[20px]"
-          >
+          <p class="lg:text-body-desktop text-body-mobile text-textSecondary font-figtree lg:leading-large-mobile leading-body-mobile">
             Job title
           </p>
-          <p
-            class="lg:text-[16px] text-[14px] text-textPrimary font-figtree lg:leading-[20px] leading-[18px] md:mt-[20px] mt-[12px]"
-          >
+          <p class="lg:text-body-mobile text-small text-textPrimary font-figtree lg:leading-body-mobile leading-[18px] md:mt-m mt-s">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
             varius enim in eros elementum tristique.
           </p>
-          <div class="flex mt-[24px] space-x-[8px]">
-            <a
-              href="#"
-              class="flex items-center justify-center w-[36px] h-[36px] bg-cardColor rounded-[12px]"
-            >
-              <Image
-                src={socialImg1}
-                alt="Billy Ward"
-                class="w-[20px] h-[20px]"
-              />
+          <div class="flex mt-text-gap-medium space-x-xxs">
+            <a href="#" class="flex items-center justify-center w-[36px] h-[36px] bg-cardColor rounded-s">
+              <Image src={socialImg1} alt="LinkedIn" class="w-[20px] h-[20px]" />
             </a>
-            <a
-              href="#"
-              class="flex items-center justify-center w-[36px] h-[36px] bg-cardColor rounded-[12px]"
-            >
-              <Image
-                src={socialImg}
-                alt="Billy Ward"
-                class="w-[20px] h-[20px]"
-              />
+            <a href="#" class="flex items-center justify-center w-[36px] h-[36px] bg-cardColor rounded-s">
+              <Image src={socialImg} alt="Twitter" class="w-[20px] h-[20px]" />
             </a>
           </div>
         </div>

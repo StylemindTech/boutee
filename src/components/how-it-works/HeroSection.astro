@@ -9,18 +9,23 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
 import heroRating from "../../assets/icons/hero-rating.svg";
 ---
 
-<section class="md:py-[112px] pt-[40px]">
-  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
-    <div class="grid xl:grid-cols-2 lg:gap-20 gap-[48px] items-center">
+<section class="md:py-section-padding-desktop pt-component-gap-medium">
+  <div class="max-w-container-max-width px-container-padding-mobile lg:px-container-padding-desktop mx-auto">
+    <div class="grid xl:grid-cols-2 lg:gap-grid-gap-desktop gap-section-padding-mobile items-center">
       <div>
+        <div class="text-center md:text-left">
+          <span class="md:text-body-mobile text-tiny font-medium md:leading-body-desktop leading-small text-textPrimary bg-cardColor py-badge-padding-y px-badge-padding-x font-figtree rounded-xxxl inline-block">
+            HOW IT WORKS
+          </span>
+        </div>
         <h1
-          class="md:text-[80px] text-[48px] text-center md:text-start leading-[42px] text-textPrimary font-black md:leading-[84px] font-ppradio md:mb-6 mb-[16px]"
+          class="md:text-hero-desktop text-hero-mobile mt-heading-margin-top-mobile md:mt-heading-margin-top-desktop text-center md:text-start leading-hero-mobile text-textPrimary font-black md:leading-hero-desktop font-ppradio mb-text-gap-small md:mb-text-gap-medium"
         >
           Bespoke, made simple
         </h1>
 
         <p
-          class="md:text-xl text-[16px] text-center md:text-start leading-[20px] md:leading-[24px] text-textSecondary font-figtree mb-12"
+          class="md:text-large-desktop text-body-mobile text-center md:text-start leading-body-mobile md:leading-large-desktop text-textSecondary font-figtree mb-12"
         >
           Commissioning a ring should be exciting, not intimidating. We've
           broken down the entire process into clear, simple steps, so you know
@@ -28,65 +33,47 @@ import heroRating from "../../assets/icons/hero-rating.svg";
         </p>
         <button
           type="button"
-          class="spinBtn cursor-pointer bg-btnPrimary howBtn-after relative text-white text-base leading-5 py-2 mx-auto md:ml-0 md:min-h-[56px] min-h-[48px] min-w-[212px] px-6 rounded-full font-figtree font-medium flex items-center gap-3"
+          class="spinBtn cursor-pointer bg-btnPrimary howBtn-after relative text-white text-body-mobile leading-body-mobile py-button-padding-y mx-auto md:ml-0 md:min-h-[56px] min-h-[48px] min-w-[212px] px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3"
         >
           <Image src={btnIcon} class="btnIcon w-5 h-5" alt="" />
           Find Your Jeweller
         </button>
       </div>
-<div class="flex justify-center xl:justify-end relative   w-full">
-   <div
-        class="md:max-w-[600px] max-w-[327px] h-full min-h-[600px] relative w-full"
-      >
-        <div class="profile-img floating rotate-[-3.73deg]" data-speed="0.2" data-float="2">
-          <Image src={heroImg} class="" alt="hero-image" />
-        </div>
-
-        <!-- Ring Box -->
-        <div class="ring-box floating rotate-[10deg]" data-speed="0.6" data-float="2">
-          <Image
-            src={heroImgMobile}
-            class="object-cover ring-img"
-            alt="hero-image"
-          />
-          <div class="heart">
-            <Image
-              src={heroImg1}
-              class="w-[30.62px] h-[30.62px]"
-              alt="hero-image"
-            />
+      <div class="flex justify-center xl:justify-end relative w-full">
+        <!-- Keep the complex floating animation structure as-is -->
+        <div class="md:max-w-[600px] max-w-[327px] h-full min-h-[600px] relative w-full">
+          <!-- All floating elements remain unchanged as they're animation-specific -->
+          <div class="profile-img floating rotate-[-3.73deg]" data-speed="0.2" data-float="2">
+            <Image src={heroImg} class="" alt="hero-image" />
           </div>
-        </div>
 
-        <!-- Chat Bubble -->
-        <div class="chat floating" data-speed="0.6" data-float="1">
-          <p class="font-figtree">
-            Hi, I really like your work and would love to order a ring from you.
-            I’ve attached a few examples of rings I like for reference. Could
-            you let me know how much something similar would cost and how long
-            it would take to make?
-          </p>
-          <button class="font-figtree">Contact jeweller</button>
-        </div>
+          <!-- Ring Box -->
+          <div class="ring-box floating rotate-[10deg]" data-speed="0.6" data-float="2">
+            <Image src={heroImgMobile} class="object-cover ring-img" alt="hero-image" />
+            <div class="heart">
+              <Image src={heroImg1} class="w-[30.62px] h-[30.62px]" alt="hero-image" />
+            </div>
+          </div>
 
-        <!-- Accordion -->
-        <div class="accordion floating" data-speed="0.3" data-float="4">
-          <!-- <h4 class="font-figtree">Budget Range</h4>
-          <label class="font-figtree"><input type="radio" name="budget" /> &lt; £1500</label>
-          <label class="font-figtree"><input type="radio" name="budget" /> £1500 - £3000</label>
-          <label class="font-figtree"><input type="radio" name="budget" /> £3000 - £4500</label>
-          <label class="font-figtree"><input type="radio" name="budget" /> &gt; £4500</label> -->
-          <Image
-              src={heroImgMobile1 }
-              class="object-cover"
-              alt="hero-image"
-            />
+          <!-- Chat Bubble -->
+          <div class="chat floating" data-speed="0.6" data-float="1">
+            <p class="font-figtree">
+              Hi, I really like your work and would love to order a ring from you.
+              I've attached a few examples of rings I like for reference. Could
+              you let me know how much something similar would cost and how long
+              it would take to make?
+            </p>
+            <button class="font-figtree">Contact jeweller</button>
+          </div>
+
+          <!-- Accordion -->
+          <div class="accordion floating" data-speed="0.3" data-float="4">
+            <Image src={heroImgMobile1} class="object-cover" alt="hero-image" />
+          </div>
+          <div class="layer-how"></div>
+          <div class="layer-how1"></div>
         </div>
-        <div class="layer-how"></div>
-        <div class="layer-how1"></div>
       </div>
-</div>
-     
     </div>
   </div>
 </section>

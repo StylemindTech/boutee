@@ -26,8 +26,10 @@ h6 {
     "calt" 1;  /* Contextual alternates */
 }
 /* 🎨 Custom Theme */
+/* src/styles/global.css */
 @theme {
-  /* Colors */
+  /* ===== COLORS ===== */
+  /* Your existing solid colors */
   --color-primary: #ffba08;
   --color-secondary: #fafafa;
   --color-textPrimary: #171719;
@@ -35,30 +37,110 @@ h6 {
   --color-btnPrimary: #171719;
   --color-cardColor: #f0f1f5;
   --color-borderOutline: #2c2c30;
+  
+  /* Brand Colors - Gradients */
+  --color-brand-white: white;
+  --color-brand-1: linear-gradient(209deg, #F6CAF6 0%, #9B9FE8 100%);
+  --color-brand-2: linear-gradient(25deg, #F6CAF6 0%, #FBDCFC 100%);
+  --color-brand-3: linear-gradient(18deg, #7CD6A8 0%, #87EDAC 100%);
+  --color-brand-4: linear-gradient(21deg, #B9F551 0%, #DDF456 100%);
+  --color-brand-5: linear-gradient(21deg, #F8BEA5 0%, #F8D2A5 100%);
 
-  /* Fonts */
+  /* ===== SPACING (doubled values) ===== */
+  --spacing-xxs: 8px;   /* 4px × 2 */
+  --spacing-xs: 16px;   /* 8px × 2 */
+  --spacing-s: 24px;    /* 16px × 2 */
+  --spacing-m: 32px;    /* 20px × 2 */
+  --spacing-l: 48px;    /* 24px × 2 */
+  --spacing-xl: 64px;   /* 32px × 2 */
+  --spacing-xxl: 80px;  /* 40px × 2 */
+  --spacing-xxxl: 96px; /* 48px × 2 */
+
+  /* ===== BORDER RADIUS / FILLETS ===== */
+  --radius-xxs: 4px;
+  --radius-xs: 8px;
+  --radius-s: 12px;
+  --radius-m: 16px;
+  --radius-l: 20px;
+  --radius-xl: 24px;
+  --radius-xxl: 32px;
+  --radius-xxxl: 40px;
+
+  /* ===== TEXT SIZES ===== */
+  /* Headings */
+  --text-hero-mobile: 48px;
+  --text-hero-desktop: 80px;
+  --text-heading-mobile: 32px;
+  --text-heading-desktop: 52px;
+  --text-subheading-mobile: 24px;
+  --text-subheading-desktop: 32px;
+  
+  /* Body text */
+  --text-body-mobile: 16px;
+  --text-body-desktop: 18px;
+  --text-large-mobile: 18px;
+  --text-large-desktop: 20px;
+  --text-small: 14px;
+  --text-tiny: 10px;
+  
+  /* Line heights */
+  --leading-hero-mobile: 42px;
+  --leading-hero-desktop: 84px;
+  --leading-heading-mobile: 36px;
+  --leading-heading-desktop: 56px;
+  --leading-body-mobile: 20px;
+  --leading-body-desktop: 24px;
+  --leading-large-mobile: 22px;
+  --leading-large-desktop: 24px;
+
+  /* ===== SEMANTIC SPACING RULES ===== */
+  
+  /* Section Spacing */
+  --spacing-section-padding-mobile: var(--spacing-l);      /* 32px */
+  --spacing-section-padding-desktop: var(--spacing-xl);   /* 96px */
+  --spacing-section-gap-mobile: var(--spacing-xxxl);         /* 80px */
+  --spacing-section-gap-desktop: var(--spacing-xxxl);       /* 96px */
+  
+  /* Container Spacing */
+  --spacing-container-padding-mobile: var(--spacing-s);     /* 48px (24px × 2) */
+  --spacing-container-padding-desktop: var(--spacing-xxl);  /* 80px */
+  --spacing-container-max-width: 1536px; /* max-w-screen-2xl */
+  
+  /* Card Spacing */
+  --spacing-card-padding-mobile: var(--spacing-s);         /* 16px */
+  --spacing-card-padding-desktop: var(--spacing-s);         /* 32px */
+  --spacing-card-gap: var(--spacing-m);                     /* 40px */
+  
+  /* Grid Spacing */
+  --spacing-grid-gap-mobile: var(--spacing-xl);             /* 64px */
+  --spacing-grid-gap-desktop: var(--spacing-xxl);           /* 80px */
+  --spacing-grid-column-gap: var(--spacing-m);              /* 40px */
+  
+  /* Text/Content Spacing */
+  --spacing-text-gap-small: var(--spacing-xs);              /* 16px */
+  --spacing-text-gap-medium: var(--spacing-s);              /* 32px */
+  --spacing-text-gap-large: var(--spacing-l);               /* 48px */
+  
+  /* Heading Spacing */
+  --spacing-heading-margin-top-mobile: var(--spacing-s);    /* 32px */
+  --spacing-heading-margin-top-desktop: var(--spacing-l);   /* 48px */
+  --spacing-heading-margin-bottom: var(--spacing-m);        /* 40px */
+  
+  /* Button/Badge Spacing */
+  --spacing-button-padding-x-mobile: var(--spacing-xs);     /* 16px */
+  --spacing-button-padding-x-desktop: var(--spacing-s);     /* 32px */
+  --spacing-button-padding-y: var(--spacing-xxs);           /* 8px */
+  --spacing-badge-padding-x: var(--spacing-xs);             /* 16px */
+  --spacing-badge-padding-y: var(--spacing-xxs);            /* 8px */
+  
+  /* Component Spacing */
+  --spacing-component-gap-small: var(--spacing-xs);         /* 16px */
+  --spacing-component-gap-medium: var(--spacing-m);         /* 40px */
+  --spacing-component-gap-large: var(--spacing-xl);         /* 64px */
+
+  /* Your existing font and other variables... */
   --font-figtree: "Figtree", "sans-serif";
   --font-ppradio: "PPRadioGrotesk", "Figtree", "sans-serif";
-
-  /* Font Sizes */
-  --text-xs: 0.75rem; /* 12px */
-  --text-sm: 0.875rem; /* 14px */
-  --text-base: 1rem; /* 16px */
-  --text-lg: 1.125rem; /* 18px */
-  --text-xl: 1.25rem; /* 20px */
-  --text-2xl: 1.5rem; /* 24px */
-  --text-3xl: 1.875rem; /* 30px */
-  --text-4xl: 2.25rem; /* 36px */
-  --text-5xl: 3rem; /* 48px */
-
-  /* Radius */
-  --radius-20px: 20px;
-
-  /* Shadows */
-  --shadow-sm-menu-small: 0px 2px 5px 0px #1f212805;
-
-  /* Spacing */
-  --spacing-xs: 0.25rem;
 }
 
 /* Enable smooth scrolling */
@@ -90,6 +172,35 @@ html {
 
 ::selection {
   background-color: #d6f99a;
+}
+
+/* After your @theme block, add these custom utilities */
+@layer utilities {
+  /* Brand Gradient Utilities */
+  .bg-brand-1 {
+    background: linear-gradient(209deg, #F6CAF6 0%, #9B9FE8 100%);
+  }
+  
+  .bg-brand-2 {
+    background: linear-gradient(25deg, #F6CAF6 0%, #FBDCFC 100%);
+  }
+  
+  .bg-brand-3 {
+    background: linear-gradient(18deg, #7CD6A8 0%, #87EDAC 100%);
+  }
+  
+  .bg-brand-4 {
+    background: linear-gradient(21deg, #B9F551 0%, #DDF456 100%);
+  }
+  
+  .bg-brand-5 {
+    background: linear-gradient(21deg, #F8BEA5 0%, #F8D2A5 100%);
+  }
+  
+  /* Alternative syntax for the green gradient if needed */
+  .bg-brand-green {
+    background: linear-gradient(76deg, #B9F551 22.87%, #D7F650 74.01%);
+  }
 }
 
 @layer utilities {
@@ -591,7 +702,7 @@ html {
   position: absolute;
   bottom: -5.0625rem;
   left: -5.5rem;
-  background: #f702ff0f;
+  background: #7dd6a931;
   width: 16.25rem;
   height: 11.875rem;
   filter: blur(20px);
@@ -604,7 +715,21 @@ html {
   position: absolute;
   top: -5.0625rem;
   right: -6.125rem;
-  background: #f6d89547;
+  background: #f6cbf748;
+  width: 17.9375rem;
+  height: 12.625rem;
+  filter: blur(88px);
+  pointer-events: none;
+  transform: rotate(-15deg);
+  z-index: -9;
+}
+
+.card-container .extra-blur {
+  content: "";
+  position: absolute;
+  top: 12rem;
+  right: -4rem;
+  background: #dcf4563f;
   width: 17.9375rem;
   height: 12.625rem;
   filter: blur(88px);
@@ -717,7 +842,7 @@ html {
   left: -8.6875rem;
   width: 9.6875rem;
   height: 7.75rem;
-  background: linear-gradient(208.61deg, #efa7f2 6.82%, #9b9fe8 90.78%);
+  background: var(--color-brand-3); /* Purple to blue gradient */
   padding: 2px;
 }
 
@@ -726,7 +851,7 @@ html {
   right: -5.625rem;
   width: 11.25rem;
   height: 9.375rem;
-  background: linear-gradient(72.92deg, #f8bea5 29.07%, #f8d2a5 78.07%);
+  background: var(--color-brand-5); /* Orange gradient */
   padding: 2px;
   z-index: -9;
 }
@@ -795,6 +920,14 @@ html {
     right: -0.125rem;
     width: 5.9375rem;
     height: 6.625rem;
+  }
+
+  .card-container .extra-blur {
+    width: 5rem;
+    height: 6rem;
+    left: 10rem;
+    top: 5rem;
+    filter: blur(60px);
   }
 }
 

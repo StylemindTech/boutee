@@ -102,31 +102,30 @@ const jewellers = [
 ];
 ---
 
-<section class="lg:py-[112px] py-[48px]">
-  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+<section class="py-section-padding-mobile lg:py-section-padding-desktop">
+  <div class="max-w-container-max-width px-container-padding-mobile lg:px-container-padding-desktop mx-auto">
     <!-- Heading -->
     <div
-      class="text-center lg:mb-[80px] mb-[24px] max-w-[768px] mx-auto overflow-hidden"
+      class="text-center lg:mb-grid-gap-desktop mb-text-gap-medium max-w-[768px] mx-auto overflow-hidden"
     >
       <h3
         data-aos="fade-up"
-        class="lg:text-[52px] text-center text-[32px] md:text-[28px] leading-[36px] lg:leading-[56px] font-black text-textPrimary font-ppradio m-0"
+        class="lg:text-heading-desktop text-center text-heading-mobile md:text-subheading-mobile leading-heading-mobile lg:leading-heading-desktop font-black text-textPrimary font-ppradio m-0"
       >
         Meet some of our talented makers
       </h3>
       <p
-        class="lg:text-[20px] text-[18px] lg:leading-[24px] leading-[22px] text-textSecondary font-figtree text-center mt-[16px]"
+        class="lg:text-large-desktop text-body-desktop lg:leading-large-desktop leading-large-mobile text-textSecondary font-figtree text-center mt-text-gap-small"
       >
-        They bring the craftsmanship. You bring the vision.
+        Independent jewellers, ready to bring your ideas to life.
       </p>
     </div>
 
     <!-- 3 Column Layout -->
     <div
-      class="grid lg:gap-[32px] gap-[20px] md:grid-cols-1 lg:grid-cols-3 jws-card relative"
+      class="grid lg:gap-s gap-m md:grid-cols-1 lg:grid-cols-3 jws-card relative"
     >
       <!-- Left Column -->
-
       <div
         id=""
         class="scrollContainer overflow-hidden relative"
@@ -134,23 +133,23 @@ const jewellers = [
       >
         <div id="" class="scrollContent flex flex-col space-y-4">
           {
-            [...jewellers] // make a shallow copy so original stays intact
-              .sort(() => Math.random() - 0.5) // shuffle array randomly
+            [...jewellers]
+              .sort(() => Math.random() - 0.5)
               .map((item) => (
-                <div class="flex items-center gap-4 rounded-[16px] acd-shadow">
+                <div class="flex items-center gap-4 rounded-m acd-shadow">
                   <Image
                     src={item.img}
-                    class="w-[126px] md:h-[132px] h-[110px] lg:rounded-[20px] rounded-[16px] object-cover"
+                    class="w-[126px] md:h-[132px] h-[110px] lg:rounded-l rounded-m object-cover"
                     alt="user-img"
                   />
                   <div>
-                    <h3 class="font-bold text-[18px] lg:text-[20px] text-textPrimary font-figtree">
+                    <h3 class="font-bold text-body-desktop lg:text-large-desktop text-textPrimary font-figtree">
                       {item.name}
                     </h3>
-                    <p class="text-[16px] lg:text-[18px] text-textSecondary font-figtree">
+                    <p class="text-body-mobile lg:text-body-desktop text-textSecondary font-figtree">
                       {item.location}
                     </p>
-                    <p class="text-[16px] lg:text-[18px] text-textPrimary mt-[16px] font-figtree">
+                    <p class="text-body-mobile lg:text-body-desktop text-textPrimary mt-text-gap-small font-figtree">
                       {item.bio}
                     </p>
                   </div>
@@ -159,8 +158,8 @@ const jewellers = [
           }
         </div>
       </div>
-      <!-- Middle Column -->
 
+      <!-- Middle Column -->
       <div
         id="scrollContainer"
         class="scrollContainer hidden lg:block overflow-hidden relative"
@@ -168,26 +167,26 @@ const jewellers = [
       >
         <div
           id="scrollContent"
-          class="scrollContent flex flex-col lg:space-y-[24px] space-y-[20px]"
+          class="scrollContent flex flex-col lg:space-y-xl space-y-m"
         >
           {
-            [...jewellers] // make a shallow copy so original stays intact
-              .sort(() => Math.random() - 0.8) // shuffle array randomly
+            [...jewellers]
+              .sort(() => Math.random() - 0.8)
               .map((item) => (
-                <div class="flex items-center gap-4 rounded-[16px] acd-shadow">
+                <div class="flex items-center gap-4 rounded-m acd-shadow">
                   <Image
                     src={item.img}
-                    class="w-[126px] md:h-[132px] h-[110px] lg:rounded-[20px] rounded-[16px] object-cover"
+                    class="w-[126px] md:h-[132px] h-[110px] lg:rounded-l rounded-m object-cover"
                     alt="user-img"
                   />
                   <div>
-                    <h3 class="font-bold text-[18px] lg:text-[20px] text-textPrimary font-figtree">
+                    <h3 class="font-bold text-body-desktop lg:text-large-desktop text-textPrimary font-figtree">
                       {item.name}
                     </h3>
-                    <p class="text-[16px] lg:text-[18px] text-textSecondary font-figtree">
+                    <p class="text-body-mobile lg:text-body-desktop text-textSecondary font-figtree">
                       {item.location}
                     </p>
-                    <p class="text-[16px] lg:text-[18px] text-textPrimary mt-[16px] font-figtree">
+                    <p class="text-body-mobile lg:text-body-desktop text-textPrimary mt-text-gap-small font-figtree">
                       {item.bio}
                     </p>
                   </div>
@@ -198,32 +197,31 @@ const jewellers = [
       </div>
 
       <!-- Right Column -->
-
       <div
         class="scrollContainer overflow-hidden relative hidden lg:block"
         data-direction="up"
       >
         <div
-          class="scrollContent flex flex-col lg:space-y-[24px] space-y-[20px]"
+          class="scrollContent flex flex-col lg:space-y-xl space-y-m"
         >
           {
-            [...jewellers] // make a shallow copy so original stays intact
-              .sort(() => Math.random() - 0.3) // shuffle array randomly
+            [...jewellers]
+              .sort(() => Math.random() - 0.3)
               .map((item) => (
-                <div class="flex items-center gap-4 rounded-[16px] acd-shadow">
+                <div class="flex items-center gap-4 rounded-m acd-shadow">
                   <Image
                     src={item.img}
-                    class="w-[126px] md:h-[132px] h-[110px] lg:rounded-[20px] rounded-[16px] object-cover"
+                    class="w-[126px] md:h-[132px] h-[110px] lg:rounded-l rounded-m object-cover"
                     alt="user-img"
                   />
                   <div>
-                    <h3 class="font-bold text-[18px] lg:text-[20px] text-textPrimary font-figtree">
+                    <h3 class="font-bold text-body-desktop lg:text-large-desktop text-textPrimary font-figtree">
                       {item.name}
                     </h3>
-                    <p class="text-[16px] lg:text-[18px] text-textSecondary font-figtree">
+                    <p class="text-body-mobile lg:text-body-desktop text-textSecondary font-figtree">
                       {item.location}
                     </p>
-                    <p class="text-[16px] lg:text-[18px] text-textPrimary mt-[16px] font-figtree">
+                    <p class="text-body-mobile lg:text-body-desktop text-textPrimary mt-text-gap-small font-figtree">
                       {item.bio}
                     </p>
                   </div>
