@@ -72,7 +72,7 @@ export default function Header() {
           <img
             src={localBirdImage.src}
             alt="Boutee logo"
-            className="h-auto w-full max-w-[60px] md:max-w-[90px]"
+            className="h-auto w-full max-w-[80px] md:max-w-[100px]"
           />
         </a>
 
@@ -178,7 +178,7 @@ export default function Header() {
             >
               {/* Top bar */}
               <div className="flex justify-between items-center pl-[8px]">
-                <img src={localBirdImage.src} alt="Boutee logo" className="h-auto w-full max-w-[60px]" />
+                <img src={localBirdImage.src} alt="Boutee logo" className="h-auto w-full max-w-[80px]" />
                 <button
                   onClick={() => setIsOpen(false)}
                   className="focus:outline-none cursor-pointer"
@@ -209,14 +209,14 @@ export default function Header() {
                       </motion.a>
                     ))}
                     <motion.a
-                      href="/faqs"
+                      href="/faq"
                       variants={itemVariants}
                       className="w-full text-center p-2 font-figtree font-normal text-base leading-5 text-textPrimary"
                     >
                       FAQs
                     </motion.a>
                     <motion.a
-                      href="/contact"
+                      href="/contact-us"
                       variants={itemVariants}
                       className="w-full text-center p-2 font-figtree font-normal text-base leading-5 text-textPrimary"
                     >
