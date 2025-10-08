@@ -1,0 +1,73 @@
+---
+// src/pages/app.astro
+const appUrl = 'https://app.boutee.co.uk';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading Boutee...</title>
+  
+  <!-- Mobile Detection - Runs IMMEDIATELY -->
+  <script is:inline define:vars={{ appUrl }}>
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && window.innerWidth <= 768) {
+      window.location.replace(appUrl);
+    }
+  </script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 flex items-center justify-center p-4">
+  
+  <div class="max-w-md w-full text-center">
+    
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="text-6xl mb-4">📱</div>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">
+        Mobile App Required
+      </h1>
+      <p class="text-gray-600">
+        Boutee works best on your mobile device
+      </p>
+    </div>
+    
+    <!-- QR Code Container -->
+    <div class="bg-white rounded-2xl shadow-xl p-8 mb-6">
+      <div id="qrcode" class="flex justify-center"></div>
+    </div>
+    
+    <!-- Instructions -->
+    <div class="space-y-4">
+      <p class="text-lg font-semibold text-gray-800">
+        📸 Scan with your phone's camera
+      </p>
+      
+      <div class="bg-white rounded-lg p-4 shadow-md">
+        <p class="text-sm text-gray-600 mb-2">Or visit this URL on your mobile:</p>
+        <code class="text-pink-600 font-mono text-lg font-semibold">
+          app.boutee.co.uk
+        </code>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- QR Code Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  
+  <!-- Generate QR Code -->
+  <script is:inline define:vars={{ appUrl }}>
+    new QRCode(document.getElementById("qrcode"), {
+      text: appUrl,
+      width: 256,
+      height: 256,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  </script>
+  
+</body>
+</html>
