@@ -1,0 +1,47 @@
+---
+import { Image } from "astro:assets";
+import qrCode from "../assets/app.boutee.co.uk QR Code.svg";
+import Layout from "../layouts/Layout.astro";
+
+const appUrl = 'https://app.boutee.co.uk';
+---
+
+<Layout title="Boutee - Mobile App">
+  <!-- Mobile Detection - Runs IMMEDIATELY -->
+  <script is:inline>
+    (function() {
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const isSmallScreen = window.innerWidth <= 768;
+      
+      if (isMobile || isSmallScreen) {
+        window.location.replace('https://app.boutee.co.uk');
+      }
+    })();
+  </script>
+
+  <section class="min-h-screen flex items-center justify-center px-container-padding-mobile lg:px-container-padding-desktop py-section-padding-mobile md:py-section-padding-desktop">
+    <div class="max-w-[1000px] w-full grid md:grid-cols-2 gap-xl md:gap-xxl items-center">
+      
+      <!-- Left Column -->
+      <div class="flex flex-col gap-m text-center md:text-left">
+        <h1 class="text-heading-mobile md:text-heading-desktop leading-heading-mobile md:leading-heading-desktop font-ppradio font-black text-textPrimary">
+          Better on Mobile
+        </h1>
+        <p class="text-body-mobile md:text-large-desktop leading-body-mobile md:leading-large-desktop font-figtree text-textSecondary">
+          Boutee is only available on mobile. Scan the QR code to continue your journey and start discovering!
+        </p>
+      </div>
+      
+      <!-- Right Column -->
+      <div class="flex flex-col items-center gap-m">
+        <p class="text-body-mobile md:text-body-desktop leading-body-mobile md:leading-body-desktop font-figtree text-textSecondary">
+          Scan this code with your mobile camera:
+        </p>
+        <div class="p-xl bg-secondary rounded-xl">
+          <Image src={qrCode} alt="Scan to open Boutee app" class="w-[280px] h-[280px]" />
+        </div>
+      </div>
+      
+    </div>
+  </section>
+</Layout>
