@@ -14,10 +14,26 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
         Most of our jewellers are fully onboarded and live on the platform with about <br>
         <span class="font-bold">2 hours of work, spread over a week.</span>
       </p>
-      <button type="button" class="spinBtn cursor-pointer bg-btnPrimary mx-auto text-white text-body-mobile leading-body-mobile py-button-padding-y min-h-[56px] min-w-[167px] px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3 btn-cta">
+      <button
+        id="join-boutee-btn-cta"
+        type="button"
+        class="spinBtn cursor-pointer bg-btnPrimary mx-auto text-white text-body-mobile leading-body-mobile py-button-padding-y min-h-[56px] min-w-[167px] px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3 btn-cta"
+      >
         <Image src={btnIcon} class="btnIcon w-5 h-5" alt="image" />
         Join Boutee
       </button>
     </div>
   </div>
 </section>
+
+<script is:client>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('join-boutee-btn-cta');
+    if (btn) {
+      btn.addEventListener('click', () => {
+        const el = document.getElementById('form-section');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+  });
+</script>

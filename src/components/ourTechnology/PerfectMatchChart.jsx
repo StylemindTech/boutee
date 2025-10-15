@@ -32,21 +32,24 @@ const customers = [
     name: "Amira Khan",
     need: "Needs modern ring",
     img: user1,
-    profile: [8, 6, 4, 7, 5, 3, 6, 4], // radar data
+    // High on 'Bold' and 'Alternative', moderate elsewhere
+    profile: [6, 9, 5, 6, 8, 4, 5, 6],
   },
   {
     id: 2,
     name: "Oliver Grant",
     need: "Needs colourful ring",
     img: user2,
-    profile: [5, 3, 9, 4, 6, 8, 5, 7],
+    // High on 'Colourful', moderate elsewhere
+    profile: [5, 5, 6, 5, 5, 5, 9, 6],
   },
   {
     id: 3,
     name: "Sofia Bennett",
     need: "Needs minimalist ring",
     img: user3,
-    profile: [3, 8, 4, 6, 7, 2, 8, 4],
+    // High on 'Minimalist', moderate elsewhere
+    profile: [5, 4, 6, 5, 4, 9, 4, 6],
   },
 ];
 
@@ -56,24 +59,27 @@ const jewellers = [
     name: "Clara Hughes",
     brand: "Clara Hughes",
     img: user4,
-    profile: [7, 6, 5, 6, 4, 4, 6, 5],
-    match: { 1: "85%", 2: "72%", 3: "50%" },
+    // Strong on 'Bold' and 'Alternative', but not identical to Amira
+    profile: [7, 8, 6, 5, 7, 5, 6, 5],
+    match: { 1: "82%", 2: "60%", 3: "48%" },
   },
   {
     id: 2,
     name: "Leila Anderson",
     brand: "Wild Arcana",
     img: user5,
-    profile: [6, 7, 5, 3, 8, 4, 7, 6],
-    match: { 1: "61%", 2: "68%", 3: "45%" },
+    // Strong on 'Colourful', moderate on others, not identical to Oliver
+    profile: [6, 5, 6, 6, 5, 6, 8, 7],
+    match: { 1: "58%", 2: "85%", 3: "52%" },
   },
   {
     id: 3,
     name: "Martin Rowe",
     brand: "Rowe & Forge",
     img: user6,
-    profile: [4, 5, 6, 7, 5, 7, 6, 5],
-    match: { 1: "36%", 2: "55%", 3: "40%" },
+    // Strong on 'Minimalist', moderate elsewhere, not identical to Sofia
+    profile: [5, 4, 7, 5, 5, 8, 5, 7],
+    match: { 1: "45%", 2: "54%", 3: "80%" },
   },
 ];
 
