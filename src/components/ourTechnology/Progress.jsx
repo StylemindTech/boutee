@@ -1,48 +1,48 @@
 import React, { useState } from "react";
-import ring1 from "../../assets/Image/tech-1.png";
-import ring2 from "../../assets/Image/tech-8.png";
-import ring3 from "../../assets/Image/tech-5.png";
-import ring4 from "../../assets/Image/tech-4.png";
+import ring1 from "../../assets/Image/dim1.png";
+import ring2 from "../../assets/Image/dim2.png";
+import ring3 from "../../assets/Image/dim3.png";
+import ring4 from "../../assets/Image/dim4.png";
 
 const rings = [
   {
     id: 1,
     image: ring1,
     attributes: {
-      classic: 30,
-      bold: 90,
-      monotone: 10,
-      organic: 95,
+      classic: 73,
+      bold: 45,
+      monotone: 20,
+      organic: 17,
     },
   },
   {
     id: 2,
     image: ring2,
     attributes: {
-      classic: 70,
-      bold: 10,
-      monotone: 80,
-      organic: 60,
+      classic: 23,
+      bold: 77,
+      monotone: 27,
+      organic: 52,
     },
   },
   {
     id: 3,
     image: ring3,
     attributes: {
-      classic: 50,
-      bold: 45,
-      monotone: 50,
-      organic: 55,
+      classic: 17,
+      bold: 88,
+      monotone: 19,
+      organic: 61,
     },
   },
   {
     id: 4,
     image: ring4,
     attributes: {
-      classic: 40,
-      bold: 70,
-      monotone: 30,
-      organic: 20,
+      classic: 76,
+      bold: 35,
+      monotone: 27,
+      organic: 17,
     },
   },
 ];
