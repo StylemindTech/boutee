@@ -11,7 +11,11 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
           Joining Boutee in <br /> 3 Simple Steps
         </h2>
         <div class="hidden md:block">
-          <button type="button" class="spinBtn cursor-pointer bg-btnPrimary relative text-white text-body-mobile leading-body-mobile py-button-padding-y mx-auto md:ml-0 min-h-[56px] min-w-[167px] px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3">
+          <button
+            id="join-boutee-btn-joinstep"
+            type="button"
+            class="spinBtn cursor-pointer bg-btnPrimary relative text-white text-body-mobile leading-body-mobile py-button-padding-y mx-auto md:ml-0 min-h-[56px] min-w-[167px] px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3"
+          >
             <Image src={btnIcon} class="btnIcon w-5 h-5" alt="image" />
             Join Boutee
           </button>
@@ -83,7 +87,11 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
       </div>
 
       <div class="md:hidden mt-[44px]">
-        <button type="button" class="spinBtn cursor-pointer bg-btnPrimary relative text-white text-body-mobile leading-body-mobile py-button-padding-y mx-auto md:ml-0 min-h-[56px] min-w-[167px] px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3">
+        <button
+          id="join-boutee-btn-joinstep-mobile"
+          type="button"
+          class="spinBtn cursor-pointer bg-btnPrimary relative text-white text-body-mobile leading-body-mobile py-button-padding-y mx-auto md:ml-0 min-h-[56px] min-w-[167px] px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3"
+        >
           <Image src={btnIcon} class="btnIcon w-5 h-5" alt="image" />
           Join Boutee
         </button>
@@ -91,6 +99,19 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
     </div>
   </div>
 </section>
+
+<script is:client>
+  function scrollToFormSection() {
+    const el = document.getElementById('form-section');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnDesktop = document.getElementById('join-boutee-btn-joinstep');
+    const btnMobile = document.getElementById('join-boutee-btn-joinstep-mobile');
+    if (btnDesktop) btnDesktop.addEventListener('click', scrollToFormSection);
+    if (btnMobile) btnMobile.addEventListener('click', scrollToFormSection);
+  });
+</script>
 
 <style>
   /* Sequential line animations for Join Boutee section */
