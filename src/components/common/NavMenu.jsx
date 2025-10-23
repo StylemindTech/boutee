@@ -134,14 +134,14 @@ export default function Header() {
 
           {/* Buttons */}
           <div className="flex items-center gap-4">
-            <button className="font-figtree text-textPrimary px-2 py-1 border border-[#2C2C30] rounded-[12px] cursor-pointer w-[76px] text-[16px] leading-[20px] h-[36px]">
-              Log in
-            </button>
-            <button className="font-figtree w-[87px] h-[36px] rounded-[12px] bg-btnPrimary text-white cursor-pointer">
-              Sign up
-            </button>
-          </div>
+          <a href="/app" className="font-figtree text-textPrimary px-2 py-1 border border-[#2C2C30] rounded-[12px] cursor-pointer w-[76px] text-[16px] leading-[20px] h-[36px] flex items-center justify-center">
+            Log in
+          </a>
+          <a href="/app" className="font-figtree w-[87px] h-[36px] rounded-[12px] bg-btnPrimary text-white cursor-pointer flex items-center justify-center">
+            Sign up
+          </a>
         </div>
+      </div>
 
         {/* Mobile Hamburger */}
         <div className="lg:hidden">
