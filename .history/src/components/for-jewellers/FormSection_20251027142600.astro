@@ -42,9 +42,9 @@
               class="w-full px-s py-[14px] text-[15px] leading-[18px] text-textPrimary focus:outline-none focus:ring-2 focus:ring-btnPrimary bg-white border border-borderOutline rounded-m" 
             />
             <input 
-              type="text" 
+              type="url" 
               name="website"
-              placeholder="Website (e.g. boutee.co.uk)"
+              placeholder="Website"
               class="w-full px-s py-[14px] text-[15px] leading-[18px] text-textPrimary focus:outline-none focus:ring-2 focus:ring-btnPrimary bg-white border border-borderOutline rounded-m" 
             />
           </div>
@@ -144,18 +144,11 @@
 
       try {
         const formData = new FormData(form);
-        
-        // Get website and add https:// if not present
-        let website = formData.get('website') as string;
-        if (website && !website.match(/^https?:\/\//i)) {
-          website = 'https://' + website;
-        }
-        
         const data = {
           name: formData.get('name') as string,
           brandName: formData.get('brandName') as string,
           email: formData.get('email') as string,
-          website: website,
+          website: formData.get('website') as string,
           instagram: formData.get('instagram') as string,
           message: formData.get('message') as string,
         };
