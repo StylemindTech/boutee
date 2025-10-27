@@ -1,0 +1,63 @@
+---
+--- 
+<section id="form-section" class="md:py-section-padding-desktop py-component-gap-medium">
+  <div class="max-w-container-max-width px-container-padding-mobile lg:px-container-padding-desktop mx-auto">
+    <div class="flex items-center justify-center">
+      <div class="bg-cardColor rounded-xxxl md:py-[88px] lg:px-[200px] px-container-padding-mobile py-component-gap-medium w-full">
+        <h2 class="lg:text-hero-mobile text-heading-mobile lg:leading-[120%] leading-heading-mobile font-bold text-center mb-text-gap-medium font-ppradio text-textPrimary">
+          Ready to meet your next customer?
+        </h2>
+        <p class="lg:text-body-desktop text-body-mobile lg:leading-large-mobile leading-body-mobile text-center lg:mb-heading-margin-top-desktop mb-xs font-figtree text-textPrimary">
+          If you believe your work is a good fit for our platform, we would love to hear from you. <br>
+          Please introduce yourself using the form below, and our partnerships team will be in touch.
+        </p>
+
+        <form class="lg:space-y-xl space-y-s">
+          <!-- Name + Brand Name -->
+          <div class="grid md:grid-cols-2 gap-xs md:gap-m mb-xs md:mb-m">
+            <input type="text" placeholder="Name"
+              class="w-full px-s py-[14px] text-[15px] leading-[18px] text-textSecondary focus:outline-none focus:ring-border-borderOutline bg-white border border-borderOutline rounded-m" />
+            <input type="text" placeholder="Brand Name"
+              class="w-full px-s py-[14px] text-[15px] leading-[18px] text-textSecondary focus:outline-none focus:ring-border-borderOutline bg-white border border-borderOutline rounded-m" />
+          </div>
+
+          <!-- Email + Website -->
+          <div class="grid md:grid-cols-2 gap-xs md:gap-m mb-xs md:mb-m">
+            <input type="email" placeholder="Email"
+              class="w-full px-s py-[14px] text-[15px] leading-[18px] text-textSecondary focus:outline-none focus:ring-border-borderOutline bg-white border border-borderOutline rounded-m" />
+            <input type="url" placeholder="Website"
+              class="w-full px-s py-[14px] text-[15px] leading-[18px] text-textSecondary focus:outline-none focus:ring-border-borderOutline bg-white border border-borderOutline rounded-m" />
+          </div>
+
+          <!-- Instagram -->
+          <input type="text" placeholder="Instagram Handle"
+            class="w-full px-s py-[14px] text-[15px] leading-[18px] text-textSecondary focus:outline-none focus:ring-border-borderOutline bg-white border border-borderOutline rounded-m mb-xs md:mb-m" />
+
+          <!-- Message -->
+          <textarea rows="3" placeholder="Message (optional)"
+            class="w-full min-h-[88px] px-s py-[14px] text-[15px] leading-[18px] text-textSecondary focus:outline-none focus:ring-border-borderOutline bg-white border border-borderOutline rounded-m mb-xs md:mb-m"></textarea>
+
+          <!-- Terms -->
+          <div class="flex gap-xxs lg:mt-2">
+            <div>
+              <input type="checkbox" id="terms"
+                class="cursor-pointer checkbox-custom w-[20px] h-[20px] appearance-none rounded-xxs border-2 border-gray-800" />
+            </div>
+            <label for="terms" class="cursor-pointer text-textPrimary text-body-mobile leading-body-mobile">
+              I accept the <a href="#" class="underline">Terms of Service</a> and 
+              <a href="#" class="underline">Privacy Policy</a>
+            </label>
+          </div>
+
+          <!-- Button -->
+          <div class="text-center lg:mt-heading-margin-top-desktop mt-s">
+            <button type="button"
+              class="cursor-pointer bg-btnPrimary mx-auto text-white text-body-mobile leading-body-mobile py-button-padding-y min-h-[56px] min-w-[194px] px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3">
+              Submit Introduction
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
