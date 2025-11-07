@@ -24,7 +24,7 @@ function TestimonialCard({  review, name, location, userImage = '' }) {
         {userImage && 
           <div>
           <img
-            src={userImage}
+            src={userImage.src || userImage}
             alt="user"
             className="w-[40px] h-[40px] rounded-full"
           />
