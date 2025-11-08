@@ -269,12 +269,19 @@ export default function Header() {
 
               {/* Buttons */}
               <div className="flex justify-center gap-3 px-6">
-                <button className="border border-[#2C2C30] rounded-xl py-3.5 px-6 w-full font-figtree font-medium text-base leading-5">
+                <a
+                  href="/app"
+                  className="border border-[#2C2C30] rounded-xl py-3.5 px-6 w-full font-figtree font-medium text-base leading-5 flex items-center justify-center"
+                >
                   Log in
-                </button>
-                <button className="rounded-xl py-3.5 px-6 bg-btnPrimary text-white w-full font-figtree font-medium text-base leading-5">
+                </a>
+
+                <a
+                  href="/app"
+                  className="rounded-xl py-3.5 px-6 bg-btnPrimary text-white w-full font-figtree font-medium text-base leading-5 flex items-center justify-center"
+                >
                   Sign up
-                </button>
+                </a>
               </div>
             </motion.div>
           </>
