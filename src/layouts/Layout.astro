@@ -9,6 +9,13 @@ import { VisualEditing } from "@sanity/astro/visual-editing";
 const visualEditingEnabled =
   import.meta.env.PUBLIC_SANITY_VISUAL_EDITING_ENABLED == "true";
 const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const gaInlineScript = gaMeasurementId
+  ? `window.dataLayer = window.dataLayer || [];
+function gtag(){window.dataLayer.push(arguments);}
+console.log('[GA] Initialising GA4 with ID', '${gaMeasurementId}');
+gtag('js', new Date());
+gtag('config', '${gaMeasurementId}', { debug_mode: true });`
+  : null;
 ---
 
 <!doctype html>
@@ -26,12 +33,7 @@ const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
           async
           src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
         ></script>
-        <script is:inline>
-          {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${gaMeasurementId}');`}
-        </script>
+        <script set:html={gaInlineScript}></script>
       </>
     )}
   </head>
