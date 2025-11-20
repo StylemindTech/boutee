@@ -3,12 +3,15 @@ import { Image } from "astro:assets";
 import cardImg from "../../assets/Image/card-img1.png";
 import cardImg1 from "../../assets/Image/card-img2.png";
 import cardImg2 from "../../assets/Image/card-img3.png";
+import type { ProcessCopy } from "../../content/homeVariants";
+
+const { content }: { content: ProcessCopy } = Astro.props;
 ---
 
 <section class="py-section-padding-mobile lg:py-section-padding-desktop">
   <div class="max-w-container-max-width px-container-padding-mobile lg:px-container-padding-desktop mx-auto overflow-hidden">
     <h2 data-aos="fade-up" class="lg:text-heading-desktop text-heading-mobile font-ppradio leading-heading-mobile lg:font-black font-normal text-center lg:leading-heading-desktop text-textPrimary lg:mb-grid-gap-desktop mb-component-gap-medium animate-fade-in-up">
-      Your journey to a <br /> bespoke ring, made simple
+      <span set:html={content.heading} />
     </h2>
 
     <div class="grid md:grid-cols-3 lg:gap-component-gap-medium gap-m">
@@ -18,11 +21,10 @@ import cardImg2 from "../../assets/Image/card-img3.png";
         </div>
         <div class="lg:p-container-padding-mobile py-text-gap-small px-container-padding-mobile">
           <h3 class="lg:text-large-desktop text-body-desktop font-bold font-figtree lg:leading-large-desktop leading-large-mobile mb-s text-textPrimary">
-            Define Your Style
+            {content.steps[0]?.title}
           </h3>
           <p class="text-textPrimary font-figtree lg:text-body-desktop text-body-mobile lg:leading-large-mobile leading-body-mobile">
-            Like rings you love and tell us your preferences. Our platform
-            builds your unique Style Profile, just like a personal shopper.
+            {content.steps[0]?.description}
           </p>
         </div>
       </div>
@@ -32,11 +34,10 @@ import cardImg2 from "../../assets/Image/card-img3.png";
         </div>
         <div class="lg:p-container-padding-mobile py-text-gap-small px-container-padding-mobile">
           <h3 class="lg:text-large-desktop text-body-desktop font-bold font-figtree lg:leading-large-desktop leading-large-mobile mb-s text-textPrimary">
-            See Your Matches
+            {content.steps[1]?.title}
           </h3>
           <p class="text-textPrimary font-figtree lg:text-body-desktop text-body-mobile lg:leading-large-mobile leading-body-mobile">
-            We show you a curated selection of independent jewellers whose style
-            and expertise are the perfect fit for you and your budget.
+            {content.steps[1]?.description}
           </p>
         </div>
       </div>
@@ -46,12 +47,10 @@ import cardImg2 from "../../assets/Image/card-img3.png";
         </div>
         <div class="lg:p-container-padding-mobile py-text-gap-small px-container-padding-mobile">
           <h3 class="lg:text-large-desktop text-body-desktop font-bold font-figtree lg:leading-large-desktop leading-large-mobile mb-s text-textPrimary">
-            Start a Conversation
+            {content.steps[2]?.title}
           </h3>
           <p class="text-textPrimary font-figtree lg:text-body-desktop text-body-mobile lg:leading-large-mobile leading-body-mobile">
-            Connect directly with your chosen jeweller to bring your ideas to
-            life. No hidden fees, no confusing process - just a clear path to
-            your perfect ring.
+            {content.steps[2]?.description}
           </p>
         </div>
       </div>

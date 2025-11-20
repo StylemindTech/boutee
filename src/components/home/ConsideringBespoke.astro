@@ -3,6 +3,9 @@ import { Image } from "astro:assets";
 import whoImg from "../../assets/Image/who-img.png";
 import walletImg from "../../assets/icons/Wallet.svg";
 import clockImg from "../../assets/icons/Clock.svg";
+import type { BespokeCopy } from "../../content/homeVariants";
+
+const { content }: { content: BespokeCopy } = Astro.props;
 ---
 
 <section class="lg:py-[112px] py-[48px]">
@@ -62,12 +65,12 @@ import clockImg from "../../assets/icons/Clock.svg";
                 <h2
                     class="lg:text-[52px] text-[32px] md:text-[28px] leading-[36px] lg:leading-[56px] lg:font-black font-normal text-textPrimary font-ppradio"
                 >
-                    Considering bespoke?
+                    {content.heading}
                 </h2>
                 <p
                     class="text-textSecondary text-[20px] leading-[24px] font-figtree lg:mt-[16px] mt-[8px] lg:mb-[64px] mb-[32px]"
                 >
-                    You'll need:
+                    {content.intro}
                 </p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
@@ -87,20 +90,19 @@ lg:rounded-[20px] rounded-[16px] lg:w-[64px] w-[52px] lg:h-[64px] h-[52px] flex 
                                 <p
                                     class="lg:text-[32px] text-[22px] lg:leading-[36px] leading-[26px] font-black text-textPrimary font-ppradio"
                                 >
-                                    £1000
+                                    {content.budgetValue}
                                 </p>
                                 <p
                                     class="text-textPrimary font-figtree lg:text-[20px] text-[16px] font-bold lg:leading-[24px] leading-[20px]"
                                 >
-                                    or more
+                                    {content.budgetLabel}
                                 </p>
                             </div>
                         </div>
                         <p
                             class="lg:text-[18px] md:text-[14px] text-[16px] lg:leading-[22px] leading-[20px] text-textPrimary font-figtree lg:pe-16"
                         >
-                            This allows for high-quality materials and
-                            craftsmanship.
+                            {content.budgetDescription}
                         </p>
                     </div>
 
@@ -119,20 +121,19 @@ lg:rounded-[20px] rounded-[16px] lg:w-[64px] w-[52px] lg:h-[64px] h-[52px] flex 
                                 <p
                                     class="lg:text-[32px] text-[22px] lg:leading-[36px] leading-[26px] font-black text-textPrimary font-ppradio"
                                 >
-                                    4-8
+                                    {content.timeValue}
                                 </p>
                                 <p
                                     class="text-textPrimary font-figtree lg:text-[20px] text-[16px] font-bold lg:leading-[24px] leading-[20px]"
                                 >
-                                    weeks
+                                    {content.timeLabel}
                                 </p>
                             </div>
                         </div>
                         <p
                             class="lg:text-[18px] text-[16px] md:text-[14px] lg:leading-[22px] leading-[20px] text-textPrimary font-figtree lg:pe-16"
                         >
-                            Every ring is designed and made to order, just for
-                            you.
+                            {content.timeDescription}
                         </p>
                     </div>
                 </div>

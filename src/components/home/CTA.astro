@@ -1,20 +1,20 @@
 ---
+import type { CtaCopy } from "../../content/homeVariants";
 
+const { content }: { content: CtaCopy } = Astro.props;
 ---
 
 <section class="py-section-padding-mobile lg:py-section-padding-desktop">
   <div class="max-w-container-max-width px-container-padding-mobile lg:px-container-padding-desktop mx-auto">
     <div class="text-center bg-cardColor rounded-xxxl lg:px-[200px] lg:py-[88px] py-section-padding-mobile px-container-padding-mobile">
       <h3 class="lg:text-heading-desktop text-center mb-text-gap-medium text-heading-mobile md:text-subheading-mobile leading-heading-mobile lg:leading-heading-desktop lg:font-black font-normal text-textPrimary font-ppradio">
-        Ready to find your perfect jeweller?
+        {content.heading}
       </h3>
       <p class="lg:text-body-desktop text-center mb-heading-margin-top-desktop text-body-mobile md:text-body-desktop leading-body-mobile lg:leading-large-mobile max-w-[880px] mx-auto font-normal text-textPrimary font-figtree">
-        Create your free style profile to explore our full community, get
-        personalised matches based on your unique taste, and start a conversation
-        with the right jeweller for you.
+        <span set:html={content.body} />
       </p>
-      <a href="/app" class="cursor-pointer bg-btnPrimary btn-after text-white text-body-mobile leading-body-mobile py-button-padding-y md:ml-0 min-h-[56px] min-w-[194px] px-button-padding-x-desktop rounded-full font-figtree font-medium inline-flex items-center justify-center btn-cta">
-        Get Started for Free
+      <a href={content.buttonHref} class="cursor-pointer bg-btnPrimary btn-after text-white text-body-mobile leading-body-mobile py-button-padding-y md:ml-0 min-h-[56px] min-w-[194px] px-button-padding-x-desktop rounded-full font-figtree font-medium inline-flex items-center justify-center btn-cta">
+        {content.buttonLabel}
       </a>
     </div>
   </div>

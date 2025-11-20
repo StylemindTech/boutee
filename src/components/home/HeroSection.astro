@@ -8,6 +8,9 @@ import loctionIcon from "../../assets/Image/loction-icon.svg";
 import starIcon from "../../assets/Image/Star.png";
 import btnIcon from "../../assets/icons/btn-icon.svg";
 import heroRating from "../../assets/icons/hero-rating.svg";
+import type { HeroCopy } from "../../content/homeVariants";
+
+const { content }: { content: HeroCopy } = Astro.props;
 ---
 
 <section class="md:py-section-padding-desktop pt-component-gap-medium pb-container-padding-mobile">
@@ -18,28 +21,28 @@ import heroRating from "../../assets/icons/hero-rating.svg";
         <div class="flex md:flex-row flex-col items-center gap-xxs md:mb-20 mb-[36px]">
           <Image src={userJewellers} alt="" width={112} height={40} />
           <p class="md:text-body-mobile text-textPrimary text-small font-figtree">
-            60+ jewellers are on Boutee
+            {content.badgeText}
           </p>
         </div>
 
         <h1 class="md:text-hero-desktop text-hero-mobile text-center md:text-start leading-hero-mobile text-textPrimary font-black md:leading-hero-desktop font-ppradio md:mb-text-gap-medium mb-text-gap-small">
-          More quality.<br />Less mark-up.
+          <span set:html={content.heading} />
         </h1>
 
         <p class="md:text-large-desktop text-body-mobile text-center md:text-start leading-body-mobile md:leading-large-desktop text-textSecondary font-figtree mb-12">
-          We match you with the perfect independent jeweller for your style and budget. Work directly with them to create a ring, without the traditional overhead.
+          {content.body}
         </p>
 
         <div class="flex justify-center md:justify-start">
-          <a href="/app" class="spinBtn cursor-pointer bg-btnPrimary btn-after text-white text-body-mobile leading-body-mobile py-button-padding-y inline-flex md:min-h-[56px] min-h-[48px] min-w-[212px] px-button-padding-x-desktop rounded-full font-figtree font-medium items-center gap-3">
+          <a href={content.ctaHref} class="spinBtn cursor-pointer bg-btnPrimary btn-after text-white text-body-mobile leading-body-mobile py-button-padding-y inline-flex md:min-h-[56px] min-h-[48px] min-w-[212px] px-button-padding-x-desktop rounded-full font-figtree font-medium items-center gap-3">
             <Image src={btnIcon} class="btnIcon w-5 h-5 transition-transform duration-500" alt="image" />
-            Find Your Jeweller
+            {content.ctaLabel}
           </a>
         </div>
 
         <div class="md:mt-20 mt-[36px] text-center md:text-left">
-          <a href="https://www.trustpilot.com/review/boutee.co.uk" target="_blank" rel="noopener noreferrer" class="inline-block">
-            <Image alt="image" src={heroRating} class="max-w-[235px] mx-auto md:ml-0 md:max-w-none" />
+          <a href={content.trustpilotLink} target="_blank" rel="noopener noreferrer" class="inline-block">
+            <Image alt={content.trustpilotAlt} src={heroRating} class="max-w-[235px] mx-auto md:ml-0 md:max-w-none" />
           </a>
         </div>
       </div>
@@ -57,14 +60,14 @@ import heroRating from "../../assets/icons/hero-rating.svg";
           <!-- Profile Card -->
           <div class="card-detail floating" data-speed="0.4" data-float="6">
             <div class="profile-img">
-              <span class="match-badge font-normal font-figtree text-textPrimary text-body-desktop leading-body-mobile">93% match</span>
+              <span class="match-badge font-normal font-figtree text-textPrimary text-body-desktop leading-body-mobile">{content.matchBadge}</span>
               <Image src={heroImg2} alt="Ring" />
             </div>
             <div class="profile-info">
-              <h2 class="font-figtree font-bold text-textPrimary uppercase text-large-desktop md:text-[22px] leading-6 md:leading-[26px]">Callum Hughes</h2>
+              <h2 class="font-figtree font-bold text-textPrimary uppercase text-large-desktop md:text-[22px] leading-6 md:leading-[26px]">{content.jewellerName}</h2>
               <p class="flex gap-1 items-center font-figtree font-normal text-body-mobile md:text-body-desktop leading-large-mobile text-textSecondary">
                 <Image src={loctionIcon} alt="" />
-                Oxfordshire
+                {content.jewellerLocation}
               </p>
             </div>
           </div>
@@ -72,15 +75,15 @@ import heroRating from "../../assets/icons/hero-rating.svg";
           <!-- Stats Card -->
           <div class="stats-box flex gap-xxs floating" data-speed="0.6" data-float="1">
             <div class="orders-box text-center font-figtree font-bold text-body-mobile md:text-body-desktop leading-large-mobile text-textPrimary">
-              25+ 
-              <div class="review-other font-normal text-textSecondary text-body-mobile md:text-body-desktop leading-body-mobile font-figtree">orders</div>
+              {content.ordersValue} 
+              <div class="review-other font-normal text-textSecondary text-body-mobile md:text-body-desktop leading-body-mobile font-figtree">{content.ordersLabel}</div>
             </div>
             <div class="border-r border-[#F2F3F7]"></div>
             <div class="orders-box">
               <div class="flex gap-1 items-baseline justify-center font-figtree font-bold text-body-mobile md:text-body-desktop leading-large-mobile text-textPrimary">
-                5 <Image alt="image" src={starIcon} />
+                {content.ratingValue} <Image alt="image" src={starIcon} />
               </div>
-              <div class="review-other block text-center font-normal text-textSecondary text-body-mobile md:text-body-desktop leading-body-mobile font-figtree">reviews</div>
+              <div class="review-other block text-center font-normal text-textSecondary text-body-mobile md:text-body-desktop leading-body-mobile font-figtree">{content.ratingLabel}</div>
             </div>
           </div>
 
