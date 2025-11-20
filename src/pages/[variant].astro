@@ -6,9 +6,14 @@ import CTA from "../components/home/CTA.astro";
 import Testimonials from "../components/home/Testimonials.astro";
 import WhyChooseUs from "../components/home/WhyChooseUs.astro";
 import ConsiderstionBespoke from "../components/home/ConsideringBespoke.astro";
-import { defaultVariant } from "../content/homeVariants";
+import { homeVariants } from "../content/homeVariants";
 
-const copy = defaultVariant;
+const slug = Astro.params.variant;
+const copy = slug ? homeVariants[slug] : null;
+
+if (!copy) {
+  return Astro.redirect("/404");
+}
 ---
 
 <BaseLayout title={copy.meta.title} description={copy.meta.description}>

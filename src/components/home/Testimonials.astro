@@ -1,42 +1,18 @@
 ---
 import TestimonialCarousel from "../common/TestimonialCarousel.jsx";
+import type { TestimonialCopy } from "../../content/homeVariants";
 
-const items = [
-  { 
-    id: 1,   
-    review: "I can't say enough great things about Boutee. I loved the suggestions they provided and was quickly able to connect with an incredible jeweller. Some of the best customer service I've ever received, I'd recommend them to absolutely anyone and everyone.", 
-    name: "Izzy Russo",
-    location: "Matched with Kintaa"
-  },
-  { 
-    id: 2,   
-    review: "My experience with Boutee has been exceptional. I stumbled across Boutee online after disappointing search for my dream engagement ring with many larger companies. Boutee offers that personalised experience... Thank you for your attention to detail and outstanding customer service!", 
-    name: "Stephanie",
-    location: "Matched with The Lane"
-  },
-  { 
-    id: 3,   
-    review: "Had an unusual idea in mind for an engagement ring that needed to be custom made. Found the Boutee website via Google, filled out the form and Billy got back to me really quickly with the perfect artisan for my project. Great experience front to back and now happily engaged!", 
-    name: "Nicholas",
-    location: "Matched with Richard Chown"
-  },
-  { 
-    id: 4,   
-    review: "Fantastic way to find bespoke, custom-made rings from independent designers who love what they do. If you're looking for a personal, affordable option for either designing or buying a ring, this is the place.", 
-    name: "Luke",
-    location: "Matched with Jodie Gearing"
-  },
-];
+const { content }: { content: TestimonialCopy } = Astro.props;
 ---
 
 <section class="lg:pt-section-padding-desktop lg:pb-grid-gap-desktop py-component-gap-medium">
   <div class="max-w-container-max-width lg:px-[65px] px-container-padding-mobile mx-auto overflow-hidden">
     <h2 data-aos="fade-up" class="lg:text-heading-desktop text-heading-mobile lg:leading-heading-desktop leading-heading-mobile font-black text-textPrimary font-ppradio text-center">
-      Stories behind the rings
+      {content.heading}
     </h2>
     <p class="lg:text-large-desktop hidden md:block text-body-mobile lg:leading-large-desktop leading-body-mobile text-textSecondary font-figtree text-center mt-text-gap-small">
-      They dreamed it — our jewellers designed it.
+      <span set:html={content.subheading} />
     </p>
-    <TestimonialCarousel client:load items={items} />
+    <TestimonialCarousel client:load items={content.items} />
   </div>
 </section>

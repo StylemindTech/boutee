@@ -1,6 +1,9 @@
 ---
 import { Image } from "astro:assets";
 import btnIcon from "../../assets/icons/btn-icon.svg";
+import type { WhyCopy } from "../../content/homeVariants";
+
+const { content }: { content: WhyCopy } = Astro.props;
 ---
 
 <section class="py-section-padding-mobile lg:py-section-padding-desktop">
@@ -8,17 +11,16 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
     <div class="grid md:grid-cols-2 md:gap-[82px] gap-text-gap-medium items-start">
       <div class="flex flex-col">
         <h2 class="lg:text-heading-desktop text-center md:text-start text-heading-mobile md:font-black font-normal font-ppradio lg:mb-6 mb-6 lg:leading-heading-desktop leading-heading-mobile">
-          Go direct to the maker
+          {content.heading}
         </h2>
         <p class="font-figtree lg:text-body-desktop text-body-mobile lg:leading-large-mobile leading-body-mobile text-textPrimary lg:pr-14 text-center md:text-left mb-0 md:mb-12">
-           Your ring should be made by a person, not a production
-           line.
+           {content.body}
         </p>
 
         <div class="md:block hidden">
-          <a href="/app" class="spinBtn cursor-pointer bg-btnPrimary btn-after text-white text-body-mobile leading-body-mobile py-button-padding-y inline-flex md:min-h-[56px] min-h-[48px] min-w-[212px] px-button-padding-x-desktop rounded-full font-figtree font-medium items-center gap-3">
+          <a href={content.ctaHref} class="spinBtn cursor-pointer bg-btnPrimary btn-after text-white text-body-mobile leading-body-mobile py-button-padding-y inline-flex md:min-h-[56px] min-h-[48px] min-w-[212px] px-button-padding-x-desktop rounded-full font-figtree font-medium items-center gap-3">
             <Image src={btnIcon} class="btnIcon w-5 h-5 transition-transform duration-500" alt="image" />
-            Find Your Jeweller
+            {content.ctaLabel}
           </a>
         </div>
       </div>
@@ -27,8 +29,7 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
         <div class="rounded-xl p-[2px] pt-[8px] bg-brand-2 hover:p-[3px] hover:pt-[10px] hover:scale-x-[101%] transition-all duration-300 overflow-hidden">
           <div class="py-container-padding-mobile px-text-gap-small rounded-xl bg-white">
             <p class="font-figtree lg:text-body-desktop text-body-mobile lg:leading-large-mobile leading-body-mobile text-textPrimary lg:pr-14">
-              We've built a community of <strong>the UK's most talented
-              independent jewellers</strong>, each with their own small workshop.
+              <span set:html={content.cardOne} />
             </p>
           </div>
         </div>
@@ -36,8 +37,7 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
         <div class="rounded-xl p-[2px] pt-[8px] bg-brand-1 mt-[-10px] hover:p-[3px] hover:pt-[10px] z-10 hover:scale-x-[101%] transition-all duration-300 overflow-hidden">
           <div class="py-container-padding-mobile px-text-gap-small rounded-xl bg-white">
             <p class="font-figtree lg:text-body-desktop text-body-mobile lg:leading-large-mobile leading-body-mobile text-textPrimary">
-              They are <strong>experts in their craft</strong>, ready to take Pinterest
-              boards and sketches and turn them into the perfect ring.
+              <span set:html={content.cardTwo} />
             </p>
           </div>
         </div>
@@ -45,14 +45,14 @@ import btnIcon from "../../assets/icons/btn-icon.svg";
         <div class="rounded-xl p-[2px] pt-[8px] bg-brand-3 mt-[-10px] hover:p-[3px] hover:pt-[10px] z-20 hover:scale-x-[101%] transition-all duration-300 overflow-hidden">
           <div class="py-container-padding-mobile px-text-gap-small rounded-xl bg-white">
             <p class="font-figtree lg:text-body-desktop text-body-mobile lg:leading-large-mobile leading-body-mobile text-textPrimary">
-              <strong>Skip the middlemen for a better ring, at a better price.</strong>
+              <span set:html={content.cardThree} />
             </p>
           </div>
         </div>
       </div>
-      <a href="/app" class="spinBtn cursor-pointer bg-btnPrimary md:hidden btn-after text-white text-body-mobile leading-body-mobile py-button-padding-y mx-auto md:ml-0 w-full min-h-[56px] justify-center px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3">
+      <a href={content.ctaHref} class="spinBtn cursor-pointer bg-btnPrimary md:hidden btn-after text-white text-body-mobile leading-body-mobile py-button-padding-y mx-auto md:ml-0 w-full min-h-[56px] justify-center px-button-padding-x-desktop rounded-full font-figtree font-medium flex items-center gap-3">
         <Image src={btnIcon} class="btnIcon w-5 h-5 transition-transform duration-500" alt="image" />
-        Find Your Jeweller
+        {content.ctaLabel}
       </a>
     </div>
   </div>
