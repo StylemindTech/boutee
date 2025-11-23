@@ -1,0 +1,105 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.cardStack {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swipeCard {
+  position: absolute !important;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 1 / 1;
+  will-change: transform;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ringCard {
+  position: absolute;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 1 / 1;
+  border-radius: 28px;
+  overflow: hidden;
+  background-color: #f0f1f5;
+  cursor: grab;
+  backface-visibility: hidden;
+  touch-action: pan-y;
+  box-shadow: none;
+}
+
+.ringCard:active {
+  cursor: grabbing;
+}
+
+.ringImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.pinterestIconOverlay {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 34px;
+  height: 34px;
+  background-color: rgba(255, 255, 255, 0.92);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+  z-index: 100;
+  pointer-events: none;
+  color: #e60023;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.pinterestLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #4b4f58;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.pinterestLink:hover {
+  color: #171719;
+}
+
+.pinterestLink svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 480px) {
+  .cardStack,
+  .swipeCard,
+  .ringCard {
+    max-width: 360px;
+  }
+}

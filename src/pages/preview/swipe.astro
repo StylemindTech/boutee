@@ -1,0 +1,30 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SwipeExperience from "../../components/preview/SwipeExperience";
+---
+
+<Layout title="Boutee Preview - Swipe" description="Try the swipe experience on mobile.">
+  <section class="preview-shell">
+    <SwipeExperience client:load />
+  </section>
+</Layout>
+
+<style>
+  .preview-shell {
+    min-height: calc(100vh - 0px);
+    width: 100%;
+  }
+
+  :global(nav),
+  :global(footer) {
+    display: none;
+  }
+
+  :global(body) {
+    background: #ffffff;
+  }
+
+  :global(main) {
+    padding: 0;
+  }
+</style>

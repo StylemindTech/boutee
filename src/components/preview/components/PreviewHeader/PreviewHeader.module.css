@@ -1,0 +1,43 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 12px 12px 8px 16px;
+  background: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(6px);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.title {
+  flex: 1 1 auto;
+  color: #171719;
+  font-family: "Figtree", sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 26px;
+  margin: 0;
+}
+
+.closeButton {
+  padding: 8px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #171719;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.closeButton:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.closeButton:active {
+  transform: scale(0.97);
+}
