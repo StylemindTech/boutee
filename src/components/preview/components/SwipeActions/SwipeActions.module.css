@@ -1,0 +1,64 @@
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 0 24px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.2s ease;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.button:active:not(:disabled)::before {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+}
+
+.button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.dislike {
+  background: #171719;
+  color: #ffffff;
+}
+
+.like {
+  background: linear-gradient(209deg, #f6caf6 0%, #9b9fe8 100%);
+  color: #171719;
+}
+
+.button svg {
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+}
+
+.emphasized {
+  transform: scale(1.08);
+}

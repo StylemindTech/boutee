@@ -1,0 +1,30 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ResultsTabs from "../../components/preview/ResultsTabs";
+---
+
+<Layout title="Boutee Preview - Results" description="Preview your matches and style profile on mobile.">
+  <section class="preview-shell">
+    <ResultsTabs client:load />
+  </section>
+</Layout>
+
+<style>
+  .preview-shell {
+    min-height: calc(100vh - 0px);
+    width: 100%;
+  }
+
+  :global(nav),
+  :global(footer) {
+    display: none;
+  }
+
+  :global(body) {
+    background: #f5f6f8;
+  }
+
+  :global(main) {
+    padding: 0;
+  }
+</style>

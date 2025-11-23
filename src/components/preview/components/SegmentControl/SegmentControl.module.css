@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  position: relative;
+  width: 100%;
+  background: #f0f1f5;
+  border-radius: 16px;
+  padding: 4px;
+  overflow: hidden;
+}
+
+.slider {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  height: calc(100% - 8px);
+  background: #ffffff;
+  box-shadow: 0px 4px 8px rgba(31, 33, 40, 0.06);
+  border-radius: 12px;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), width 0.2s ease;
+  z-index: 0;
+}
+
+.tabButton {
+  flex: 1 1 0;
+  padding: 8px 24px;
+  border: none;
+  background: transparent;
+  z-index: 1;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.label {
+  font-family: "Figtree", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #73737d;
+  transition: color 0.18s ease-in-out;
+}
+
+.activeLabel {
+  color: #171719;
+}
