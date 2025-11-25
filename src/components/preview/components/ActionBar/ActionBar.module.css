@@ -3,13 +3,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: #ffffff;
   border-top: 1px solid #e5e7eb;
   padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0px));
-  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.06);
-  z-index: 40;
+  box-shadow: none;
+  z-index: 60;
 }
 
 .inner {
@@ -31,7 +29,10 @@
 }
 
 .button {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   width: 100%;
   padding: 16px 18px;
   border: none;
@@ -47,6 +48,12 @@
   -webkit-tap-highlight-color: transparent;
   transition: transform 0.12s ease, opacity 0.12s ease, box-shadow 0.15s ease;
   box-shadow: none;
+}
+
+.buttonIcon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
 .button:hover {

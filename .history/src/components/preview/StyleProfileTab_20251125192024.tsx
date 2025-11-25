@@ -67,7 +67,7 @@ const StyleProfileTab: React.FC = () => {
             Your style profile
           </h3>
           <p className="text-[0.875rem] text-[#4b4f58]">
-            Based on your swipes, here&apos;s an early snapshot of what we think you like. People with 10-15 liked rings have the most accurate style profiles.
+            Based on your swipes, here&apos;s an early snapshot. We will refine this once you create a free account.
           </p>
         </div>
         <StyleDNARadarChart userData={profile} noBackground />
@@ -76,7 +76,7 @@ const StyleProfileTab: React.FC = () => {
           style={{ minHeight: "48px", padding: "14px 0" }}
         >
           <ExternalLink className="h-[15px] w-[15px] text-[#171719]" aria-hidden="true" />
-          See Your Full Style Profile
+          Strengthen your style profile on Boutee
         </button>
       </div>
 
@@ -92,7 +92,7 @@ const StyleProfileTab: React.FC = () => {
           <LikedRingsGrid items={likedRings} title="" interactive={false} />
         ) : (
           <div className="text-[0.875rem] text-[#4b4f58] bg-[#f5f6f8] border border-[#eceff2] rounded-2xl p-4">
-            You didn't like any of the 10 random rings we showed you - sorry! There are over 1000 rings to swipe through once you create your free account.
+            Like rings in the swipe experience to see them here.
           </div>
         )}
       </section>

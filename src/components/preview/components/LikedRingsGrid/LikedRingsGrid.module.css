@@ -27,13 +27,21 @@
 
 .gridItem {
   aspect-ratio: 1 / 1;
+  position: relative;
   border: none;
   padding: 0;
   border-radius: 18px;
   overflow: hidden;
   background: #f5f6f8;
-  cursor: pointer;
   display: block;
+}
+
+.gridItemInteractive {
+  cursor: pointer;
+}
+
+.gridItemStatic {
+  cursor: default;
 }
 
 .image {
@@ -45,7 +53,7 @@
   opacity: 1;
 }
 
-.gridItem:hover .image {
+.gridItemInteractive:hover .image {
   transform: scale(1.04);
 }
 
@@ -55,5 +63,26 @@
 
 .imageError {
   background: #f5f6f8;
+  object-fit: contain;
+}
+
+.pinBadge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  z-index: 1;
+}
+
+.pinIcon {
+  width: 20px;
+  height: 20px;
   object-fit: contain;
 }

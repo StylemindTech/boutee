@@ -13,30 +13,39 @@ const ResultsTabs: React.FC = () => {
 
   return (
     <MobileOnlyGate>
-      <div className="min-h-screen bg-[#f5f6f8] text-[#171719] flex flex-col">
-        <div className="w-full max-w-[520px] mx-auto flex-1 pb-36">
+      <div className="min-h-screen bg-white text-[#171719] flex flex-col">
+        <div className="w-full max-w-[520px] mx-auto flex-1 pb-24">
           <PreviewHeader title="Your results" />
 
-          <div className="px-5 mt-2">
-            <SegmentControl
-              items={[
-                { id: "matches", label: "Your jeweller matches" },
-                { id: "profile", label: "Your style profile" },
-              ]}
-              activeItemId={activeTab}
-              onItemClick={(id) => setActiveTab(id as TabKey)}
-            />
+          <div className="mt-0">
+            <div
+              className="w-full overflow-hidden rounded-[var(--radius-l)] bg-white shadow-[var(--shadow-panel-top)]"
+              style={{
+                backgroundColor: "var(--Surface-Primary)",
+                boxShadow: "0px -3px 15px #5580c014",
+              }}
+            >
+              <div className="px-3 pt-3 pb-2">
+                <SegmentControl
+                  items={[
+                    { id: "matches", label: "Jeweller Matches" },
+                    { id: "profile", label: "Style Profile" },
+                  ]}
+                  activeItemId={activeTab}
+                  onItemClick={(id) => setActiveTab(id as TabKey)}
+                />
+              </div>
+              <div className="px-3 pb-4 pt-1">
+                {activeTab === "matches" ? <JewellerMatchesTab /> : <StyleProfileTab />}
+              </div>
+            </div>
           </div>
-
-        <main className="px-5 mt-6 flex-1 overflow-y-auto">
-            {activeTab === "matches" ? <JewellerMatchesTab /> : <StyleProfileTab />}
-          </main>
         </div>
         <ActionBar
           helperText={
             activeTab === "matches" ? "See all your matches on Boutee" : "Refine your style profile on Boutee"
           }
-          label="Continue"
+          label="Continue For Free"
           href="/app"
         />
       </div>
