@@ -15,14 +15,16 @@ type SegmentControlProps = {
 const SegmentControl: React.FC<SegmentControlProps> = ({ items, activeItemId, onItemClick }) => {
   const activeIndex = items.findIndex((item) => item.id === activeItemId);
   const count = items.length || 1;
+  const gutter = 8; // total horizontal padding (4px each side)
 
   return (
     <div className={styles.container}>
       <div
         className={styles.slider}
         style={{
-          width: `calc((100% - 0px) / ${count})`,
-          transform: `translateX(calc(100% * ${activeIndex}))`,
+          width: `calc((100% - ${gutter}px) / ${count})`,
+          left: "4px",
+          transform: `translateX(calc(${activeIndex} * 100%))`,
         }}
       />
       {items.map((item) => (

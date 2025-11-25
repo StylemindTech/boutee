@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import styles from "./RingCardStack.module.css";
 
 export type RingCard = {
@@ -17,10 +17,20 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   const [position, setPosition] = useState({ x: 0, y: 0, rotation: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
+  const [leavingRingId, setLeavingRingId] = useState<string | null>(null);
   const dragStart = useRef({ x: 0, y: 0 });
   const dragCurrent = useRef({ x: 0, y: 0 });
+  const leavingRingRef = useRef<RingCard | null>(null);
 
-  const displayStack = useMemo(() => rings.slice(0, 4), [rings]);
+  const displayStack = useMemo(() => {
+    const baseStack = rings.slice(0, 4);
+    const shouldInjectLeaving =
+      isLeaving && leavingRingId && leavingRingRef.current && baseStack.every((ring) => ring.id !== leavingRingId);
+    if (shouldInjectLeaving) {
+      baseStack.unshift(leavingRingRef.current);
+    }
+    return baseStack.slice(0, 4);
+  }, [rings, isLeaving, leavingRingId]);
   const topRing = displayStack[0];
 
   const resetDirection = useCallback(() => {
@@ -60,6 +70,8 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
 
   const animateOut = (direction: "left" | "right", ring: RingCard) => {
     setIsLeaving(true);
+    leavingRingRef.current = ring;
+    setLeavingRingId(ring.id);
     const width = typeof window !== "undefined" ? window.innerWidth : 375;
     const finalX = direction === "left" ? -width * 1.5 : width * 1.5;
     const finalRotation = direction === "left" ? -28 : 28;
@@ -67,6 +79,8 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
     onSwipe?.(direction, ring);
     window.setTimeout(() => {
       setIsLeaving(false);
+      setLeavingRingId(null);
+      leavingRingRef.current = null;
       setPosition({ x: 0, y: 0, rotation: 0 });
     }, 280);
   };
@@ -86,6 +100,11 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
       setPosition({ x: 0, y: 0, rotation: 0 });
     }
   }, [isDragging, isLeaving, topRing, resetDirection]);
+
+  useLayoutEffect(() => {
+    setPosition({ x: 0, y: 0, rotation: 0 });
+    setIsLeaving(false);
+  }, [topRing?.id]);
 
   useEffect(() => {
     if (!isDragging) return;
@@ -108,11 +127,12 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
       <div className={styles.cardStack}>
         {displayStack.map((ring, index) => {
           const isTop = index === 0;
+          const isLeavingCard = leavingRingId === ring.id;
           const cardStyle = isTop
             ? {
                 transform: `translate(${position.x}px, ${position.y}px) rotate(${position.rotation}deg)`,
                 transition: isDragging ? "none" : "transform 0.3s ease-out, opacity 0.2s ease-out",
-                opacity: isLeaving ? 0 : 1,
+                opacity: isLeaving && isLeavingCard ? 0 : 1,
                 zIndex: displayStack.length - index,
               }
             : {

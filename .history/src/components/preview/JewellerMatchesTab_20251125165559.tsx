@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { BadgeCheck, Check, ExternalLink } from "lucide-react";
+import { Check, ChevronRight, ExternalLink } from "lucide-react";
 import { collection, getCountFromServer, getDocs, limit, query, where } from "firebase/firestore";
 import { db, ensureAnonAuth } from "../../lib/firebaseClient";
 
@@ -41,7 +41,7 @@ const tagOrder: Array<{ key: string; label: string }> = [
   { key: "offersWarranty", label: "Warranty" },
   { key: "emergingDesigner", label: "Emerging designer" },
   { key: "freeRingResizing", label: "Free resizing" },
-  { key: "inPersonConsultations", label: "Online or in-person" },
+  { key: "inPersonConsultations", label: "In-person consults" },
   { key: "lgbtqOwned", label: "LGBTQ+ owned" },
   { key: "queerFriendly", label: "Queer-friendly" },
 ];
@@ -352,14 +352,12 @@ const JewellerMatchesTab: React.FC = () => {
   }, [profile]);
 
   return (
-    <div className="flex flex-col gap-4 pb-3">
-      <Intro />
+    <div className="flex flex-col gap-4 pb-6">
+      <p className="text-sm text-[#4b4f58] leading-relaxed">
+        Based on your liked rings, we think you'll like these jewellers:
+      </p>
 
-      {loading && (
-        <div className="flex w-full justify-center py-10">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#d1d5db] border-t-[#171719]" aria-label="Loading" />
-        </div>
-      )}
+      {loading && <div className="text-sm text-[#4b4f58]">Loading jeweller matches...</div>}
       {error && <div className="text-sm text-red-700">{error}</div>}
       {!loading && !error && jewellers.length === 0 && (
         <div className="text-sm text-[#4b4f58]">No jeweller matches available right now.</div>
@@ -372,28 +370,34 @@ const JewellerMatchesTab: React.FC = () => {
         {!loading && !error && jewellers.length >= 4 && (
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 bottom-[-15px] z-40 h-[215px] w-screen"
+            className="pointer-events-none absolute left-1/2 bottom-[-100px] z-40 h-[350px] w-screen"
             style={{
               transform: "translateX(-50%)",
               background:
-                "linear-gradient(180deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0.65) 65px, rgba(255,255,255,1) 120px, #ffffff 215px)",
+                "linear-gradient(180deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0.65) 100px, rgba(255,255,255,1) 150px, #ffffff 350px)",
             }}
           >
             <div
-              className="pointer-events-auto absolute left-1/2 bottom-[12px] w-full max-w-[520px] -translate-x-1/2 px-3"
+              className="pointer-events-auto absolute left-1/2 bottom-[100px] w-full max-w-[520px] -translate-x-1/2 px-3"
             >
               <button
                 className="flex w-full items-center gap-3 rounded-[1rem] border border-[#c8c1f2] bg-white px-4 py-5 text-left text-[#73737d]"
                 style={{ minHeight: "64px" }}
                 onClick={() => {
                   if (typeof window !== "undefined") {
-                    window.location.href = "https://app.boutee.co.uk/";
+                    window.location.href = "/signup";
                   }
                 }}
               >
-                <BadgeCheck className="h-5 w-5 text-[#73737d] shrink-0" aria-hidden="true" />
+                <img
+                  src="https://firebasestorage.googleapis.com/v0/b/boutee-app.firebasestorage.app/o/CustomerApp%2FIcons%2FInfo.svg?alt=media&token=b0d06b83-8598-4a31-9bdd-dc3a6e4f7365"
+                  alt="Info"
+                  width={20}
+                  height={20}
+                  className="shrink-0"
+                />
                 <span className="flex-1 text-[0.875rem] font-normal leading-tight">
-                  {`Create a free account to see all ${activeJewellerCount ?? jewellers.length} of your jeweller matches`}
+                  {`You need to create a free account to see all ${activeJewellerCount ?? jewellers.length} of your jeweller matches`}
                 </span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -421,20 +425,6 @@ const JewellerMatchesTab: React.FC = () => {
 };
 
 export default JewellerMatchesTab;
-
-const Intro = () => (
-  <div className="flex flex-col gap-2">
-    <h3
-      className="m-0 text-[1.125rem] font-[700] text-[var(--Text-Primary)] [font-family:var(--font-family-primary)]"
-      style={{ fontFamily: "var(--font-family-primary)" }}
-    >
-      Recommended for you
-    </h3>
-    <p className="m-0 text-sm text-[#4b4f58] leading-relaxed">
-      Based on your liked rings, we think you'll like these jewellers:
-    </p>
-  </div>
-);
 
 const CrossIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">

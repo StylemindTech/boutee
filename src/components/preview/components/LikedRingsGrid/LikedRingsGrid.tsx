@@ -16,12 +16,18 @@ type LikedRingsGridProps = {
   items: LikedRing[];
   onItemClick?: (ring: LikedRing) => void;
   title?: string;
+  interactive?: boolean;
 };
 
 const FALLBACK =
   "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><rect width='400' height='400' fill='%23ededf0'/><text x='50%' y='50%' font-family='Figtree,Arial' font-size='28' fill='%239197a3' text-anchor='middle' dominant-baseline='middle'>Ring</text></svg>";
 
-const LikedRingsGrid: React.FC<LikedRingsGridProps> = ({ items, onItemClick, title = "Liked rings" }) => {
+const LikedRingsGrid: React.FC<LikedRingsGridProps> = ({
+  items,
+  onItemClick,
+  title = "Liked rings",
+  interactive = true,
+}) => {
   const imgRefs = useRef<Record<string, HTMLImageElement | null>>({});
   const [status, setStatus] = useState<Record<string, "loading" | "loaded" | "error">>({});
 
@@ -53,21 +59,20 @@ const LikedRingsGrid: React.FC<LikedRingsGridProps> = ({ items, onItemClick, tit
 
   return (
     <section className={styles.section}>
-      <div className={styles.header}>
-        <h4 className={styles.title}>{title}</h4>
-      </div>
+      {title ? (
+        <div className={styles.header}>
+          <h4 className={styles.title}>{title}</h4>
+        </div>
+      ) : null}
 
       <div className={styles.grid}>
         {prepared.map(({ item, src, alt }) => {
           const s = status[item.id] || "loading";
-          return (
-            <button
-              key={item.id}
-              type="button"
-              className={styles.gridItem}
-              onClick={() => onItemClick?.(item)}
-              aria-label={alt}
-            >
+          const common = (
+            <>
+              <span className={styles.pinBadge} aria-hidden="true">
+                <img src="/Pinterest_Logo_Red.png" alt="" className={styles.pinIcon} />
+              </span>
               <img
                 ref={(node) => {
                   imgRefs.current[item.id] = node;
@@ -81,7 +86,27 @@ const LikedRingsGrid: React.FC<LikedRingsGridProps> = ({ items, onItemClick, tit
                 onLoad={() => handleLoad(item.id)}
                 onError={() => handleError(item.id)}
               />
-            </button>
+            </>
+          );
+
+          if (interactive && onItemClick) {
+            return (
+              <button
+                key={item.id}
+                type="button"
+                className={`${styles.gridItem} ${styles.gridItemInteractive}`}
+                onClick={() => onItemClick?.(item)}
+                aria-label={alt}
+              >
+                {common}
+              </button>
+            );
+          }
+
+          return (
+            <div key={item.id} className={`${styles.gridItem} ${styles.gridItemStatic}`} aria-label={alt}>
+              {common}
+            </div>
           );
         })}
       </div>
