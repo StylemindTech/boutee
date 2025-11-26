@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./SwipeIntroMessage.module.css";
 
 const SwipeIntroMessage: React.FC = () => {
-  return <p className={styles.copy}>Swipe 10 rings to start building your style profile.</p>;
+  return <p className={styles.copy}>Like or dislike 10 rings so we can learn your style</p>;
 };
 
 export default SwipeIntroMessage;

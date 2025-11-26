@@ -12,18 +12,19 @@
     url("/fonts/PPRadioGrotesk-Black.woff2") format("woff2");
 }
 
+:root {
+  --font-ppradio: "PPRadioGrotesk", "Figtree", sans-serif;
+  --font-ppradio-features: "ss01" 1, "ss02" 1, "dlig" 0, "calt" 1;
+}
+
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: "PPRadioGrotesk", "Figtree", sans-serif;
-  font-feature-settings: 
-    "ss01" 1,  /* Alternative 'a' and rounded dots */
-    "ss02" 1,  /* Alternative 'g' */
-    "dlig" 0,  /* Explicitly disable discretionary ligatures */
-    "calt" 1;  /* Contextual alternates */
+  font-family: var(--font-ppradio);
+  font-feature-settings: var(--font-ppradio-features);
 }
 /* 🎨 Custom Theme */
 /* src/styles/global.css */
@@ -141,6 +142,11 @@ h6 {
   /* Your existing font and other variables... */
   --font-figtree: "Figtree", "sans-serif";
   --font-ppradio: "PPRadioGrotesk", "Figtree", "sans-serif";
+}
+
+.font-ppradio {
+  font-family: var(--font-ppradio);
+  font-feature-settings: var(--font-ppradio-features);
 }
 
 /* Enable smooth scrolling */

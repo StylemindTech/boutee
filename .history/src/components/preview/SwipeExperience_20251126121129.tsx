@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
 import MobileOnlyGate from "./MobileOnlyGate";
 import PreviewHeader from "./components/PreviewHeader/PreviewHeader";
@@ -71,33 +71,20 @@ const fallbackRingDeck: RingCard[] = [
   },
 ];
 
-const progressSteps = ["Analysing your swipes", "Searching Boutee jewellers", "Calculating match %"];
-
-type SwipeExperienceProps = {
-  disableAutoRedirect?: boolean;
-  forceRedirectOverlay?: boolean;
-};
-
-const SwipeExperience: React.FC<SwipeExperienceProps> = ({
-  disableAutoRedirect = false,
-  forceRedirectOverlay = false,
-}) => {
+const SwipeExperience: React.FC = () => {
   const maxSwipes = 10;
   const likedStorageKey = "previewLikedRings";
   const profileStorageKey = "previewStyleProfile";
-  const prefetchedMatchesKey = "previewPrefetchedMatches";
 
   const [ringDeck, setRingDeck] = useState<RingWithStyle[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [totalRings, setTotalRings] = useState<number>(maxSwipes);
   const [swipes, setSwipes] = useState<SwipeDecision[]>([]);
-  const [redirecting, setRedirecting] = useState(forceRedirectOverlay);
-  const [completionStep, setCompletionStep] = useState(0);
+  const [redirecting, setRedirecting] = useState(false);
   const [highlightDirection, setHighlightDirection] = useState<"left" | "right" | null>(null);
   const [guideOpen, setGuideOpen] = useState(true);
   const [loadingRings, setLoadingRings] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
-  const prefetchingRef = useRef(false);
 
   const handleClose = () => {
     if (typeof window === "undefined") return;
@@ -270,159 +257,25 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
   }, [maxSwipes]);
 
   useEffect(() => {
-    if (disableAutoRedirect) return;
     if (totalRings > 0 && swipes.length >= totalRings) {
       setRedirecting(true);
+      const timer = setTimeout(() => {
+        window.location.href = "/preview/results";
+      }, 800);
+      return () => clearTimeout(timer);
     }
-  }, [swipes.length, totalRings, disableAutoRedirect]);
+  }, [swipes.length, totalRings]);
 
-  const baseStyleProfile = useMemo<RingStyleProfile>(
-    () => ({
-      classic: 50,
-      bold: 50,
-      monotone: 50,
-      organic: 50,
-      alternative: 50,
-      minimal: 50,
-      colourful: 50,
-      refined: 50,
-    }),
-    []
-  );
-
-  const similarity = useCallback((user: RingStyleProfile, target?: RingStyleProfile) => {
-    const defaultVal = 50;
-    if (!target) return 0;
-    const keys = Array.from(new Set([...Object.keys(user), ...Object.keys(target)]));
-    if (!keys.length) return 0;
-    const diffs = keys.map((k) => {
-      const u = typeof user[k] === "number" ? (user[k] as number) : defaultVal;
-      const t = typeof target[k] === "number" ? (target[k] as number) : defaultVal;
-      return Math.abs(u - t);
-    });
-    const avgDiff = diffs.reduce((a, b) => a + b, 0) / diffs.length;
-    return Math.max(0, Math.round(100 - avgDiff));
-  }, []);
-
-  const parseRingImage = useCallback((ring: any) => {
-    if (ring.imageUrl) return ring.imageUrl;
-    if (ring.image) return ring.image;
-    if (ring.imgUrl) return ring.imgUrl;
-    if (ring.url) return ring.url;
-    if (ring.imageUrls) {
-      const field = ring.imageUrls;
-      if (Array.isArray(field)) {
-        const stringUrl = field.find((item) => typeof item === "string" && item.trim().length > 0) as string | undefined;
-        if (stringUrl) return stringUrl;
-        const obj = field.find((item) => item && typeof item === "object" && (item as any).url) as Record<
-          string,
-          unknown
-        >;
-        if (obj && typeof obj.url === "string") return obj.url;
-      } else if (typeof field === "string") {
-        return field;
-      }
-    }
-    if (ring.metadata && typeof ring.metadata === "object") {
-      const metaUrl = (ring.metadata as any).imageUrl || (ring.metadata as any).url;
-      if (typeof metaUrl === "string") return metaUrl;
-    }
-    return null;
-  }, []);
-
-  const prefetchResults = useCallback(async () => {
-    if (prefetchingRef.current) return;
-    prefetchingRef.current = true;
-    try {
-      await ensureAnonAuth();
-      const profile = (() => {
-        try {
-          const raw = typeof window !== "undefined" ? window.localStorage.getItem(profileStorageKey) : null;
-          if (raw) {
-            const parsed = JSON.parse(raw) as RingStyleProfile;
-            return { ...baseStyleProfile, ...parsed };
-          }
-        } catch (err) {
-          console.warn("[SwipeExperience] Unable to parse profile for prefetch", err);
-        }
-        return baseStyleProfile;
-      })();
-
-      const jewellerSnap = await getDocs(query(collection(db, "jewellers"), where("active", "==", true), limit(20)));
-      const jewellerDocs = jewellerSnap.docs.map((doc) => {
-        const data = doc.data() as Record<string, any>;
-        const tagsRaw = (data.tags || {}) as Record<string, boolean>;
-        const tagOrder: Array<{ key: string; label: string }> = [
-          { key: "madeUK", label: "Made in the UK" },
-          { key: "ethicalJeweller", label: "Ethical jeweller" },
-          { key: "offersWarranty", label: "Warranty" },
-          { key: "emergingDesigner", label: "Emerging designer" },
-          { key: "freeRingResizing", label: "Free resizing" },
-          { key: "inPersonConsultations", label: "Online or in-person" },
-          { key: "lgbtqOwned", label: "LGBTQ+ owned" },
-          { key: "queerFriendly", label: "Queer-friendly" },
-        ];
-        const tags = tagOrder
-          .filter((t) => tagsRaw[t.key])
-          .map((t) => t.label)
-          .slice(0, 3);
-        return {
-          id: doc.id,
-          name: data.companyName || data.name || data.displayName || "Jeweller",
-          tagline: data.tagline || data.bio || "",
-          image: data.heroImage || data.bannerImage || data.image || "",
-          avatar: data.profilePhoto || data.avatar || data.logo || "",
-          location: data.location || data.city || "",
-          styleProfile: data.styleProfile as RingStyleProfile | undefined,
-          tags,
-        };
-      });
-
-      const jewellersWithRings = await Promise.all(
-        jewellerDocs.map(async (jeweller) => {
-          try {
-            const snap = await getDocs(query(collection(db, "rings"), where("jewellerId", "==", jeweller.id), limit(20)));
-            const rings = snap.docs.map((doc) => {
-              const data = doc.data() as Record<string, any>;
-              return {
-                id: doc.id,
-                imageUrl: data.imageUrl,
-                imageUrls: data.imageUrls,
-                image: data.image,
-                imgUrl: data.imgUrl,
-                url: data.url,
-                styleProfile: data.styleProfile || (data.metadata && data.metadata.styleProfile),
-                metadata: data.metadata,
-              };
-            });
-            const sortedByFit = rings
-              .map((ring) => ({ ring, score: similarity(profile, ring.styleProfile) }))
-              .sort((a, b) => b.score - a.score)
-              .slice(0, 2)
-              .map((entry) => parseRingImage(entry.ring))
-              .filter(Boolean) as string[];
-            return { ...jeweller, galleryImages: sortedByFit };
-          } catch (err) {
-            console.warn("[SwipeExperience] Unable to fetch rings for jeweller", jeweller.id, err);
-            return { ...jeweller, galleryImages: [] };
-          }
-        })
-      );
-
-      const scored = jewellersWithRings
-        .map((j) => ({
-          ...j,
-          matchPercent: similarity(profile, j.styleProfile),
-        }))
-        .sort((a, b) => b.matchPercent - a.matchPercent);
-
-      if (typeof window !== "undefined") {
-        window.sessionStorage.setItem(prefetchedMatchesKey, JSON.stringify({ ts: Date.now(), jewellers: scored }));
-      }
-    } catch (err) {
-      console.warn("[SwipeExperience] Prefetch of results failed", err);
-    }
-  }, [baseStyleProfile, parseRingImage, profileStorageKey, similarity]);
+  const baseStyleProfile: RingStyleProfile = {
+    classic: 50,
+    bold: 50,
+    monotone: 50,
+    organic: 50,
+    alternative: 50,
+    minimal: 50,
+    colourful: 50,
+    refined: 50,
+  };
 
   const aggregateProfile = (liked: RingWithStyle[]): RingStyleProfile => {
     if (!liked.length) return baseStyleProfile;
@@ -444,28 +297,6 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
     return result;
   };
 
-  useEffect(() => {
-    if (!redirecting) {
-      setCompletionStep(0);
-      return;
-    }
-    prefetchResults();
-    setCompletionStep(0);
-    const stepTimers = [600, 1500, 2400].map((ms, idx) =>
-      window.setTimeout(() => setCompletionStep(idx + 1), ms)
-    );
-    const redirectTimer =
-      disableAutoRedirect || forceRedirectOverlay
-        ? undefined
-        : window.setTimeout(() => {
-            window.location.href = "/preview/results";
-          }, 3200);
-    return () => {
-      stepTimers.forEach((t) => window.clearTimeout(t));
-      if (redirectTimer) window.clearTimeout(redirectTimer);
-    };
-  }, [redirecting, disableAutoRedirect, forceRedirectOverlay, prefetchResults]);
-
   const persistLike = (ring: RingWithStyle) => {
     if (typeof window === "undefined") return;
     try {
@@ -484,13 +315,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
   const handleSwipe = (direction: SwipeDecision["direction"]) => {
     if (!ringDeck.length || swipes.length >= totalRings || guideOpen || loadingRings) return;
     const ring = ringDeck[currentIndex % ringDeck.length];
-    setSwipes((prev) => {
-      const next = [...prev, { ringId: ring.id, direction }];
-      if (!disableAutoRedirect && next.length >= totalRings) {
-        setRedirecting(true);
-      }
-      return next;
-    });
+    setSwipes((prev) => [...prev, { ringId: ring.id, direction }]);
     if (direction === "like") {
       persistLike(ring);
     }
@@ -523,9 +348,10 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
               onSwipeDirectionChange={(dir) => setHighlightDirection(dir)}
             />
           </div>
-          {(loadingRings || fetchError) && (
+          {(redirecting || loadingRings || fetchError) && (
             <div className="text-center text-sm text-[#4b4f58] pb-4 space-y-1">
-              {loadingRings && <p>Loading rings...</p>}
+              {loadingRings && <p></p>}
+              {redirecting && <p>Calculating your matches...</p>}
               {fetchError && <p>{fetchError}</p>}
             </div>
           )}
@@ -544,62 +370,6 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
             />
           </div>
         </div>
-
-        {redirecting && (
-          <div className="absolute inset-0 bg-white/96 backdrop-blur-sm z-40 flex items-center justify-center px-4">
-            <div className="w-full max-w-[360px] text-left flex flex-col gap-5">
-              <h3
-                className="m-0 text-[1.25rem] font-[700] text-[#171719]"
-                style={{ fontFamily: "var(--font-family-primary)" }}
-              >
-                Calculating your matches
-              </h3>
-              <div className="flex flex-col gap-5">
-                {progressSteps.map((label, idx) => {
-                  const done = completionStep > idx;
-                  return (
-                    <div
-                      key={label}
-                      className="flex items-center gap-3 p-1 rounded-xl"
-                      style={{
-                        border: "none",
-                        background: done ? "#f0f1f5" : "#fafafa",
-                      }}
-                    >
-                      <div
-                        className="h-7 w-7 p-1 rounded-full flex items-center justify-center border"
-                        style={{
-                          background: done ? "#b9f551" : "#fafafa",
-                          borderColor: done ? "#b9f551" : "#d5d9e1",
-                        }}
-                      >
-                        {done && (
-                          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true">
-                            <path
-                              d="M4 8.5 6.5 11 12 5"
-                              stroke="#0f1b03"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        )}
-                      </div>
-                      <span
-                        className={`text-[0.95rem] leading-tight ${
-                          done ? "text-[#171719] font-semibold" : "text-[#4b4f58]"
-                        }`}
-                        style={{ fontFamily: "var(--font-family-primary)" }}
-                      >
-                        {label}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        )}
 
         <SwipeGuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />
       </div>

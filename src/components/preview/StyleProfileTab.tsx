@@ -15,7 +15,11 @@ type LikedRing = {
 
 type StyleProfile = Record<string, number>;
 
-const StyleProfileTab: React.FC = () => {
+type StyleProfileTabProps = {
+  isActive?: boolean;
+};
+
+const StyleProfileTab: React.FC<StyleProfileTabProps> = ({ isActive = true }) => {
   const defaultProfile: StyleProfile = {
     classic: 50,
     bold: 50,
@@ -29,6 +33,7 @@ const StyleProfileTab: React.FC = () => {
 
   const [likedRings, setLikedRings] = useState<LikedRing[]>([]);
   const [profile, setProfile] = useState<StyleProfile>(defaultProfile);
+  const [chartKey, setChartKey] = useState(0);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -56,6 +61,12 @@ const StyleProfileTab: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (isActive) {
+      setChartKey((k) => k + 1);
+    }
+  }, [isActive]);
+
   return (
     <div className="flex flex-col gap-6 pb-3">
       <div className="rounded-[32px] bg-white p-6 shadow-[0_10px_40px_rgba(0,0,0,0.06)]">
@@ -70,7 +81,7 @@ const StyleProfileTab: React.FC = () => {
             Based on your swipes, here&apos;s an early snapshot of what we think you like. People with 10-15 liked rings have the most accurate style profiles.
           </p>
         </div>
-        <StyleDNARadarChart userData={profile} noBackground />
+        <StyleDNARadarChart key={chartKey} userData={profile} noBackground />
         <button
           className="Button_button__rqctt Button_large__1HWt1 Button_normal__3bvFj inline-flex w-full items-center justify-center gap-2 rounded-[50px] border border-transparent bg-[#f0f1f5] text-[1rem] font-normal text-[#171719] antialiased transition-colors duration-200 ease-in-out cursor-pointer whitespace-nowrap"
           style={{ minHeight: "48px", padding: "14px 0" }}
