@@ -130,102 +130,90 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
         console.log("[SwipeExperience] Authenticated as anonymous user:", uid);
         console.log("[SwipeExperience] Firebase project:", import.meta.env.PUBLIC_FIREBASE_PROJECT_ID);
         const ringsCollection = collection(db, "rings");
-        const seed = Math.random();
+        const snap = await getDocs(query(ringsCollection, where("isDiscovery", "==", true), limit(60)));
+        const docs = snap.docs;
+        console.log("[SwipeExperience] Rings query size:", docs.length);
+        const buildRings = (inputDocs: typeof docs) =>
+          (inputDocs
+            .map((doc) => {
+              const data = doc.data() as {
+                imageUrl?: string;
+                imageURL?: string;
+                image_url?: string;
+                image?: string;
+                imgUrl?: string;
+                imageUrls?: unknown;
+                sourceUrl?: string;
+                sourceURL?: string;
+                source_url?: string;
+                url?: string;
+                thumbnailUrl?: string;
+                metadata?: Record<string, unknown>;
+                styleProfile?: RingStyleProfile;
+              };
 
-        const randomQuerySlice = async (op: ">=" | "<") => {
-          const q = query(
-            ringsCollection,
-            where("isDiscovery", "==", true),
-            where("randomSeed", op, seed),
-            orderBy("randomSeed"),
-            limit(30)
-          );
-          const snap = await getDocs(q);
-          return snap.docs;
-        };
+              const primaryImage =
+                data.imageUrl ||
+                data.imageURL ||
+                data.image_url ||
+                data.image ||
+                data.imgUrl ||
+                data.url ||
+                data.thumbnailUrl;
 
-        let docs: typeof getDocs extends (...args: any) => Promise<infer R> ? R["docs"] : any = [];
-        try {
-          const first = await randomQuerySlice(">=");
-          docs = [...first];
-          if (docs.length < 30) {
-            const wrap = await randomQuerySlice("<");
-            docs = [...docs, ...wrap];
-          }
-        } catch (randError) {
-          console.warn("[SwipeExperience] Random seed query failed, falling back to basic query", randError);
-          const fallbackSnap = await getDocs(query(ringsCollection, where("isDiscovery", "==", true), limit(30)));
-          docs = fallbackSnap.docs;
+              let imageUrl = primaryImage;
+              if (!imageUrl && data.imageUrls) {
+                const imgField = data.imageUrls;
+                if (Array.isArray(imgField)) {
+                  const stringUrl = imgField.find((item) => typeof item === "string" && item.trim().length > 0) as
+                    | string
+                    | undefined;
+                  const objectUrl = !stringUrl
+                    ? (imgField.find(
+                        (item) =>
+                          item &&
+                          typeof item === "object" &&
+                          (item as any).url &&
+                          typeof (item as any).url === "string"
+                      ) as Record<string, unknown> | undefined)
+                    : undefined;
+                  imageUrl =
+                    stringUrl ||
+                    (objectUrl && typeof objectUrl.url === "string" ? (objectUrl.url as string) : undefined) ||
+                    undefined;
+                } else if (typeof imgField === "string" && imgField.trim().length > 0) {
+                  imageUrl = imgField;
+                }
+              }
+
+              const sourceUrl =
+                data.sourceUrl ||
+                data.sourceURL ||
+                data.source_url ||
+                (data.metadata && typeof data.metadata === "object" && (data.metadata as any).sourceUrl
+                  ? ((data.metadata as any).sourceUrl as string)
+                  : undefined);
+
+              const styleProfile = data.styleProfile || (data.metadata && (data.metadata as any).styleProfile);
+
+              if (!imageUrl) return null;
+              return {
+                id: doc.id,
+                imageUrl,
+                sourceUrl,
+                styleProfile: typeof styleProfile === "object" ? (styleProfile as RingStyleProfile) : undefined,
+              };
+            })
+            .filter(Boolean) as RingWithStyle[]);
+
+        let rings: RingWithStyle[] = buildRings(docs);
+
+        if (!rings.length) {
+          console.warn("[SwipeExperience] No rings with images returned; trying simple discovery query");
+          const basicSnap = await getDocs(query(collection(db, "rings"), where("isDiscovery", "==", true), limit(30)));
+          rings = buildRings(basicSnap.docs);
         }
 
-        console.log("[SwipeExperience] Rings query size:", docs.length, "seed:", seed);
-        const rings: RingWithStyle[] = docs
-          .map((doc) => {
-            const data = doc.data() as {
-              imageUrl?: string;
-              imageURL?: string;
-              image_url?: string;
-              image?: string;
-              imgUrl?: string;
-              imageUrls?: unknown;
-              sourceUrl?: string;
-              sourceURL?: string;
-              source_url?: string;
-              url?: string;
-              metadata?: Record<string, unknown>;
-              styleProfile?: RingStyleProfile;
-            };
-
-            const primaryImage =
-              data.imageUrl || data.imageURL || data.image_url || data.image || data.imgUrl || data.url;
-
-            let imageUrl = primaryImage;
-            if (!imageUrl && data.imageUrls) {
-              const imgField = data.imageUrls;
-              if (Array.isArray(imgField)) {
-                const stringUrl = imgField.find((item) => typeof item === "string" && item.trim().length > 0) as
-                  | string
-                  | undefined;
-                const objectUrl = !stringUrl
-                  ? (imgField.find(
-                      (item) =>
-                        item &&
-                        typeof item === "object" &&
-                        (item as any).url &&
-                        typeof (item as any).url === "string"
-                    ) as Record<string, unknown> | undefined)
-                  : undefined;
-                imageUrl =
-                  stringUrl ||
-                  (objectUrl && typeof objectUrl.url === "string" ? (objectUrl.url as string) : undefined) ||
-                  undefined;
-              } else if (typeof imgField === "string" && imgField.trim().length > 0) {
-                imageUrl = imgField;
-              }
-            }
-
-            const sourceUrl =
-              data.sourceUrl ||
-              data.sourceURL ||
-              data.source_url ||
-              (data.metadata && typeof data.metadata === "object" && (data.metadata as any).sourceUrl
-                ? ((data.metadata as any).sourceUrl as string)
-                : undefined);
-
-            const styleProfile = data.styleProfile || (data.metadata && (data.metadata as any).styleProfile);
-
-            if (!imageUrl) {
-              console.warn("[SwipeExperience] Missing image field for ring doc:", doc.id, "keys:", Object.keys(data));
-              return null;
-            }
-            return {
-              id: doc.id,
-              imageUrl,
-              sourceUrl,
-              styleProfile: typeof styleProfile === "object" ? (styleProfile as RingStyleProfile) : undefined,
-            };
-          })
-          .filter(Boolean) as RingWithStyle[];
         console.log("[SwipeExperience] Rings after filtering:", rings.length);
 
         const shuffled = [...rings].sort(() => Math.random() - 0.5);
