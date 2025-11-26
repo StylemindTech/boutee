@@ -8,32 +8,46 @@
 }
 
 .dot {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: 1.5px solid #171719;
-  background: rgba(23, 23, 25, 0.06);
-  transition: border-color 0.25s ease, background-color 0.25s ease;
+  background: transparent;
+  transition: border-color 0.25s ease, transform 0.25s ease;
 }
 
 .innerDot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #171719;
   transform: scale(0);
-  transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.24s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .completed {
   border-color: #171719;
-  background: rgba(23, 23, 25, 0.14);
 }
 
 .completed .innerDot {
   background: #171719;
   transform: scale(1);
+  animation: dotGrow 0.3s cubic-bezier(0.2, 0.8, 0.45, 1);
+}
+
+@keyframes dotGrow {
+  0% {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+  60% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
 }

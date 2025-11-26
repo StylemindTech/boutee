@@ -3,16 +3,17 @@
   justify-content: center;
   align-items: center;
   gap: 24px;
-  padding: 16px 0 24px;
+  padding: 8px 0 12px;
+  width: 100%;
 }
 
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 80px;
-  border-radius: 40px;
+  width: 92px;
+  height: 92px;
+  border-radius: 46px;
   border: none;
   cursor: pointer;
   position: relative;
@@ -54,11 +55,12 @@
 }
 
 .button svg {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
+  display: block;
   pointer-events: none;
 }
 
 .emphasized {
-  transform: scale(1.08);
+  transform: scale(1.2);
 }

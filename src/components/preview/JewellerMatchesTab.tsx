@@ -30,6 +30,7 @@ type RingDoc = {
 };
 
 const profileStorageKey = "previewStyleProfile";
+const prefetchedMatchesKey = "previewPrefetchedMatches";
 
 const placeholderRing =
   "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><rect width='600' height='600' fill='%23ededf0'/><text x='50%' y='50%' font-family='Figtree,Arial' font-size='48' fill='%239197a3' text-anchor='middle' dominant-baseline='middle'>Ring</text></svg>";
@@ -96,11 +97,11 @@ const Card: React.FC<{
   const imgSizes = "(max-width: 640px) 100vw, 640px";
 
   useEffect(() => {
-    if (allReady) {
-      const t = setTimeout(() => setVisible(true), delayMs);
-      return () => clearTimeout(t);
-    }
-  }, [allReady, delayMs]);
+    const t = setTimeout(() => {
+      window.requestAnimationFrame(() => setVisible(true));
+    }, delayMs);
+    return () => clearTimeout(t);
+  }, [delayMs]);
 
   return (
     <article
@@ -110,8 +111,7 @@ const Card: React.FC<{
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(18px)",
-        transition: "opacity 480ms ease, transform 480ms ease",
-        visibility: visible ? "visible" : "hidden",
+        transition: "opacity 500ms ease, transform 500ms ease",
       }}
     >
       <div className="relative p-0">
@@ -269,6 +269,7 @@ const Card: React.FC<{
 const JewellerMatchesTab: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [jewellers, setJewellers] = useState<Jeweller[]>([]);
+  const [hasPrefetched, setHasPrefetched] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeJewellerCount, setActiveJewellerCount] = useState<number | null>(null);
   const [assetsLoaded, setAssetsLoaded] = useState(0);
@@ -329,10 +330,26 @@ const JewellerMatchesTab: React.FC = () => {
   };
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = window.sessionStorage.getItem(prefetchedMatchesKey);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as { ts?: number; jewellers?: Jeweller[] };
+      if (parsed && Array.isArray(parsed.jewellers) && parsed.jewellers.length) {
+        setJewellers(parsed.jewellers);
+        setHasPrefetched(true);
+        setLoading(false);
+      }
+    } catch (err) {
+      console.warn("[JewellerMatchesTab] Unable to read prefetched matches", err);
+    }
+  }, []);
+
+  useEffect(() => {
     let cancelled = false;
     const load = async () => {
       try {
-        setLoading(true);
+        if (!hasPrefetched) setLoading(true);
         setError(null);
         await ensureAnonAuth();
 
@@ -400,6 +417,9 @@ const JewellerMatchesTab: React.FC = () => {
 
         if (!cancelled) {
           setJewellers(scored);
+          if (typeof window !== "undefined") {
+            window.sessionStorage.setItem(prefetchedMatchesKey, JSON.stringify({ ts: Date.now(), jewellers: scored }));
+          }
         }
       } catch (err: any) {
         console.error("[JewellerMatchesTab] Failed to load jewellers", err);
@@ -413,7 +433,7 @@ const JewellerMatchesTab: React.FC = () => {
     return () => {
       cancelled = true;
     };
-  }, [profile]);
+  }, [profile, hasPrefetched]);
 
   const displayedJewellers = useMemo(() => jewellers.slice(0, 4), [jewellers]);
   const totalAssets = displayedJewellers.length * 3;
@@ -450,7 +470,7 @@ const JewellerMatchesTab: React.FC = () => {
             <Card
               key={jeweller.id}
               jeweller={jeweller}
-              delayMs={idx * 120}
+              delayMs={idx * 520}
               allReady={allAssetsReady}
               onAssetLoaded={() => setAssetsLoaded((c) => c + 1)}
             />

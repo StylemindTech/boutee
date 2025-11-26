@@ -149,7 +149,16 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
             >
               <div className={styles.ringCard}>
                 <img src={ring.imageUrl} alt="Ring for selection" className={styles.ringImage} draggable={false} />
-                <div className={styles.pinterestIconOverlay}>P</div>
+                <div className={styles.pinterestIconOverlay}>
+                  <img
+                    src="/Pinterest_Logo_Red.png"
+                    alt="Pinterest"
+                    className={styles.pinterestIcon}
+                    loading="lazy"
+                    decoding="async"
+                    draggable={false}
+                  />
+                </div>
               </div>
             </div>
           );
