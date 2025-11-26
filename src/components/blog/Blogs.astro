@@ -155,7 +155,7 @@ function calculateReadTime(body: any[]): string {
                   <img
                     src={urlForImage(post?.mainImage)}
                     alt={post?.mainImage?.alt || post?.title || "blog image"}
-                    class="lg:rounded-[24px] rounded-[20px] mb-[8px] md:mb-0 md:w-[350px] lg:w-[440px] md:h-[280px] lg:h-[312px] object-cover"
+                    class="lg:rounded-[24px] rounded-[20px] mb-[8px] w-full aspect-square object-cover"
                   />
                 </a>
                 <div class="p-[12px] md:py-[24px] md:pl-[48px] md:pr-[32px]">
@@ -200,7 +200,7 @@ function calculateReadTime(body: any[]): string {
                     <img
                       src={urlForImage(item?.mainImage)}
                       alt={item?.mainImage?.alt || item?.title || "blog image"}
-                      class="lg:rounded-[24px] rounded-[20px] mb-[8px] min-h-[231px] md:min-h-[293px] md:max-h-[293px] w-full"
+                      class="lg:rounded-[24px] rounded-[20px] mb-[8px] w-full aspect-square object-cover"
                     />
                   </a>
                   <div class="p-[12px] lg:py-4 lg:px-5">
