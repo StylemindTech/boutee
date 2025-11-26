@@ -77,16 +77,42 @@ const optimizeImageUrl = (url?: string, targetWidth = 640) => {
   return url;
 };
 
-const Card: React.FC<{ jeweller: Jeweller; clipped?: boolean }> = ({ jeweller, clipped = false }) => {
+const Card: React.FC<{
+  jeweller: Jeweller;
+  clipped?: boolean;
+  delayMs?: number;
+  allReady?: boolean;
+  onAssetLoaded?: () => void;
+}> = ({ jeweller, clipped = false, delayMs = 0, allReady = false, onAssetLoaded }) => {
   const [leftLoaded, setLeftLoaded] = useState(false);
   const [rightLoaded, setRightLoaded] = useState(false);
   const [avatarLoaded, setAvatarLoaded] = useState(false);
+  const [notifiedLeft, setNotifiedLeft] = useState(false);
+  const [notifiedRight, setNotifiedRight] = useState(false);
+  const [notifiedAvatar, setNotifiedAvatar] = useState(false);
+  const [visible, setVisible] = useState(false);
   const gallery = jeweller.galleryImages && jeweller.galleryImages.length ? jeweller.galleryImages : [];
   const pills = jeweller.tags || [];
   const imgSizes = "(max-width: 640px) 100vw, 640px";
+
+  useEffect(() => {
+    if (allReady) {
+      const t = setTimeout(() => setVisible(true), delayMs);
+      return () => clearTimeout(t);
+    }
+  }, [allReady, delayMs]);
+
   return (
     <article
-      className={`relative bg-white rounded-[32px] overflow-hidden shadow-[0px_4px_24px_#1617190f] px-3 ${clipped ? "max-h-[360px]" : ""}`}
+      className={`relative bg-white rounded-[32px] overflow-hidden border border-[#f0f1f5] shadow-[0px_4px_24px_#1617190f] px-3 ${
+        clipped ? "max-h-[360px]" : ""
+      }`}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(18px)",
+        transition: "opacity 480ms ease, transform 480ms ease",
+        visibility: visible ? "visible" : "hidden",
+      }}
     >
       <div className="relative p-0">
         <div className="relative -mx-3 w-[calc(100%+24px)] overflow-hidden">
@@ -103,15 +129,27 @@ const Card: React.FC<{ jeweller: Jeweller; clipped?: boolean }> = ({ jeweller, c
               sizes={imgSizes}
               alt={`${jeweller.name} left ring`}
               className="h-[240px] w-1/2 object-cover object-center -translate-y-5"
-              loading="lazy"
-              decoding="async"
-              onLoad={() => setLeftLoaded(true)}
-              onError={() => setLeftLoaded(true)}
-              style={{
-                opacity: leftLoaded ? 1 : 0,
-                transition: "opacity 220ms ease, transform 220ms ease",
-                willChange: "opacity, transform",
-              }}
+            loading="lazy"
+            decoding="async"
+            onLoad={() => {
+              setLeftLoaded(true);
+              if (!notifiedLeft) {
+                onAssetLoaded?.();
+                setNotifiedLeft(true);
+              }
+            }}
+            onError={() => {
+              setLeftLoaded(true);
+              if (!notifiedLeft) {
+                onAssetLoaded?.();
+                setNotifiedLeft(true);
+              }
+            }}
+            style={{
+              opacity: leftLoaded ? 1 : 0,
+              transition: "opacity 220ms ease, transform 220ms ease",
+              willChange: "opacity, transform",
+            }}
             />
             <img
               src={optimizeImageUrl(gallery[1] || gallery[0]) || placeholderRing}
@@ -122,15 +160,27 @@ const Card: React.FC<{ jeweller: Jeweller; clipped?: boolean }> = ({ jeweller, c
               sizes={imgSizes}
               alt={`${jeweller.name} right ring`}
               className="h-[240px] w-1/2 object-cover object-center -translate-y-5"
-              loading="lazy"
-              decoding="async"
-              onLoad={() => setRightLoaded(true)}
-              onError={() => setRightLoaded(true)}
-              style={{
-                opacity: rightLoaded ? 1 : 0,
-                transition: "opacity 220ms ease, transform 220ms ease",
-                willChange: "opacity, transform",
-              }}
+            loading="lazy"
+            decoding="async"
+            onLoad={() => {
+              setRightLoaded(true);
+              if (!notifiedRight) {
+                onAssetLoaded?.();
+                setNotifiedRight(true);
+              }
+            }}
+            onError={() => {
+              setRightLoaded(true);
+              if (!notifiedRight) {
+                onAssetLoaded?.();
+                setNotifiedRight(true);
+              }
+            }}
+            style={{
+              opacity: rightLoaded ? 1 : 0,
+              transition: "opacity 220ms ease, transform 220ms ease",
+              willChange: "opacity, transform",
+            }}
             />
           </div>
         </div>
@@ -140,14 +190,26 @@ const Card: React.FC<{ jeweller: Jeweller; clipped?: boolean }> = ({ jeweller, c
               src={optimizeImageUrl(jeweller.avatar, 320) || placeholderAvatar}
               alt={jeweller.name}
               className="h-full w-full rounded-full object-cover"
-              loading="lazy"
-              decoding="async"
-              onLoad={() => setAvatarLoaded(true)}
-              onError={() => setAvatarLoaded(true)}
-              style={{
-                opacity: avatarLoaded ? 1 : 0,
-                transition: "opacity 200ms ease, transform 200ms ease",
-                transform: avatarLoaded ? "scale(1)" : "scale(0.98)",
+            loading="lazy"
+            decoding="async"
+            onLoad={() => {
+              setAvatarLoaded(true);
+              if (!notifiedAvatar) {
+                onAssetLoaded?.();
+                setNotifiedAvatar(true);
+              }
+            }}
+            onError={() => {
+              setAvatarLoaded(true);
+              if (!notifiedAvatar) {
+                onAssetLoaded?.();
+                setNotifiedAvatar(true);
+              }
+            }}
+            style={{
+              opacity: avatarLoaded ? 1 : 0,
+              transition: "opacity 200ms ease, transform 200ms ease",
+              transform: avatarLoaded ? "scale(1)" : "scale(0.98)",
                 willChange: "opacity, transform",
               }}
             />
@@ -209,6 +271,8 @@ const JewellerMatchesTab: React.FC = () => {
   const [jewellers, setJewellers] = useState<Jeweller[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [activeJewellerCount, setActiveJewellerCount] = useState<number | null>(null);
+  const [assetsLoaded, setAssetsLoaded] = useState(0);
+  const [allAssetsReady, setAllAssetsReady] = useState(false);
 
   const profile = useMemo<StyleProfile>(() => {
     if (typeof window === "undefined") return defaultProfile;
@@ -351,6 +415,20 @@ const JewellerMatchesTab: React.FC = () => {
     };
   }, [profile]);
 
+  const displayedJewellers = useMemo(() => jewellers.slice(0, 4), [jewellers]);
+  const totalAssets = displayedJewellers.length * 3;
+
+  useEffect(() => {
+    setAssetsLoaded(0);
+    setAllAssetsReady(false);
+  }, [totalAssets]);
+
+  useEffect(() => {
+    if (totalAssets > 0 && assetsLoaded >= totalAssets) {
+      setAllAssetsReady(true);
+    }
+  }, [assetsLoaded, totalAssets]);
+
   return (
     <div className="flex flex-col gap-4 pb-3">
       <Intro />
@@ -368,7 +446,15 @@ const JewellerMatchesTab: React.FC = () => {
       <div className="relative flex flex-col gap-4">
         {!loading &&
           !error &&
-          jewellers.slice(0, 4).map((jeweller) => <Card key={jeweller.id} jeweller={jeweller} />)}
+          displayedJewellers.map((jeweller, idx) => (
+            <Card
+              key={jeweller.id}
+              jeweller={jeweller}
+              delayMs={idx * 120}
+              allReady={allAssetsReady}
+              onAssetLoaded={() => setAssetsLoaded((c) => c + 1)}
+            />
+          ))}
         {!loading && !error && jewellers.length >= 4 && (
           <div
             aria-hidden="true"
