@@ -42,7 +42,7 @@
   background-color: #f0f1f5;
   cursor: grab;
   backface-visibility: hidden;
-  touch-action: pan-y;
+  touch-action: none;
   box-shadow: none;
 }
 

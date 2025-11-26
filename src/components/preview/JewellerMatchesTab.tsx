@@ -250,6 +250,12 @@ const Card: React.FC<{
         <button
           className="Button_button__rqctt Button_large__1HWt1 Button_normal__3bvFj inline-flex w-full items-center justify-center gap-2 rounded-[50px] border border-transparent bg-[#f0f1f5] text-[1rem] font-normal text-[#171719] antialiased transition-colors duration-200 ease-in-out cursor-pointer whitespace-nowrap"
           style={{ minHeight: "48px", padding: "14px 0" }}
+          type="button"
+          onClick={() => {
+            if (typeof window !== "undefined") {
+              window.location.href = "https://app.boutee.co.uk/";
+            }
+          }}
         >
           <ExternalLink className="h-[15px] w-[15px] text-[#171719]" aria-hidden="true" />
           More From {jeweller.name}

@@ -49,6 +49,9 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
 
   const handleMove = (e: MouseEvent | TouchEvent) => {
     if (!isDragging || !topRing || isLeaving) return;
+    if ("touches" in e && e.cancelable) {
+      e.preventDefault();
+    }
     const touch = "touches" in e ? e.touches[0] : null;
     const clientX = touch ? touch.clientX : (e as MouseEvent).clientX;
     const clientY = touch ? touch.clientY : (e as MouseEvent).clientY;
