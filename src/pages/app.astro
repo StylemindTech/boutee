@@ -23,6 +23,12 @@ import Layout from "../layouts/Layout.astro";
       const isSmallScreen = window.innerWidth <= 768;
 
       if (isMobile || isSmallScreen) {
+        const match = document.cookie.match(/(?:^|;\s*)gclid=([^;]+)/);
+        const gclid = match ? decodeURIComponent(match[1]) : null;
+        const previewBase = "/preview/swipe";
+        const previewUrl = gclid ? `${previewBase}?gclid=${encodeURIComponent(gclid)}` : previewBase;
+        window.location.replace(previewUrl);
+      } else {
         redirectToApp();
       }
     })();
