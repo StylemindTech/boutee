@@ -13,30 +13,30 @@ const calculatingSeenKey = "previewCalculatingSeen";
 
 const ResultsTabs: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabKey>("matches");
-  const [showCalculating, setShowCalculating] = useState(false);
+  const [showCalculating, setShowCalculating] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return !window.sessionStorage.getItem(calculatingSeenKey);
+  });
   const [completionStep, setCompletionStep] = useState(0);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const alreadySeen = window.sessionStorage.getItem(calculatingSeenKey);
-    if (alreadySeen) {
-      setShowCalculating(false);
-      return;
-    }
-    setShowCalculating(true);
+    if (!showCalculating) return;
     setCompletionStep(0);
+    // Mark as seen immediately to avoid re-show if React re-renders in dev/StrictMode
+    if (typeof window !== "undefined") {
+      window.sessionStorage.setItem(calculatingSeenKey, "1");
+    }
     const stepTimers = [600, 1500, 2400].map((ms, idx) =>
       window.setTimeout(() => setCompletionStep(idx + 1), ms)
     );
     const hideTimer = window.setTimeout(() => {
       setShowCalculating(false);
-      window.sessionStorage.setItem(calculatingSeenKey, "1");
     }, 3200);
     return () => {
       stepTimers.forEach((t) => window.clearTimeout(t));
       window.clearTimeout(hideTimer);
     };
-  }, []);
+  }, [showCalculating]);
 
   const contentStyle = useMemo(
     () => ({

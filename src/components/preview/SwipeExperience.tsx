@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
+import { collection, doc, getDocs, limit, orderBy, query, setDoc, where } from "firebase/firestore";
 import MobileOnlyGate from "./MobileOnlyGate";
 import PreviewHeader from "./components/PreviewHeader/PreviewHeader";
 import ProgressDots from "./components/ProgressDots/ProgressDots";
@@ -454,9 +454,10 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
     };
   }, [redirecting, disableAutoRedirect, forceRedirectOverlay, prefetchResults]);
 
-  const persistLike = (ring: RingWithStyle) => {
+  const persistLike = async (ring: RingWithStyle) => {
     if (typeof window === "undefined") return;
     try {
+      console.log("[SwipeExperience] Persisting like locally and to Firestore for ring:", ring.id);
       const raw = window.localStorage.getItem(likedStorageKey);
       const existing: RingWithStyle[] = raw ? (JSON.parse(raw) as RingWithStyle[]) : [];
       if (existing.some((item) => item.id === ring.id)) return;
@@ -464,6 +465,31 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
       window.localStorage.setItem(likedStorageKey, JSON.stringify(next));
       const profile = aggregateProfile(next);
       window.localStorage.setItem(profileStorageKey, JSON.stringify(profile));
+
+      // Persist to Firestore for carry-over to linked accounts
+      const uid = await ensureAnonAuth();
+      if (!uid) {
+        console.warn("[SwipeExperience] Missing UID for persisting likes; skipping Firestore sync");
+        return;
+      }
+      const userDoc = doc(db, "users", uid);
+      const previewDoc = doc(collection(userDoc, "preview"), "likes");
+      const payload = {
+        likedRings: next.map((item) => ({
+          id: item.id,
+          imageUrl: item.imageUrl,
+          sourceUrl: item.sourceUrl,
+          thumbnailUrl: item.imageUrl,
+        })),
+        profile,
+        updatedAt: Date.now(),
+      };
+      try {
+        await setDoc(previewDoc, payload, { merge: true });
+        console.log("[SwipeExperience] Synced preview likes to Firestore for uid:", uid);
+      } catch (firestoreErr) {
+        console.error("[SwipeExperience] Firestore sync failed", firestoreErr, "payload:", payload);
+      }
     } catch (err) {
       console.warn("[SwipeExperience] Unable to persist liked ring", err);
     }
@@ -480,7 +506,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
       return next;
     });
     if (direction === "like") {
-      persistLike(ring);
+      persistLike(ring).catch((err) => console.error("[SwipeExperience] persistLike failed", err));
     }
     setCurrentIndex((prev) => prev + 1);
     setHighlightDirection(null);
