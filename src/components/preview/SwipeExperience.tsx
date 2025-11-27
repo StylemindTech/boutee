@@ -71,6 +71,8 @@ const fallbackRingDeck: RingCard[] = [
   },
 ];
 
+const calculatingSeenKey = "previewCalculatingSeen";
+
 const progressSteps = ["Analysing your swipes", "Searching Boutee jewellers", "Calculating match %"];
 
 type SwipeExperienceProps = {
@@ -436,6 +438,9 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
     if (!redirecting) {
       setCompletionStep(0);
       return;
+    }
+    if (typeof window !== "undefined") {
+      window.sessionStorage.setItem(calculatingSeenKey, "1");
     }
     prefetchResults();
     setCompletionStep(0);
