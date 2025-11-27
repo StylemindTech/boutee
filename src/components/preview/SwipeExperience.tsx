@@ -101,6 +101,15 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
   const [fetchError, setFetchError] = useState<string | null>(null);
   const prefetchingRef = useRef(false);
 
+  const setPreviewAnonCookie = useCallback((uid: string) => {
+    if (typeof document === "undefined") return;
+    const match = document.cookie.match(/(?:^|;\s*)previewAnonUid=([^;]+)/);
+    const current = match ? decodeURIComponent(match[1]) : null;
+    if (current === uid) return;
+    const maxAge = 60 * 60 * 24 * 7; // 7 days
+    document.cookie = `previewAnonUid=${encodeURIComponent(uid)}; domain=.boutee.co.uk; path=/; max-age=${maxAge}; SameSite=Lax; Secure`;
+  }, []);
+
   const handleClose = () => {
     if (typeof window === "undefined") return;
     if (window.history.length > 1) {
@@ -131,6 +140,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
         // Helpful diagnostics in browser console for env/auth
         console.log("[SwipeExperience] Authenticated as anonymous user:", uid);
         console.log("[SwipeExperience] Firebase project:", import.meta.env.PUBLIC_FIREBASE_PROJECT_ID);
+        setPreviewAnonCookie(uid);
         const ringsCollection = collection(db, "rings");
         const snap = await getDocs(query(ringsCollection, where("isDiscovery", "==", true), limit(60)));
         const docs = snap.docs;
