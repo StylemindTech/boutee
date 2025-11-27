@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import JewellerMatchesTab from "./JewellerMatchesTab";
 import MobileOnlyGate from "./MobileOnlyGate";
 import StyleProfileTab from "./StyleProfileTab";
@@ -8,49 +8,13 @@ import ActionBar from "./components/ActionBar/ActionBar";
 
 type TabKey = "matches" | "profile";
 
-const progressSteps = ["Analysing your swipes", "Searching Boutee jewellers", "Calculating match %"];
-const calculatingSeenKey = "previewCalculatingSeen";
-
 const ResultsTabs: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabKey>("matches");
-  const [showCalculating, setShowCalculating] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    return !window.sessionStorage.getItem(calculatingSeenKey);
-  });
-  const [completionStep, setCompletionStep] = useState(0);
-
-  useEffect(() => {
-    if (!showCalculating) return;
-    setCompletionStep(0);
-    // Mark as seen immediately to avoid re-show if React re-renders in dev/StrictMode
-    if (typeof window !== "undefined") {
-      window.sessionStorage.setItem(calculatingSeenKey, "1");
-    }
-    const stepTimers = [600, 1500, 2400].map((ms, idx) =>
-      window.setTimeout(() => setCompletionStep(idx + 1), ms)
-    );
-    const hideTimer = window.setTimeout(() => {
-      setShowCalculating(false);
-    }, 3200);
-    return () => {
-      stepTimers.forEach((t) => window.clearTimeout(t));
-      window.clearTimeout(hideTimer);
-    };
-  }, [showCalculating]);
-
-  const contentStyle = useMemo(
-    () => ({
-      transform: showCalculating ? "translateY(12px)" : "translateY(0)",
-      opacity: showCalculating ? 0.85 : 1,
-      transition: "transform 260ms ease, opacity 260ms ease",
-    }),
-    [showCalculating]
-  );
 
   return (
     <MobileOnlyGate>
       <div className="relative min-h-screen bg-white text-[#171719] flex flex-col overflow-hidden">
-        <div className="w-full max-w-[520px] mx-auto flex-1 pb-24" style={contentStyle}>
+        <div className="w-full max-w-[520px] mx-auto flex-1 pb-24">
           <PreviewHeader title="Your results" />
 
           <div className="mt-0">
@@ -109,61 +73,6 @@ const ResultsTabs: React.FC = () => {
           label="Continue For Free"
           href="https://app.boutee.co.uk/"
         />
-
-        {showCalculating && (
-          <div className="absolute inset-0 bg-white/96 backdrop-blur-sm z-40 flex items-center justify-center px-4">
-            <div className="w-full max-w-[360px] text-left flex flex-col gap-5">
-              <h3
-                className="m-0 text-[1.25rem] font-[700] text-[#171719]"
-                style={{ fontFamily: "var(--font-family-primary)" }}
-              >
-                Calculating your matches
-              </h3>
-              <div className="flex flex-col gap-5">
-                {progressSteps.map((label, idx) => {
-                  const done = completionStep > idx;
-                  return (
-                    <div
-                      key={label}
-                      className="flex items-center gap-3 p-1 rounded-xl"
-                      style={{
-                        background: done ? "#f0f1f5" : "#fafafa",
-                      }}
-                    >
-                      <div
-                        className="h-7 w-7 p-1 rounded-full flex items-center justify-center border"
-                        style={{
-                          background: done ? "#b9f551" : "#fafafa",
-                          borderColor: done ? "#b9f551" : "#d5d9e1",
-                        }}
-                      >
-                        {done && (
-                          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true">
-                            <path
-                              d="M4 8.5 6.5 11 12 5"
-                              stroke="#0f1b03"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        )}
-                      </div>
-                      <span
-                        className={`text-[0.95rem] leading-tight ${
-                          done ? "text-[#171719] font-semibold" : "text-[#4b4f58]"
-                        }`}
-                        style={{ fontFamily: "var(--font-family-primary)" }}
-                      >
-                        {label}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </MobileOnlyGate>
   );
