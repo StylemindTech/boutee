@@ -86,7 +86,7 @@ const baseVariant: HomeVariant = {
     heading: "More quality.<br />Less mark-up.",
     body: "We match you with the perfect independent jeweller for your style and budget. Work directly with them to create a ring, without the traditional overhead.",
     ctaHref: "/app",
-    ctaLabel: "Find Your Jeweller",
+    ctaLabel: "Start by Swiping 10 Rings",
     trustpilotLink: "https://www.trustpilot.com/review/boutee.co.uk",
     trustpilotAlt: "Boutee Trustpilot rating",
     matchBadge: "93% match",
@@ -202,6 +202,14 @@ const createVariant = (overrides: Partial<HomeVariant> = {}): HomeVariant => ({
 
 export const homeVariants: Record<string, HomeVariant> = {
   default: baseVariant,
+  "tinder-for-rings": createVariant({
+    hero: {
+      badgeText: "Swipe rings. Match with 60+ makers.",
+      heading: "Tinder for engagement rings",
+      body: "Swipe right on ring styles you love and we'll build your Style Profile. We'll then match you with independent jewellers who can craft that exact style for your budget.",
+      ctaLabel: "Start Swiping Rings",
+    },
+  }),
   "value-for-money": createVariant({
     meta: {
       title: "Boutee - Great Value",
@@ -210,8 +218,9 @@ export const homeVariants: Record<string, HomeVariant> = {
     hero: {
       badgeText: "60+ vetted independent jewellers",
       heading: "More quality.<br />Less mark-up.",
-      body: "Get more ring for your money. Boutee matches you with independent jewellers — no retail overheads, no sales tricks, no unnecessary markups.",
+      body: "Get more ring for your money. Boutee matches you with independent jewellers — start by swiping 10 rings so we can understand your style.",
       ctaLabel: "Find Your Jeweller",
+      ctaLabel: "Start Your Style Check",
     },
     process: {
       heading: "Your journey to a better-value ring",
@@ -266,8 +275,8 @@ export const homeVariants: Record<string, HomeVariant> = {
     hero: {
       badgeText: "60+ vetted jewellers",
       heading: "A ring journey you can trust",
-      body: "Connect directly with vetted independent jewellers to craft your perfect ring, with no middlemen, mark-ups, or hidden fees.",
-      ctaLabel: "Find Your Jeweller",
+      body: "Swipe through 10 ring designs so we can understand your style. Then we’ll show you a list of fully vetted independent jewellers who are a great fit.",
+      ctaLabel: "Swipe 10 Rings To Start",
     },
     process: {
       heading: "Your journey to the perfect ring, made simple",
@@ -307,7 +316,7 @@ export const homeVariants: Record<string, HomeVariant> = {
       badgeText: "60+ expert designers available",
       heading: "Find her ring style with total confidence",
       body: "Not sure what she’ll like? Boutee makes it simple: swipe through designs you love and we’ll build a Style Profile that clearly shows what suits her. Then we match you with independent jewellers who specialise in that exact style.",
-      ctaLabel: "Find Your Jeweller",
+      ctaLabel: "Start By Swiping Rings",
     },
     process: {
       heading: "Your path to the right ring, made easy",
@@ -347,8 +356,8 @@ export const homeVariants: Record<string, HomeVariant> = {
     hero: {
       badgeText: "60+ independent makers, no sales targets",
       heading: "A calm, clear way to create the perfect ring",
-      body: "Take your time. Browse styles. Choose a jeweller when you’re ready. Boutee gives you a simple, comfortable way to design an engagement ring — without the intensity of traditional jewellery shopping.",
-      ctaLabel: "Explore Your Options",
+      body: "Boutee gives you a simple, comfortable way to design an engagement ring — without the intensity of traditional jewellery shopping. Start by swiping 10 rings so we can learn your style.",
+      ctaLabel: "Let's Learn Your Style",
     },
     process: {
       heading: "A simple path to the perfect ring",
@@ -387,8 +396,8 @@ export const homeVariants: Record<string, HomeVariant> = {
     hero: {
       badgeText: "60+ jewellers ready to chat",
       heading: "The best way to choose a ring",
-      body: "There's nothing worse than being sold an engagement ring. On Boutee, you explore designs, figure out what you like, and speak directly with the person who’ll make the ring — not someone trying to sell you one.",
-      ctaLabel: "Find Your Jeweller",
+      body: "There's nothing worse than being sold an engagement ring. On Boutee, you swipe through designs, figure out what you like, and speak directly with the person who’ll make the ring.",
+      ctaLabel: "Start Swiping Rings",
     },
     process: {
       heading: "A clear, comfortable process",
@@ -427,8 +436,8 @@ export const homeVariants: Record<string, HomeVariant> = {
     hero: {
       badgeText: "60+ independent jewellers ready to guide",
       heading: "The best way to create a custom ring",
-      body: "A custom ring shouldn’t start with guesswork. Browse designs to understand your style, then get matched with a jeweller who can explain options clearly and create the exact ring you want.",
-      ctaLabel: "Find Your Jeweller",
+      body: "A custom ring shouldn’t start with guesswork. Swipe through ring designs to understand your style, then get matched with a jeweller who can explain options clearly and create the exact ring you want.",
+      ctaLabel: "Swipe 10 Rings To Start",
     },
     process: {
       heading: "Your journey to a custom ring, made simple",
@@ -467,8 +476,8 @@ export const homeVariants: Record<string, HomeVariant> = {
     hero: {
       badgeText: "60+ independent jewellers crafting bespoke",
       heading: "Start the journey to a truly bespoke ring",
-      body: "If you want a truly one-of-a-kind ring, you need the right craftsperson. Swipe to build your Style Profile, then connect directly with the perfect independent jeweller.",
-      ctaLabel: "Find Your Bespoke Jeweller",
+      body: "If you want a truly one-of-a-kind ring, you need the right craftsperson. Swipe through rings to build your Style Profile, then connect directly with the perfect independent jeweller.",
+      ctaLabel: "Swipe 10 Rings To Begin",
     },
     process: {
       heading: "Your bespoke ring, designed the right way",
