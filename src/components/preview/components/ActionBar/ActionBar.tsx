@@ -21,12 +21,12 @@ const ActionBar: React.FC<ActionBarProps> = ({ helperText, label, href, onClick,
             className={styles.button}
             aria-disabled={disabled}
           >
-            <img src="/btn-icon.svg" alt="" className={styles.buttonIcon} aria-hidden="true" />
+            <img src="/button-icon-black.svg" alt="" className={styles.buttonIcon} aria-hidden="true" />
             <span>{label}</span>
           </a>
         ) : (
           <button type="button" className={styles.button} onClick={onClick} disabled={disabled}>
-            <img src="/btn-icon.svg" alt="" className={styles.buttonIcon} aria-hidden="true" />
+            <img src="/button-icon-black.svg" alt="" className={styles.buttonIcon} aria-hidden="true" />
             <span>{label}</span>
           </button>
         )}

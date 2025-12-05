@@ -704,7 +704,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
       ? "Welcome"
       : stage === "questions"
         ? "Tell us about you"
-        : stage === "swipe-intro"
+        : stage === "swipe-intro" || stage === "swipe"
           ? "Let's learn your style"
           : "Start by swiping 10 rings";
 

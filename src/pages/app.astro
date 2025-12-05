@@ -28,8 +28,6 @@ import Layout from "../layouts/Layout.astro";
         const previewBase = "/preview/swipe";
         const previewUrl = gclid ? `${previewBase}?gclid=${encodeURIComponent(gclid)}` : previewBase;
         window.location.replace(previewUrl);
-      } else {
-        redirectToApp();
       }
     })();
   </script>
@@ -40,10 +38,10 @@ import Layout from "../layouts/Layout.astro";
       <!-- Left Column -->
       <div class="flex flex-col gap-m text-center md:text-left">
         <h1 class="text-heading-mobile md:text-heading-desktop leading-heading-mobile md:leading-heading-desktop font-ppradio font-black text-textPrimary">
-          Only on mobile
+          Boutee is built for mobile
         </h1>
         <p class="text-body-mobile md:text-large-desktop leading-body-mobile md:leading-large-desktop font-figtree text-textSecondary">
-          <span class="font-semibold text-textPrimary">Boutee is only available on mobile.</span> Scan the QR code to continue your journey and start discovering!
+          <span class="font-semibold text-textPrimary">Boutee is only available on phones.</span> Scan the QR code to continue your journey and start discovering!
         </p>
       </div>
       

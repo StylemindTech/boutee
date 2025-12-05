@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { BadgeCheck, Check, ExternalLink } from "lucide-react";
 import { collection, getCountFromServer, getDocs, limit, query, where } from "firebase/firestore";
 import { db, ensureAnonAuth } from "../../lib/firebaseClient";
@@ -57,6 +57,75 @@ const defaultProfile: StyleProfile = {
   refined: 50,
 };
 
+type Burst = { id: number; x: number; y: number; delay: number; w: number; h: number; r: number };
+
+type ConfettiParticle = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  alpha: number;
+  decay: number;
+  rotation: number;
+  color: string;
+};
+
+const createConfetti = (canvas: HTMLCanvasElement, originX: number, originY: number) => {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return () => {};
+  const particles: ConfettiParticle[] = Array.from({ length: 36 }, () => {
+    const baseAngle = -Math.PI / 2; // upward
+    const spread = (Math.PI * 5) / 6; // 150deg fan
+    const angle = baseAngle + (Math.random() - 0.5) * spread;
+    const speed = 8 + Math.random() * 6;
+    return {
+      x: originX,
+      y: originY,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      size: 6 + Math.random() * 8,
+      alpha: 1,
+      decay: 0.008 + Math.random() * 0.01,
+      rotation: Math.random() * Math.PI * 2,
+      color: Math.random() > 0.6 ? "#111113" : Math.random() > 0.5 ? "#1c1d22" : "#2b2c33",
+    };
+  });
+
+  let raf: number | null = null;
+  const step = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p) => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.12; // gravity
+      p.vx *= 0.99;
+      p.vy *= 0.99;
+      p.rotation += 0.12;
+      p.alpha -= p.decay;
+      if (p.alpha < 0) p.alpha = 0;
+
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+      ctx.restore();
+    });
+
+    if (particles.some((p) => p.alpha > 0.02)) {
+      raf = window.requestAnimationFrame(step);
+    }
+  };
+
+  step();
+  return () => {
+    if (raf) window.cancelAnimationFrame(raf);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  };
+};
+
 const optimizeImageUrl = (url?: string, targetWidth = 640) => {
   if (!url) return url;
   try {
@@ -92,6 +161,12 @@ const Card: React.FC<{
   const [notifiedRight, setNotifiedRight] = useState(false);
   const [notifiedAvatar, setNotifiedAvatar] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [revealed, setRevealed] = useState(false);
+  const [overlayGone, setOverlayGone] = useState(false);
+  const [bursts, setBursts] = useState<Burst[]>([]);
+  const hideTimerRef = useRef<number | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const stopConfettiRef = useRef<(() => void) | null>(null);
   const gallery = jeweller.galleryImages && jeweller.galleryImages.length ? jeweller.galleryImages : [];
   const pills = jeweller.tags || [];
   const imgSizes = "(max-width: 640px) 100vw, 640px";
@@ -102,6 +177,43 @@ const Card: React.FC<{
     }, delayMs);
     return () => clearTimeout(t);
   }, [delayMs]);
+
+  useEffect(() => {
+    return () => {
+      if (hideTimerRef.current) {
+        window.clearTimeout(hideTimerRef.current);
+      }
+      if (stopConfettiRef.current) stopConfettiRef.current();
+    };
+  }, []);
+
+  const handleReveal = () => {
+    if (revealed) return;
+    const now = Date.now();
+    setBursts(
+      Array.from({ length: 22 }, (_, idx) => ({
+        id: now + idx,
+        x: Math.random() * 320 - 160,
+        y: Math.random() * 260 - 130,
+        delay: Math.random() * 140,
+        w: 8 + Math.random() * 10,
+        h: 3 + Math.random() * 8,
+        r: Math.random() * 200 - 100,
+      }))
+    );
+    if (typeof window !== "undefined" && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `${rect.height}px`;
+      stopConfettiRef.current = createConfetti(canvas, (rect.width / 2) * dpr, (rect.height / 2) * dpr);
+    }
+    setRevealed(true);
+    hideTimerRef.current = window.setTimeout(() => setOverlayGone(true), 260);
+  };
 
   return (
     <article
@@ -116,7 +228,11 @@ const Card: React.FC<{
     >
       <div className="relative p-0">
         <div className="relative -mx-3 w-[calc(100%+24px)] overflow-hidden">
-          <span className="absolute left-3 top-3 z-20 rounded-full bg-gradient-to-r from-[#b9f551] to-[#ddf456] px-3 py-1 text-[12px] font-medium text-[#171719] shadow">
+          <span
+            className="absolute left-3 top-3 z-20 rounded-full bg-[#171719] px-3 py-1 text-[12px] font-medium text-white shadow"
+            style={{ display: "none" }}
+            aria-hidden="true"
+          >
             {jeweller.matchPercent}% match
           </span>
           <div className="flex h-[200px] w-full overflow-hidden">
@@ -238,7 +354,7 @@ const Card: React.FC<{
               key={label}
               className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#f2f3f7] to-[#edeaef] py-1 pl-1 pr-2 text-[0.75rem] font-normal text-[#1d2130]"
             >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#b9f551] text-[#0f1b03] shadow-[0_0_0_1px_rgba(0,0,0,0.05)]">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#171719] text-white shadow-[0_0_0_1px_rgba(0,0,0,0.05)]">
                 <Check className="h-3 w-3" aria-hidden="true" />
               </span>
               <span className="leading-none">{label}</span>
@@ -248,8 +364,8 @@ const Card: React.FC<{
       </div>
       <div className="pb-4">
         <button
-          className="Button_button__rqctt Button_large__1HWt1 Button_normal__3bvFj inline-flex w-full items-center justify-center gap-2 rounded-[50px] border border-transparent bg-[#f0f1f5] text-[1rem] font-normal text-[#171719] antialiased transition-colors duration-200 ease-in-out cursor-pointer whitespace-nowrap"
-          style={{ minHeight: "48px", padding: "14px 0" }}
+          className="Button_button__rqctt Button_large__1HWt1 Button_normal__3bvFj inline-flex w-full items-center justify-center gap-2 rounded-[50px] border border-transparent bg-[#171719] text-[1rem] font-normal text-white antialiased transition-colors duration-200 ease-in-out cursor-pointer whitespace-nowrap"
+          style={{ minHeight: "48px", padding: "14px 0", color: "#ffffff" }}
           type="button"
           onClick={() => {
             if (typeof window !== "undefined") {
@@ -257,7 +373,7 @@ const Card: React.FC<{
             }
           }}
         >
-          <ExternalLink className="h-[15px] w-[15px] text-[#171719]" aria-hidden="true" />
+          <ExternalLink className="h-[15px] w-[15px] text-white" aria-hidden="true" />
           More From {jeweller.name}
         </button>
       </div>
@@ -268,6 +384,36 @@ const Card: React.FC<{
           </div>
         </div>
       )}
+      {!overlayGone && (
+        <div
+          className={`reveal-overlay ${revealed ? "reveal-overlay--revealed" : ""}`}
+          style={{ borderRadius: "inherit" }}
+        >
+          {!revealed && (
+            <button type="button" className="reveal-overlay__button" onClick={handleReveal}>
+              Reveal
+            </button>
+          )}
+          {!revealed &&
+            bursts.map((burst) => (
+              <span
+                key={burst.id}
+                className="reveal-burst"
+                style={
+                  {
+                    "--x": `${burst.x}px`,
+                    "--y": `${burst.y}px`,
+                    "--delay": `${burst.delay}ms`,
+                    "--w": `${burst.w}px`,
+                    "--h": `${burst.h}px`,
+                    "--r": `${burst.r}deg`,
+                  } as React.CSSProperties
+                }
+              />
+            ))}
+        </div>
+      )}
+      <canvas ref={canvasRef} className="reveal-confetti-canvas" aria-hidden="true" />
     </article>
   );
 };
@@ -280,6 +426,82 @@ const JewellerMatchesTab: React.FC = () => {
   const [activeJewellerCount, setActiveJewellerCount] = useState<number | null>(null);
   const [assetsLoaded, setAssetsLoaded] = useState(0);
   const [allAssetsReady, setAllAssetsReady] = useState(false);
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (document.getElementById("jeweller-reveal-styles")) return;
+    const style = document.createElement("style");
+    style.id = "jeweller-reveal-styles";
+    style.textContent = `
+      .reveal-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.55);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 80;
+        transition: background-color 260ms ease, transform 200ms ease, backdrop-filter 260ms ease;
+        border-radius: inherit;
+      }
+      .reveal-overlay--revealed {
+        background: rgba(255, 255, 255, 0);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        transform: scale(0.94);
+        pointer-events: none;
+      }
+      .reveal-overlay__button {
+        padding: 14px 28px;
+        border-radius: 999px;
+        border: none;
+        background: #171719;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.18);
+        cursor: pointer;
+        transition: transform 120ms ease, box-shadow 140ms ease, opacity 120ms ease;
+      }
+      .reveal-overlay__button:active {
+        transform: translateY(1px) scale(0.99);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14);
+      }
+      .reveal-burst {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: var(--w, 10px);
+        height: var(--h, 6px);
+        border-radius: 3px;
+        background: linear-gradient(135deg, #0d0d10 0%, #1d1e23 80%);
+        box-shadow: 0 0 0 0 rgba(0,0,0,0.18), 0 0 10px rgba(0,0,0,0.15);
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(var(--r, 0deg)) scale(0.7);
+        animation: reveal-burst 700ms ease-out forwards;
+        animation-delay: var(--delay, 0ms);
+        pointer-events: none;
+        z-index: 90;
+        mix-blend-mode: multiply;
+      }
+      .reveal-confetti-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 92;
+      }
+      @keyframes reveal-burst {
+        0% { opacity: 0; transform: translate(calc(-50% + var(--x, 0px)), calc(-50% + var(--y, 0px))) rotate(var(--r, 0deg)) scale(0.6); filter: blur(0px); }
+        30% { opacity: 0.9; }
+        100% { opacity: 0; transform: translate(calc(-50% + var(--x, 0px)), calc(-50% + var(--y, 0px))) rotate(calc(var(--r, 0deg) + 40deg)) scale(1.9); filter: blur(2px); }
+      }
+    `;
+    document.head.appendChild(style);
+  }, []);
 
   const profile = useMemo<StyleProfile>(() => {
     if (typeof window === "undefined") return defaultProfile;
@@ -497,20 +719,20 @@ const JewellerMatchesTab: React.FC = () => {
               <button
                 className="flex w-full items-center gap-3 rounded-[1rem] border border-[#c8c1f2] bg-white px-4 py-5 text-left text-[#73737d]"
                 style={{ minHeight: "64px" }}
-                onClick={() => {
-                  if (typeof window !== "undefined") {
-                    window.location.href = "https://app.boutee.co.uk/";
-                  }
-                }}
-              >
-                <BadgeCheck className="h-5 w-5 text-[#73737d] shrink-0" aria-hidden="true" />
-                <span className="flex-1 text-[0.875rem] font-normal leading-tight">
-                  {`Create a free account to see all ${activeJewellerCount ?? jewellers.length} of your jeweller matches`}
-                </span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  window.location.href = "https://app.boutee.co.uk/";
+                }
+              }}
+            >
+              <BadgeCheck className="h-5 w-5 text-[#73737d] shrink-0" aria-hidden="true" />
+              <span className="flex-1 text-[0.875rem] font-normal leading-tight">
+                  {`Create a free account to browse all ${activeJewellerCount ?? jewellers.length} Boutee jewellers and see your top ten matches`}
+              </span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -540,10 +762,10 @@ const Intro = () => (
       className="m-0 text-[1.125rem] font-[700] text-[var(--Text-Primary)] [font-family:var(--font-family-primary)]"
       style={{ fontFamily: "var(--font-family-primary)" }}
     >
-      Recommended for you
+      We think you'll like these Boutee jewellers
     </h3>
     <p className="m-0 text-sm text-[#4b4f58] leading-relaxed">
-      Based on your liked rings, we think you'll like these jewellers:
+      Based on the answers you've given, we have 14 jewellers who we think you'll like! Here's a preview of the top 3:
     </p>
   </div>
 );
