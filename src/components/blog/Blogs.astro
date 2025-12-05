@@ -244,11 +244,6 @@ function calculateReadTime(body: any[]): string {
                     <h3 class="line-clamp-2 mt-[12px] mb-[8px] font-ppradio font-bold text-textPrimary text-lg leading-[22px] lg:font-black lg:text-[20px] lg:leading-[24px]">
                       {item?.title}
                     </h3>
-                    <img
-                      src={urlForImage(item?.mainImage)}
-                      alt={item?.mainImage?.alt || item?.title || "blog image"}
-                      class="lg:rounded-[24px] rounded-[20px] mb-[8px] w-full aspect-square object-cover"
-                    />
                   </a>
                   <p class="line-clamp-2 lg:mb-[32px] mb-[16px] font-figtree font-normal text-textPrimary text-base leading-[20px] lg:text-[18px] lg:leading-[22px]">
                     {item?.description}

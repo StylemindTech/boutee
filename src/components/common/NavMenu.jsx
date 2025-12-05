@@ -8,29 +8,29 @@ import closeMenuIcon from "../../assets/icons/close.svg"
 import arrow from "../../assets/icons/dropdown-arrow.svg"
 import navMenu from "../../assets/icons/toggle-nav.svg"
 
-// SIMPLIFIED LINKS - CURRENT VERSION
+// SIMPLE LINKS (used when dropdown is disabled)
 const links = [
   { name: "How It Works", href: "/how-it-works" },
   { name: "Our Jewellers", href: "/our-jewellers" },
+  { name: "Ring Inspiration", href: "/inspiration" },
   { name: "Our Technology", href: "/our-technology" },
   { name: "About Us", href: "/about-us" },
   { name: "Blog", href: "/blog" },
 ]
 
-// ORIGINAL LINKS WITH DROPDOWNS - SAVED FOR FUTURE RELEASE
+// DESKTOP LINKS WITH DROPDOWN
 const originalLinks = [
   { name: "How It Works", href: "/how-it-works" },
-  { name: "Inspiration", href: "/inspiration" },
+  { name: "Our Jewellers", href: "/our-jewellers" },
+  { name: "Ring Inspiration", href: "/inspiration" },
   {
     name: "Learn More",
     dropdown: [
-      { name: "About Us", href: "/about-us" },
-      { name: "Our Jewellers", href: "/our-jewellers" },
       { name: "Our Technology", href: "/our-technology" },
+      { name: "About Us", href: "/about-us" },
       { name: "Blog", href: "/blog" },
     ],
   },
-  { name: "For Jewellers", href: "/for-jewellers" },
 ]
 
 const menuVariants = {
@@ -62,8 +62,8 @@ const itemVariants = {
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   
-  // Set this to true when ready to use dropdown menu
-  const useDropdownMenu = false
+  // Toggle dropdown navigation
+  const useDropdownMenu = true
 
   return (
     <header className="bg-white md:pt-[12px] lg:px-[48px] pt-[8px] px-[12px] md:px-[24px] relative z-50">
@@ -135,10 +135,10 @@ export default function Header() {
 
           {/* Buttons */}
           <div className="flex items-center gap-4">
-          <a href="/app" className="font-figtree text-textPrimary px-2 py-1 border border-[#2C2C30] rounded-[12px] cursor-pointer w-[76px] text-[16px] leading-[20px] h-[36px] flex items-center justify-center">
+          <a href="https://app.boutee.co.uk" className="font-figtree text-textPrimary px-2 py-1 border border-[#2C2C30] rounded-[12px] cursor-pointer w-[76px] text-[16px] leading-[20px] h-[36px] flex items-center justify-center">
             Log in
           </a>
-          <a href="/app" className="font-figtree w-[87px] h-[36px] rounded-[12px] bg-btnPrimary text-white cursor-pointer flex items-center justify-center">
+          <a href="https://app.boutee.co.uk" className="font-figtree w-[87px] h-[36px] rounded-[12px] bg-btnPrimary text-white cursor-pointer flex items-center justify-center">
             Sign up
           </a>
         </div>
@@ -251,14 +251,14 @@ export default function Header() {
                       )
                     )}
                     <motion.a
-                      href="/faqs"
+                      href="/faq"
                       variants={itemVariants}
                       className="w-full text-center p-2 font-figtree font-normal text-base leading-5 text-textPrimary"
                     >
                       FAQs
                     </motion.a>
                     <motion.a
-                      href="/contact"
+                      href="/contact-us"
                       variants={itemVariants}
                       className="w-full text-center p-2 font-figtree font-normal text-base leading-5 text-textPrimary"
                     >
@@ -271,14 +271,14 @@ export default function Header() {
               {/* Buttons */}
               <div className="flex justify-center gap-3 px-6">
                 <a
-                  href="/app"
+                  href="https://app.boutee.co.uk"
                   className="border border-[#2C2C30] rounded-xl py-3.5 px-6 w-full font-figtree font-medium text-base leading-5 flex items-center justify-center"
                 >
                   Log in
                 </a>
 
                 <a
-                  href="/app"
+                  href="https://app.boutee.co.uk"
                   className="rounded-xl py-3.5 px-6 bg-btnPrimary text-white w-full font-figtree font-medium text-base leading-5 flex items-center justify-center"
                 >
                   Sign up

@@ -20,9 +20,14 @@ const FALLBACK_IMAGE =
 const BUDGET_BANDS = [
   { value: "any", label: "Any budget" },
   { value: "0-500", label: "Under £500", min: 0, max: 500 },
-  { value: "500-1500", label: "£500 - £1,500", min: 500, max: 1500 },
-  { value: "1500-3000", label: "£1,500 - £3,000", min: 1500, max: 3000 },
-  { value: "3000+", label: "£3,000+", min: 3000 },
+  { value: "500-1000", label: "£500 - £1,000", min: 500, max: 1000 },
+  { value: "1000-1500", label: "£1,000 - £1,500", min: 1000, max: 1500 },
+  { value: "1500-2000", label: "£1,500 - £2,000", min: 1500, max: 2000 },
+  { value: "2000-2500", label: "£2,000 - £2,500", min: 2000, max: 2500 },
+  { value: "2500-3000", label: "£2,500 - £3,000", min: 2500, max: 3000 },
+  { value: "3000-3500", label: "£3,000 - £3,500", min: 3000, max: 3500 },
+  { value: "3500-4000", label: "£3,500 - £4,000", min: 3500, max: 4000 },
+  { value: "4000+", label: "£4,000+", min: 4000 },
 ];
 
 const SORT_OPTIONS = [
@@ -534,9 +539,7 @@ export default function RingModal() {
             <span className="font-figtree font-medium min-w-[120px] text-left">
               {budgetFilters.length === 0 || budgetFilters.includes("any")
                 ? "Any budget"
-                : BUDGET_BANDS.filter((b) => budgetFilters.includes(b.value))
-                    .map((b) => b.label)
-                    .join(", ")}
+                : `${budgetFilters.length} Selected`}
             </span>
             <img src={arrowDown.src} alt="toggle budget dropdown" className="w-4 h-4 rotate-180" />
           </button>
