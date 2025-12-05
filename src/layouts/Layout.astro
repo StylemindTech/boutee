@@ -128,6 +128,42 @@ if (typeof window !== "undefined") {
 captureGclid();
 
 document.addEventListener("DOMContentLoaded", () => {
+  const initImageFade = () => {
+    const process = (img) => {
+      if (!img || img.dataset.fadeBound) return;
+      img.dataset.fadeBound = "1";
+      img.classList.add("img-fade");
+      const markLoaded = () => img.classList.add("img-loaded");
+      if (img.complete && img.naturalWidth > 0) {
+        markLoaded();
+      } else {
+        img.addEventListener("load", markLoaded, { once: true });
+        img.addEventListener("error", markLoaded, { once: true });
+      }
+    };
+
+    const scan = (root = document) => {
+      root.querySelectorAll("img").forEach(process);
+    };
+
+    scan();
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((m) => {
+        m.addedNodes.forEach((node) => {
+          if (node.nodeType !== 1) return;
+          if (node.tagName === "IMG") {
+            process(node);
+          } else if (node.querySelectorAll) {
+            scan(node);
+          }
+        });
+      });
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+  };
+
   // 🔹 Spin Button Icons
   const initSpinButtons = () => {
     const buttons = document.querySelectorAll(".spinBtn");
@@ -187,6 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSpinButtons();
   initParallax();
   initIntersectionAnimations();
+  initImageFade();
 });
 </script>
 

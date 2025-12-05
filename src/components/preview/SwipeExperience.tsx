@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { collection, doc, getDocs, limit, orderBy, query, setDoc, where } from "firebase/firestore";
+import { collection, doc, getDocs, limit, query, serverTimestamp, setDoc, where } from "firebase/firestore";
 import MobileOnlyGate from "./MobileOnlyGate";
 import PreviewHeader from "./components/PreviewHeader/PreviewHeader";
 import ProgressDots from "./components/ProgressDots/ProgressDots";
@@ -7,6 +7,9 @@ import SwipeIntroMessage from "./components/SwipeIntroMessage/SwipeIntroMessage"
 import SwipeGuideModal from "./components/SwipeGuideModal/SwipeGuideModal";
 import SwipeActions from "./components/SwipeActions/SwipeActions";
 import RingCardStack, { type RingCard } from "./components/RingCardStack/RingCardStack";
+import OnboardingFlow, { type OnboardingAnswers } from "./components/OnboardingFlow/OnboardingFlow";
+import welcomeImage from "../../assets/Image/swipe-welcome.jpg";
+import swipeIntroImage from "../../assets/Image/card-img1.png";
 import { db, ensureAnonAuth } from "../../lib/firebaseClient";
 
 type SwipeDecision = {
@@ -17,6 +20,8 @@ type SwipeDecision = {
 type RingStyleProfile = Record<string, number>;
 
 type RingWithStyle = RingCard & { styleProfile?: RingStyleProfile };
+
+type ExperienceStage = "welcome" | "questions" | "swipe-intro" | "swipe";
 
 const fallbackRingDeck: RingCard[] = [
   {
@@ -73,6 +78,9 @@ const fallbackRingDeck: RingCard[] = [
 
 const calculatingSeenKey = "previewCalculatingSeen";
 
+const onboardingStorageKey = "previewOnboardingAnswers";
+const onboardingStageKey = "previewOnboardingStage";
+
 const progressSteps = ["Analysing your swipes", "Searching Boutee jewellers", "Calculating match %"];
 
 type SwipeExperienceProps = {
@@ -89,6 +97,18 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
   const profileStorageKey = "previewStyleProfile";
   const prefetchedMatchesKey = "previewPrefetchedMatches";
 
+  const [stage, setStage] = useState<ExperienceStage>("welcome");
+  const [onboardingAnswers, setOnboardingAnswers] = useState<OnboardingAnswers>({
+    audience: undefined,
+    traits: [],
+    intent: undefined,
+    perfectWeekend: [],
+    budgetUpper: "",
+    budgetNotSure: true,
+    timeframe: "none",
+    timeFrameNotSure: true,
+    values: [],
+  });
   const [ringDeck, setRingDeck] = useState<RingWithStyle[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [totalRings, setTotalRings] = useState<number>(maxSwipes);
@@ -96,7 +116,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
   const [redirecting, setRedirecting] = useState(forceRedirectOverlay);
   const [completionStep, setCompletionStep] = useState(0);
   const [highlightDirection, setHighlightDirection] = useState<"left" | "right" | null>(null);
-  const [guideOpen, setGuideOpen] = useState(true);
+  const [guideOpen, setGuideOpen] = useState(false);
   const [loadingRings, setLoadingRings] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const prefetchingRef = useRef(false);
@@ -118,6 +138,40 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
     }
     window.location.href = "/";
   };
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const storedAnswers = window.localStorage.getItem(onboardingStorageKey);
+      if (storedAnswers) {
+        const parsed = JSON.parse(storedAnswers) as Partial<OnboardingAnswers>;
+        const legacyTraits = (parsed as any).selfDescriptors;
+        const legacyWeekend = (parsed as any).perfectWeekend;
+        setOnboardingAnswers((prev) => ({
+          ...prev,
+          ...parsed,
+          traits:
+            parsed.traits ??
+            (Array.isArray(legacyTraits) ? (legacyTraits as string[]) : prev.traits),
+          perfectWeekend: Array.isArray(parsed.perfectWeekend)
+            ? (parsed.perfectWeekend as OnboardingAnswers["perfectWeekend"])
+            : legacyWeekend
+              ? [legacyWeekend as string].filter(Boolean) as OnboardingAnswers["perfectWeekend"]
+              : prev.perfectWeekend,
+          values: parsed.values ?? prev.values,
+          budgetUpper: parsed.budgetUpper ?? prev.budgetUpper,
+          budgetNotSure: parsed.budgetNotSure ?? prev.budgetNotSure,
+          timeFrameNotSure: parsed.timeFrameNotSure ?? prev.timeFrameNotSure,
+        }));
+      }
+      const savedStage = window.localStorage.getItem(onboardingStageKey);
+      if (savedStage === "done" || savedStage === "skipped") {
+        setStage("swipe-intro");
+      }
+    } catch (err) {
+      console.warn("[SwipeExperience] Unable to hydrate onboarding answers", err);
+    }
+  }, []);
 
   useEffect(() => {
     let isCancelled = false;
@@ -270,11 +324,28 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
   }, [maxSwipes]);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(onboardingStorageKey, JSON.stringify(onboardingAnswers));
+    } catch (err) {
+      console.warn("[SwipeExperience] Unable to persist onboarding answers", err);
+    }
+  }, [onboardingAnswers]);
+
+  useEffect(() => {
     if (disableAutoRedirect) return;
     if (totalRings > 0 && swipes.length >= totalRings) {
       setRedirecting(true);
     }
   }, [swipes.length, totalRings, disableAutoRedirect]);
+
+  useEffect(() => {
+    if (stage === "swipe") {
+      setGuideOpen(true);
+    } else {
+      setGuideOpen(false);
+    }
+  }, [stage]);
 
   const baseStyleProfile = useMemo<RingStyleProfile>(
     () => ({
@@ -424,6 +495,58 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
     }
   }, [baseStyleProfile, parseRingImage, profileStorageKey, similarity]);
 
+  const persistOnboardingAnswers = useCallback(async (answers: OnboardingAnswers) => {
+    try {
+      const uid = await ensureAnonAuth();
+      if (!uid) return;
+      const userDoc = doc(db, "users", uid);
+
+      const timeframeMap: Record<string, number> = {
+        "1m": 4,
+        "2m": 8,
+        "3m": 12,
+        "3mPlus": 16,
+      };
+      const timeFrameWeeks =
+        answers.timeframe && answers.timeframe !== "none" ? timeframeMap[answers.timeframe] ?? null : null;
+      const timeFrameNotSure = answers.timeFrameNotSure || !answers.timeframe || answers.timeframe === "none";
+
+      const budgetNotSure = answers.budgetNotSure || !answers.budgetUpper;
+      const budgetUpper = budgetNotSure ? null : answers.budgetUpper || null;
+
+      const tagsBase = {
+        emergingDesigner: false,
+        ethicalJeweller: false,
+        lgbtqOwned: false,
+        queerFriendly: false,
+        madeuk: false,
+      };
+      const tags = Object.keys(tagsBase).reduce<Record<string, boolean>>((acc, key) => {
+        acc[key] = answers.values.includes(key);
+        return acc;
+      }, { ...tagsBase });
+
+      const payload = {
+        preferences: {
+          whoFor: answers.audience === "partner" ? "My Partner" : answers.audience ? "Myself" : null,
+          budgetRangeUpper: budgetUpper,
+          timeFrameWeeks,
+          intent: answers.intent ?? null,
+          traits: answers.traits ?? [],
+          perfectWeekend: answers.perfectWeekend && answers.perfectWeekend.length ? answers.perfectWeekend : null,
+          lastUpdated: serverTimestamp(),
+        },
+        budgetNotSure,
+        timeFrameNotSure,
+        tags,
+      };
+
+      await setDoc(userDoc, payload, { merge: true });
+    } catch (err) {
+      console.warn("[SwipeExperience] Unable to persist onboarding answers", err);
+    }
+  }, []);
+
   const aggregateProfile = (liked: RingWithStyle[]): RingStyleProfile => {
     if (!liked.length) return baseStyleProfile;
     const sums: Record<string, { total: number; count: number }> = {};
@@ -511,6 +634,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
   };
 
   const handleSwipe = (direction: SwipeDecision["direction"]) => {
+    if (stage !== "swipe") return;
     if (!ringDeck.length || swipes.length >= totalRings || guideOpen || loadingRings) return;
     const ring = ringDeck[currentIndex % ringDeck.length];
     setSwipes((prev) => {
@@ -534,45 +658,220 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
     return remaining;
   }, [currentIndex, ringDeck]);
 
+  const setOnboardingStage = (value: "done" | "skipped") => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(onboardingStageKey, value);
+    } catch (err) {
+      console.warn("[SwipeExperience] Unable to persist onboarding stage", err);
+    }
+  };
+
+  const handleOnboardingComplete = () => {
+    setOnboardingStage("done");
+    setStage("swipe-intro");
+    persistOnboardingAnswers(onboardingAnswers);
+  };
+
+  const handleSkipOnboarding = () => {
+    const skipped: OnboardingAnswers = {
+      audience: undefined,
+      traits: [],
+      intent: undefined,
+      perfectWeekend: [],
+      budgetUpper: "",
+      budgetNotSure: true,
+      timeframe: "none",
+      timeFrameNotSure: true,
+      values: [],
+    };
+    setOnboardingAnswers(skipped);
+    setOnboardingStage("skipped");
+    setStage("swipe-intro");
+    persistOnboardingAnswers(skipped);
+  };
+
+  const handleStartQuestions = () => {
+    setStage("questions");
+  };
+
+  const handleBeginSwipe = () => {
+    setStage("swipe");
+  };
+
+  const headerTitle =
+    stage === "welcome"
+      ? "Welcome"
+      : stage === "questions"
+        ? "Tell us about you"
+        : stage === "swipe-intro" || stage === "swipe"
+          ? "Let's learn your style"
+          : "Start by swiping 10 rings";
+
+  const renderWelcome = () => (
+    <div className="relative flex-1 flex flex-col bg-white">
+      <div className="px-3 pb-[200px] overflow-y-auto">
+        <div className="w-full rounded-2xl overflow-hidden bg-[#f7f8fa] border border-[#eceef3] aspect-[4/3]">
+          <img src={welcomeImage.src} alt="Boutee customers with their jeweller" className="w-full h-full object-cover" />
+        </div>
+        <div className="mt-6 space-y-3">
+          <h3
+            className="text-[1.5rem] leading-[1.25] font-[700] text-[#171719]"
+            style={{ fontFamily: "var(--font-family-primary)" }}
+          >
+            We&apos;ve helped over 1000 people find an independent jeweller
+          </h3>
+          <p className="text-[0.98rem] leading-6 text-[#4b4f58]">
+            We start by asking 6 questions about you so that we can make smarter recommendations.
+          </p>
+        </div>
+      </div>
+
+      <div
+        className="fixed inset-x-0 bottom-0 px-3 pt-3 pb-4"
+        style={{
+          background: "linear-gradient(180deg, rgba(255,255,255,0.72) 0%, #ffffff 45%)",
+          paddingBottom: "calc(20px + env(safe-area-inset-bottom, 0px))",
+        }}
+      >
+        <div className="w-full max-w-[520px] mx-auto flex flex-col gap-4">
+          <button
+            type="button"
+            className="text-[0.95rem] font-normal text-[#171719] underline underline-offset-4 self-center text-center mb-1"
+            onClick={handleSkipOnboarding}
+          >
+            Skip our questions
+          </button>
+          <button
+            type="button"
+            className="w-full rounded-xl bg-[#171719] text-white py-4 text-[1rem] font-semibold shadow-[0_12px_30px_rgba(0,0,0,0.12)]"
+            onClick={handleStartQuestions}
+          >
+            Continue
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderQuestions = () => (
+    <div className="px-3 flex-1 flex flex-col pb-4">
+      <OnboardingFlow
+        answers={onboardingAnswers}
+        onAnswersChange={setOnboardingAnswers}
+        onComplete={handleOnboardingComplete}
+        onSkip={handleSkipOnboarding}
+        onBackToWelcome={() => setStage("welcome")}
+      />
+    </div>
+  );
+
+  const renderSwipeIntro = () => (
+    <div className="relative flex-1 flex flex-col bg-white">
+      <div className="px-3 pb-[200px] overflow-y-auto">
+        <div className="w-full rounded-2xl overflow-hidden bg-transparent border border-transparent aspect-square">
+          <img src={swipeIntroImage.src} alt="Preview rings for your style" className="w-full h-full object-cover" />
+        </div>
+        <div className="mt-6 space-y-3">
+          <h3
+            className="text-[1.5rem] leading-[1.25] font-[700] text-[#171719]"
+            style={{ fontFamily: "var(--font-family-primary)" }}
+          >
+            Now it&apos;s time to learn your style
+          </h3>
+          <p className="text-[0.98rem] leading-6 text-[#4b4f58]">
+            We&apos;ll get you to <strong>swipe through 10 rings</strong>. With this, we can start to recommend
+            jewellers who we think match your style.
+          </p>
+        </div>
+      </div>
+
+      <div
+        className="fixed inset-x-0 bottom-0 px-3 pt-3 pb-4"
+        style={{
+          background: "linear-gradient(180deg, rgba(255,255,255,0.72) 0%, #ffffff 45%)",
+          paddingBottom: "calc(20px + env(safe-area-inset-bottom, 0px))",
+        }}
+      >
+        <div className="w-full max-w-[520px] mx-auto flex flex-col gap-4">
+          <button
+            type="button"
+            className="text-[0.95rem] font-normal text-[#171719] underline underline-offset-4 self-center text-center mb-1"
+            onClick={handleStartQuestions}
+          >
+            Edit my answers
+          </button>
+          <button
+            type="button"
+            className="w-full rounded-xl bg-[#171719] text-white py-4 text-[1rem] font-semibold shadow-[0_12px_30px_rgba(0,0,0,0.12)]"
+            onClick={handleBeginSwipe}
+          >
+            Continue
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderSwipeStage = () => (
+    <>
+      <div className="px-3 flex flex-col gap-4">
+        <SwipeIntroMessage />
+        <ProgressDots total={totalRings} completed={swipes.length} />
+      </div>
+
+      <div className="px-3 mt-6 flex-1 flex flex-col items-stretch gap-5 pb-[140px] overflow-hidden">
+        <div className="w-full">
+          <RingCardStack
+            rings={visibleRings}
+            onSwipe={(dir) => handleSwipe(dir === "left" ? "dislike" : "like")}
+            onSwipeDirectionChange={(dir) => setHighlightDirection(dir)}
+          />
+        </div>
+        {(loadingRings || fetchError) && (
+          <div className="text-center text-sm text-[#4b4f58] pb-4 space-y-1">
+            {loadingRings && <p>Loading rings...</p>}
+            {fetchError && <p>{fetchError}</p>}
+          </div>
+        )}
+      </div>
+
+      <div
+        className="fixed inset-x-0 bottom-0 px-3 pt-3 z-30"
+        style={{ paddingBottom: "calc(16px + env(safe-area-inset-bottom, 0px))", background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 35%)" }}
+      >
+        <div className="w-full mx-auto">
+          <SwipeActions
+            onDislike={() => handleSwipe("dislike")}
+            onLike={() => handleSwipe("like")}
+            disabled={redirecting || guideOpen || loadingRings}
+            emphasizedDirection={highlightDirection === "left" ? "left" : highlightDirection === "right" ? "right" : null}
+          />
+        </div>
+      </div>
+    </>
+  );
+
+  const renderStageContent = () => {
+    switch (stage) {
+      case "welcome":
+        return renderWelcome();
+      case "questions":
+        return renderQuestions();
+      case "swipe-intro":
+        return renderSwipeIntro();
+      case "swipe":
+      default:
+        return renderSwipeStage();
+    }
+  };
+
   return (
     <MobileOnlyGate>
       <div className="relative bg-white text-[#171719] min-h-[100dvh] flex flex-col overflow-x-hidden">
-        <PreviewHeader title="Start by swiping 10 rings" onClose={handleClose} />
+        <PreviewHeader title={headerTitle} onClose={handleClose} />
 
-        <div className="px-3 flex flex-col gap-4">
-          <SwipeIntroMessage />
-          <ProgressDots total={totalRings} completed={swipes.length} />
-        </div>
-
-        <div className="px-3 mt-6 flex-1 flex flex-col items-stretch gap-5 pb-[140px] overflow-hidden">
-          <div className="w-full">
-            <RingCardStack
-              rings={visibleRings}
-              onSwipe={(dir) => handleSwipe(dir === "left" ? "dislike" : "like")}
-              onSwipeDirectionChange={(dir) => setHighlightDirection(dir)}
-            />
-          </div>
-          {(loadingRings || fetchError) && (
-            <div className="text-center text-sm text-[#4b4f58] pb-4 space-y-1">
-              {loadingRings && <p>Loading rings...</p>}
-              {fetchError && <p>{fetchError}</p>}
-            </div>
-          )}
-        </div>
-
-        <div
-          className="fixed inset-x-0 bottom-0 px-3 pt-3 z-30"
-          style={{ paddingBottom: "calc(16px + env(safe-area-inset-bottom, 0px))", background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 35%)" }}
-        >
-          <div className="w-full mx-auto">
-            <SwipeActions
-              onDislike={() => handleSwipe("dislike")}
-              onLike={() => handleSwipe("like")}
-              disabled={redirecting || guideOpen || loadingRings}
-              emphasizedDirection={highlightDirection === "left" ? "left" : highlightDirection === "right" ? "right" : null}
-            />
-          </div>
-        </div>
+        <div className="flex-1 flex flex-col">{renderStageContent()}</div>
 
         {redirecting && (
           <div className="absolute inset-0 bg-white/96 backdrop-blur-sm z-40 flex items-center justify-center px-4">
@@ -630,7 +929,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
           </div>
         )}
 
-        <SwipeGuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />
+        {stage === "swipe" && <SwipeGuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />}
       </div>
     </MobileOnlyGate>
   );

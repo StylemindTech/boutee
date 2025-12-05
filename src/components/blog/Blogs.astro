@@ -4,6 +4,7 @@ import badge from "../../assets/icons/Badge-blog.svg";
 import { urlForImage } from "../../sanity/lib/url-for-image";
 import { loadQuery } from "../../sanity/lib/load-query";
 import type { SanityDocument } from "@sanity/client";
+import { optimizeImageUrl } from "../../lib/imageKit";
 
 // Fetch all posts
 const { data: posts } = await loadQuery<SanityDocument[]>({
@@ -150,12 +151,15 @@ function calculateReadTime(body: any[]): string {
               >
                 <a
                   href={`/blog/${post?.slug?.current}`}
-                  class="md:min-w-[400px] lg:min-w-[440px]"
+                  class="md:min-w-[400px] lg:min-w-[440px] relative block"
                 >
+                  <span class="absolute top-3 left-3 z-10 px-3 py-1 rounded-full bg-brand-4 text-textPrimary text-[12px] font-figtree font-semibold shadow">
+                    LATEST
+                  </span>
                   <img
-                    src={urlForImage(post?.mainImage)}
+                    src={post?.mainImage ? optimizeImageUrl(urlForImage(post.mainImage).url(), 900, 70) : ""}
                     alt={post?.mainImage?.alt || post?.title || "blog image"}
-                    class="lg:rounded-[24px] rounded-[20px] mb-[8px] w-full aspect-square object-cover"
+                    class="lg:rounded-[24px] rounded-[20px] mb-[8px] md:mb-0 md:w-[350px] lg:w-[440px] w-full object-cover aspect-square"
                   />
                 </a>
                 <div class="p-[12px] md:py-[24px] md:pl-[48px] md:pr-[32px]">
@@ -187,49 +191,81 @@ function calculateReadTime(body: any[]): string {
         }
         <!-- Other blogs -->
         {
-          posts?.slice(1).map(
-            (item) =>
-              item?.slug?.current && (
-                <div
-                  class="min-w-[240px] rounded-[20px] border border-cardColor flex flex-col post-item"
-                  data-category={item?.categories
-                    ?.map((c) => c.slug?.current || c.title)
-                    .join(" ")}
+          posts?.slice(1).map((item, idx) => {
+            if (!item?.slug?.current) return null;
+            const overallIndex = idx + 1; // account for the first featured post
+            const wide = overallIndex === 4 || overallIndex === 10;
+            let pillLabel = "";
+            if (overallIndex === 4) pillLabel = "FEATURED";
+            if (overallIndex === 10) pillLabel = "YOU MIGHT LIKE";
+
+            const cardClasses = [
+              "min-w-[240px]",
+              "rounded-[20px]",
+              "border",
+              "border-cardColor",
+              "post-item",
+              wide ? "md:col-span-2 lg:col-span-2 bg-secondary md:flex md:flex-row md:items-center md:border-secondary" : "flex flex-col",
+            ]
+              .filter(Boolean)
+              .join(" ");
+
+            return (
+              <div
+                class={cardClasses}
+                data-category={item?.categories?.map((c) => c.slug?.current || c.title).join(" ")}
+              >
+                <a
+                  href={`/blog/${item?.slug?.current}`}
+                  class={`relative block ${wide ? "md:w-1/2" : ""}`}
                 >
+                  {pillLabel ? (
+                    <span class="absolute top-3 left-3 z-10 px-3 py-1 rounded-full bg-brand-4 text-textPrimary text-[12px] font-figtree font-semibold shadow">
+                      {pillLabel}
+                    </span>
+                  ) : null}
+                  <img
+                    src={
+                      item?.mainImage ? optimizeImageUrl(urlForImage(item.mainImage).url(), 700, 70) : ""
+                    }
+                    alt={item?.mainImage?.alt || item?.title || "blog image"}
+                    class={`lg:rounded-[24px] rounded-[20px] mb-[8px] w-full object-cover ${
+                      wide ? "md:mb-0 md:h-full" : "aspect-square"
+                    }`}
+                  />
+                </a>
+                <div class={`p-[12px] lg:py-4 lg:px-5 ${wide ? "md:w-1/2" : ""}`}>
+                  {item?.categories && (
+                    <span class="inline-block grid uppercase place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree font-normal text-[10px] leading-[14px] text-textPrimary">
+                      {item?.categories?.map((cat) => cat?.title).join(", ")}
+                    </span>
+                  )}
                   <a href={`/blog/${item?.slug?.current}`}>
+                    <h3 class="line-clamp-2 mt-[12px] mb-[8px] font-ppradio font-bold text-textPrimary text-lg leading-[22px] lg:font-black lg:text-[20px] lg:leading-[24px]">
+                      {item?.title}
+                    </h3>
                     <img
                       src={urlForImage(item?.mainImage)}
                       alt={item?.mainImage?.alt || item?.title || "blog image"}
                       class="lg:rounded-[24px] rounded-[20px] mb-[8px] w-full aspect-square object-cover"
                     />
                   </a>
-                  <div class="p-[12px] lg:py-4 lg:px-5">
-                    {item?.categories && (
-                      <span class="inline-block grid uppercase place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree font-normal text-[10px] leading-[14px] text-textPrimary">
-                        {item?.categories?.map((cat) => cat?.title).join(", ")}
-                      </span>
-                    )}
-                    <a href={`/blog/${item?.slug?.current}`}>
-                      <h3 class="line-clamp-2 mt-[12px] mb-[8px] font-ppradio font-bold text-textPrimary text-lg leading-[22px] lg:font-black lg:text-[20px] lg:leading-[24px]">
-                        {item?.title}
-                      </h3>
-                    </a>
-                    <p class="line-clamp-2 lg:mb-[32px] mb-[16px] font-figtree font-normal text-textPrimary text-base leading-[20px] lg:text-[18px] lg:leading-[22px]">
-                      {item?.description}
-                    </p>
-                    <div class="w-full flex items-center gap-2">
-                      <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
-                        {item?.publishedAt && formatDate(item?.publishedAt)}
-                      </span>
-                      <Image src={badge} alt="blog image" class="h-2 w-2" />
-                      <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
-                        {calculateReadTime(item?.body)}
-                      </span>
-                    </div>
+                  <p class="line-clamp-2 lg:mb-[32px] mb-[16px] font-figtree font-normal text-textPrimary text-base leading-[20px] lg:text-[18px] lg:leading-[22px]">
+                    {item?.description}
+                  </p>
+                  <div class="w-full flex items-center gap-2">
+                    <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
+                      {item?.publishedAt && formatDate(item?.publishedAt)}
+                    </span>
+                    <Image src={badge} alt="blog image" class="h-2 w-2" />
+                    <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
+                      {calculateReadTime(item?.body)}
+                    </span>
                   </div>
                 </div>
-              )
-          )
+              </div>
+            );
+          })
         }
       </div>
 

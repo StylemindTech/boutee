@@ -1,0 +1,26 @@
+---
+import { Image } from "astro:assets";
+import foundersImg from "../../assets/Image/boutee-founders-together.jpg";
+---
+
+<section class="py-section-padding-mobile lg:py-section-padding-desktop">
+  <div class="max-w-container-max-width px-container-padding-mobile lg:px-container-padding-desktop mx-auto">
+    <div class="grid lg:grid-cols-3 gap-section-padding-mobile lg:gap-grid-gap-desktop items-center">
+      <div class="lg:col-span-2 order-1 lg:order-1 rounded-xxl overflow-hidden">
+        <Image
+          src={foundersImg}
+          alt="Boutee founders together"
+          class="w-full h-full object-cover aspect-[4/3] rounded-xxl"
+        />
+      </div>
+      <div class="lg:col-span-1 order-2 lg:order-2 flex flex-col gap-text-gap-small">
+        <h2 class="text-heading-mobile lg:text-heading-desktop leading-heading-mobile lg:leading-heading-desktop font-black font-ppradio text-textPrimary">
+          The brothers behind Boutee
+        </h2>
+        <p class="text-body-mobile lg:text-body-desktop leading-body-mobile lg:leading-body-desktop text-textSecondary font-figtree">
+          We’re Billy and Ethan Ward. After Covid, we watched dozens of independent jewellers shut their doors, which didn’t seem right to us — people love buying independent. With backgrounds in tech and psychology, we dug into what was going on. The problem wasn’t that people didn’t want independents; they just couldn’t find them, and when they did, the bespoke process felt confusing and a bit intimidating. We built Boutee to change that — to make it easier to discover great independent jewellers and feel confident going bespoke. We honestly think it’s the best way to buy a ring.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -15,7 +15,7 @@ const ResultsTabs: React.FC = () => {
     <MobileOnlyGate>
       <div className="relative min-h-screen bg-white text-[#171719] flex flex-col overflow-hidden">
         <div className="w-full max-w-[520px] mx-auto flex-1 pb-24">
-          <PreviewHeader title="Your results" />
+          <PreviewHeader title="Preview of your results" />
 
           <div className="mt-0">
             <div
@@ -28,8 +28,8 @@ const ResultsTabs: React.FC = () => {
               <div className="px-3 pt-3 pb-2">
                 <SegmentControl
                   items={[
-                    { id: "matches", label: "Jeweller Matches" },
-                    { id: "profile", label: "Style Profile" },
+                    { id: "matches", label: "Your Jewellers" },
+                    { id: "profile", label: "Your Style" },
                   ]}
                   activeItemId={activeTab}
                   onItemClick={(id) => setActiveTab(id as TabKey)}
@@ -68,9 +68,9 @@ const ResultsTabs: React.FC = () => {
         </div>
         <ActionBar
           helperText={
-            activeTab === "matches" ? "See all your matches on Boutee" : "Refine your style profile on Boutee"
+            activeTab === "matches" ? "See all your matches on Boutee for free!" : "Refine your style profile on Boutee"
           }
-          label="Continue For Free"
+          label="Continue Exploring For Free"
           href="https://app.boutee.co.uk/"
         />
       </div>

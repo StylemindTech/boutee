@@ -1,0 +1,45 @@
+@import "../../../../styles/_variables.css";
+
+.chip {
+  border-radius: 999px;
+  border: 1px solid #2c2c30;
+  background: #ffffff;
+  color: #171719;
+  padding: 8px 12px;
+  font-family: "Figtree", sans-serif;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chip:hover {
+  border-color: #2c2c30;
+}
+
+.chipSelected {
+  background: #d6f99a;
+  color: #171719;
+  border-color: #2c2c30;
+  box-shadow: none;
+}
+
+.chipDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.label {
+  line-height: 1.2;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  color: currentColor;
+  flex-shrink: 0;
+}

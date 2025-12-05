@@ -12,6 +12,7 @@ import facebook from "../../assets/icons/Facebook.svg";
 import twitter from "../../assets/icons/X.svg";
 import arrow from "../../assets/icons/ArrowRight.svg";
 import { urlForImage } from "../../sanity/lib/url-for-image";
+import { optimizeImageUrl } from "../../lib/imageKit";
 
 export async function getStaticPaths() {
   const { data: posts } = await loadQuery<SanityDocument[]>({
@@ -54,6 +55,9 @@ function formatDate(dateString: string) {
     year: "numeric",
   }).format(new Date(dateString));
 }
+
+const mainImageUrl = post?.mainImage ? optimizeImageUrl(urlForImage(post.mainImage).url(), 900, 70) : null;
+const authorImageUrl = post?.author?.image ? optimizeImageUrl(urlForImage(post.author.image).url(), 200, 70) : null;
 
 const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
   query: `*[_type == "post" && slug.current != $slug && count(categories[@._ref in $categoryIds]) > 0] 
@@ -178,9 +182,9 @@ function calculateReadTime(content: any[]): string {
                 </div>
               </div>
 
-              {post?.mainImage && (
+              {mainImageUrl && (
                 <img
-                  src={`${urlForImage(post.mainImage)}`}
+                  src={mainImageUrl}
                   alt={post?.mainImage?.alt || "blog image"}
                   class="rounded-[24px] w-full max-w-[600px] aspect-square object-cover" 
                   w-full h-full 
@@ -338,7 +342,7 @@ function calculateReadTime(content: any[]): string {
 
                       // ✅ Image blocks
                       if (block._type === "image" && block.asset?._ref) {
-                        const url = urlForImage(block).url();
+                        const url = optimizeImageUrl(urlForImage(block).url(), 900, 70);
                         elements.push(
                           <figure>
                             <img
@@ -405,9 +409,9 @@ function calculateReadTime(content: any[]): string {
             {/* <!-- Author --> */}
             {post?.author && (
               <div class="flex flex-row justify-start items-center gap-2 md:gap-4 mt-4 md:mt-6">
-                {post?.author?.image && (
+                {authorImageUrl && (
                   <img
-                    src={urlForImage(post.author.image)}
+                    src={authorImageUrl}
                     alt={post?.author?.name || "author"}
                     class="w-12 h-12 sm:w-14 sm:h-14 md:h-16 md:w-16 rounded-full object-cover"
                   />
@@ -452,7 +456,7 @@ function calculateReadTime(content: any[]): string {
                       <div class="min-w-[240px] rounded-[20px] border border-cardColor flex flex-col">
                         <a href={`/blog/${rp.slug.current}`}>
                           <img
-                            src={`${urlForImage(rp.mainImage)}`}
+                            src={optimizeImageUrl(urlForImage(rp.mainImage).url(), 600, 70)}
                             alt={rp?.mainImage?.alt || "blog image"}
                             class="rounded-[24px] mb-[8px] w-full aspect-square object-cover"
                           />

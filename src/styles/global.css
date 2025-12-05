@@ -180,6 +180,15 @@ html {
   background-color: #d6f99a;
 }
 
+.img-fade {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.img-fade.img-loaded {
+  opacity: 1;
+}
+
 /* After your @theme block, add these custom utilities */
 @layer utilities {
   /* Brand Gradient Utilities */

@@ -5,14 +5,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 40px 20px;
   z-index: 60;
   backdrop-filter: blur(2px);
 }
 
 .modal {
   width: min(360px, 100%);
-  background: linear-gradient(165deg, #2b2d33 0%, #1f2127 100%);
+  background: #171719;
   color: #ffffff;
   border-radius: 18px;
   padding: 22px 18px 18px;
@@ -58,7 +58,7 @@
   background: #ffffff;
   color: #171719;
   font-family: inherit;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.01em;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
