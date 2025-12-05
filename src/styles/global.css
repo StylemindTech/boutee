@@ -1055,7 +1055,7 @@ html {
   border-radius: 50%;
 }
 
-body {
-  /* Set "counter" to 0 */
+.blog_content__list ul {
+  /* Reset list counter per list */
   counter-reset: counter;
 }

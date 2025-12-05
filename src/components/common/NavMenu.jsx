@@ -14,6 +14,7 @@ const links = [
   { name: "Our Jewellers", href: "/our-jewellers" },
   { name: "Our Technology", href: "/our-technology" },
   { name: "About Us", href: "/about-us" },
+  { name: "Blog", href: "/blog" },
 ]
 
 // ORIGINAL LINKS WITH DROPDOWNS - SAVED FOR FUTURE RELEASE
