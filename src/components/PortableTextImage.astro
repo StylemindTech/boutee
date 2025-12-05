@@ -1,11 +1,12 @@
 ---
 // ./src/components/PortableTextImage.astro
 import { urlForImage } from "../sanity/lib/url-for-image";
+import { optimizeImageUrl } from "../lib/imageKit";
 
 const { asset, alt } = Astro.props.node;
 
-const url = urlForImage(asset).url();
-const webpUrl = urlForImage(asset).format("webp").url();
+const url = optimizeImageUrl(urlForImage(asset).url(), 900, 70);
+const webpUrl = optimizeImageUrl(urlForImage(asset).format("webp").url(), 900, 70);
 ---
 
 <picture>

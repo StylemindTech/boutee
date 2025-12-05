@@ -1,0 +1,31 @@
+@import "../../../../styles/_variables.css";
+
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-family: "Figtree", sans-serif;
+  color: var(--Text-Primary);
+  font-size: var(--font-size-body3);
+}
+
+.input {
+  width: 18px;
+  height: 18px;
+  accent-color: #171719;
+  cursor: pointer;
+}
+
+.label {
+  line-height: 1.4;
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.disabled .input {
+  cursor: not-allowed;
+}

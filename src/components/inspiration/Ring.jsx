@@ -1,447 +1,840 @@
-import { useState, useEffect } from "react";
-import dropdownArrow from "../../assets/icons/dropdown-arrow.svg";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { SlidersHorizontal } from "lucide-react";
+import { doc, collection, documentId, getDocs, query, where, runTransaction, serverTimestamp } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay, A11y } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import arrowDown from "../../assets/icons/dropdown-arrow.svg";
-import img1 from "../../assets/Image/ins1.png";
-import img2 from "../../assets/Image/ins2.png";
-import img3 from "../../assets/Image/ins3.png";
-import img4 from "../../assets/Image/ins4.png";
-import img5 from "../../assets/Image/ins5.png";
-import img6 from "../../assets/Image/ins6.png";
-import img7 from "../../assets/Image/ins7.jpg";
-import img8 from "../../assets/Image/ins8.png";
-import img9 from "../../assets/Image/ins9.png";
-import img10 from "../../assets/Image/ins10.png";
-import img11 from "../../assets/Image/ins11.png";
-import img12 from "../../assets/Image/ins12.png";
 import closeIcon from "../../assets/icons/close-icon.svg";
 import nextIcon from "../../assets/icons/next-arrow.svg";
 import preIcon from "../../assets/icons/pre-arrow.svg";
+import { auth, db, ensureAnonAuth } from "../../lib/firebaseClient";
+import { optimizeImageUrl } from "../../lib/imageKit";
 
-const data = [
-  {
-    id: 1,
-    title: "Oval Tanzanite Engagement Ring",
-    images: [img1, img1],
-    price: 1200,
-    type: "Yellow gold",
-    description:
-      "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. ",
-  },
-  {
-    id: 2,
-    title: "Emerald Cut Diamond Ring",
-    images: [img2, img2],
-    price: 1100,
-    type: "Classic",
-    description:
-      "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. ",
-  },
-  {
-    id: 3,
-    title: "Emerald Cut Diamond Ring",
-    images: [img3, img3],
-    price: 1100,
-    type: "Classic",
-    description:
-      "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. ",
-  },
-  {
-    id: 4,
-    title: "Round Brilliant Engagement Ring",
-    images: [img4, img4],
-    price: 1300,
-    type: "Bold",
-    description:
-      "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. ",
-  },
-  {
-    id: 5,
-    title: "Round Brilliant Engagement Ring",
-    images: [img5, img5],
-    price: 1300,
-    type: "Bold",
-    description:
-      "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. ",
-  },
-  {
-    id: 6,
-    title: "Round Brilliant Engagement Ring",
-    images: [img6, img6],
-    price: 1300,
-    type: "Bold",
-    description:
-      "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. ",
-  },
-  {
-    id: 7,
-    title: "Round Brilliant Engagement Ring",
-    images: [img7, img7],
-    price: 1300,
-    type: "Bold",
-    description:
-      "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. ",
-  },
-  {
-    id: 8,
-    title: "Round Brilliant Engagement Ring",
-    images: [img8, img8],
-    price: 1300,
-    type: "Bold",
-    description:
-      "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. ",
-  },
-  {
-    id: 9,
-    title: "Round Brilliant Engagement Ring",
-    images: [img9, img9],
-    price: 1300,
-    type: "Bold",
-    description:
-      "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. ",
-  },
-  {
-    id: 10,
-    title: "Round Brilliant Engagement Ring",
-    images: [img10, img10],
-    price: 1300,
-    type: "Bold",
-    description:
-      "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. ",
-  },
-  {
-    id: 11,
-    title: "Round Brilliant Engagement Ring",
-    images: [img11, img11],
-    price: 1300,
-    type: "Bold",
-    description:
-      "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. ",
-  },
-  {
-    id: 12,
-    title: "Round Brilliant Engagement Ring",
-    images: [img12, img12],
-    price: 1300,
-    type: "Bold",
-    description:
-      "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. ",
-  },
-  {
-    id: 13,
-    title: "Round Brilliant Engagement Ring",
-    images: [img1, img1],
-    price: 3300,
-    type: "Bold",
-    description:
-      "A bespoke ring in this style will start at £1200. Opting for higher carat and quality gemstones and metal will increase the price accordingly. ",
-  },
+const FALLBACK_IMAGE =
+  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800'><rect width='800' height='800' fill='%23f5f6f8'/><text x='50%' y='50%' font-family='Figtree,Arial' font-size='32' fill='%239197a3' text-anchor='middle' dominant-baseline='middle'>Ring image</text></svg>";
+
+const BUDGET_BANDS = [
+  { value: "any", label: "Any budget" },
+  { value: "0-500", label: "Under £500", min: 0, max: 500 },
+  { value: "500-1500", label: "£500 - £1,500", min: 500, max: 1500 },
+  { value: "1500-3000", label: "£1,500 - £3,000", min: 1500, max: 3000 },
+  { value: "3000+", label: "£3,000+", min: 3000 },
 ];
 
-const filters = [
-  "Yellow gold",
-  "Classic",
-  "Bold",
-  "Colorful",
-  "Organic",
-  "Rose gold",
+const SORT_OPTIONS = [
+  { value: "trending", label: "Trending" },
+  { value: "popular", label: "Most popular" },
+  { value: "recent", label: "Most recent" },
+  { value: "priceDesc", label: "Price: high to low" },
+  { value: "priceAsc", label: "Price: low to high" },
 ];
 
-const shuffleArray = (arr) => {
-  return [...arr].sort(() => Math.random() - 0.5);
+const normalizeLabel = (value) => {
+  if (typeof value !== "string") return "";
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
 };
 
+const normalizeArray = (input) => {
+  if (!input) return [];
+  if (Array.isArray(input)) {
+    return input
+      .map((item) => {
+        if (typeof item === "string") return normalizeLabel(item);
+        if (item && typeof item === "object" && typeof item.label === "string") return normalizeLabel(item.label);
+        return "";
+      })
+      .filter(Boolean);
+  }
+  if (typeof input === "string") return [normalizeLabel(input)];
+  return [];
+};
+
+const extractImages = (data) => {
+  const images = [];
+  const candidates = [
+    data.imageUrl,
+    data.imageURL,
+    data.image_url,
+    data.image,
+    data.imgUrl,
+    data.url,
+    data.thumbnailUrl,
+    data.thumbnail,
+  ];
+
+  candidates.forEach((item) => {
+    if (typeof item === "string" && item.trim()) images.push(item.trim());
+  });
+
+  const fromArray = data.imageUrls;
+  if (Array.isArray(fromArray)) {
+    fromArray.forEach((item) => {
+      if (typeof item === "string" && item.trim()) {
+        images.push(item.trim());
+        return;
+      }
+      if (item && typeof item === "object" && typeof item.url === "string") {
+        images.push(item.url.trim());
+      }
+    });
+  } else if (typeof fromArray === "string" && fromArray.trim()) {
+    images.push(fromArray.trim());
+  } else if (fromArray && typeof fromArray === "object" && typeof fromArray.url === "string") {
+    images.push(fromArray.url.trim());
+  }
+
+  if (data.metadata && typeof data.metadata === "object") {
+    const metaUrl = data.metadata.imageUrl || data.metadata.url;
+    if (typeof metaUrl === "string" && metaUrl.trim()) images.push(metaUrl.trim());
+  }
+
+  return Array.from(new Set(images.filter((src) => typeof src === "string" && src.trim()))).map((src) => toSafeString(src, ""));
+};
+
+const parsePriceNumber = (value) => {
+  if (typeof value === "number") return Number.isFinite(value) ? value : null;
+  if (typeof value === "string") {
+    const numeric = Number(value.replace(/[^\d.]/g, ""));
+    return Number.isFinite(numeric) ? numeric : null;
+  }
+  return null;
+};
+
+const parseCountNumber = (value) => {
+  if (typeof value === "number" && Number.isFinite(value) && value >= 0) return value;
+  return 0;
+};
+
+const computeTrendingScore = (ring) => {
+  const votes = parseCountNumber(ring.voteCount);
+  const updated = typeof ring.updatedAt === "number" ? ring.updatedAt : 0;
+  if (!updated) return votes;
+  const ageHours = Math.max(1, (Date.now() - updated) / 3600000);
+  return (votes + 1) / Math.pow(ageHours + 2, 1.5);
+};
+
+const formatPrice = (numberValue, fallback) => {
+  if (typeof numberValue === "number" && Number.isFinite(numberValue)) {
+    return `£${numberValue.toLocaleString("en-GB")}`;
+  }
+  if (typeof fallback === "string" && fallback.trim()) {
+    return fallback.startsWith("£") ? fallback : `£${fallback}`;
+  }
+  return "Price on request";
+};
+
+const toSafeString = (value, fallback = "") => {
+  if (value == null) return fallback;
+  if (typeof value === "string" || typeof value === "number") return String(value);
+  if (Array.isArray(value)) return value.map((v) => toSafeString(v, "")).join(" ");
+  if (typeof value === "object") {
+    if (typeof value.__html === "string") return value.__html;
+    const possible = value.text || value.content || value.description || value.title || value.value;
+    if (typeof possible === "string" || typeof possible === "number") return String(possible);
+  }
+  return fallback;
+};
+
+const buildRingFromDoc = (doc) => {
+  const data = doc.data() || {};
+  const images = extractImages(data);
+  const priceNumber = parsePriceNumber(data.price ?? data.metadata?.price);
+  const gemstones = normalizeArray(data.gemstone || data.gemstones || data.stones);
+  const metals = normalizeArray(data.metal || data.metals);
+  const styles = normalizeArray(data.style || data.styles);
+  const descriptionText = toSafeString(data.description || data.metadata?.description);
+  const voteCount = parseCountNumber(data.voteCount);
+
+  const updatedAt =
+    (data.updatedAt && typeof data.updatedAt.toMillis === "function" ? data.updatedAt.toMillis() : data.updatedAt) ??
+    (data.createdAt && typeof data.createdAt.toMillis === "function" ? data.createdAt.toMillis() : data.createdAt) ??
+    null;
+
+  return {
+    id: doc.id,
+    title: toSafeString(data.name || data.title || data.metadata?.name, "Untitled ring") || "Untitled ring",
+    description: descriptionText,
+    priceNumber,
+    priceDisplay: toSafeString(formatPrice(priceNumber, data.price ?? data.metadata?.price), "Price on request"),
+    metals,
+    gemstones,
+    styles,
+    voteCount,
+    images: images.length ? images : [FALLBACK_IMAGE],
+    jewellerId: data.jewellerId || data.jewelerId || data.jewelleryId || null,
+    updatedAt,
+  };
+};
+
+const chunk = (arr, size) => {
+  const result = [];
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
+  }
+  return result;
+};
+
+const fetchJewellersMap = async (ids) => {
+  const unique = Array.from(new Set(ids.filter(Boolean)));
+  if (!unique.length) return {};
+  const map = {};
+
+  for (const batch of chunk(unique, 10)) {
+    const snap = await getDocs(query(collection(db, "jewellers"), where(documentId(), "in", batch), where("active", "==", true)));
+    snap.forEach((docSnap) => {
+      const data = docSnap.data() || {};
+      map[docSnap.id] = {
+        id: docSnap.id,
+        companyName: toSafeString(data.companyName || data.name || data.displayName, "Jeweller"),
+        profilePhoto: toSafeString(data.profilePhoto || data.avatar || data.logo, ""),
+        active: Boolean(data.active),
+      };
+    });
+  }
+
+  return map;
+};
+
+const containsReactNode = (value) => {
+  if (!value) return false;
+  if (typeof value === "object") {
+    if (value.$$typeof) return true;
+    if (Array.isArray(value)) return value.some(containsReactNode);
+    return Object.values(value).some(containsReactNode);
+  }
+  return false;
+};
+
+const UpvoteIcon = ({ filled = false, className = "" }) => (
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    className={className}
+    fill={filled ? "currentColor" : "transparent"}
+    stroke="currentColor"
+    strokeWidth="2.2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M12 4l7 8h-4v8h-6v-8H5z" />
+  </svg>
+);
+
 export default function RingModal() {
-  const [activeFilters, setActiveFilters] = useState([]);
+  const [mounted, setMounted] = useState(false);
+  const [rings, setRings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
+  const [slideIn, setSlideIn] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [shuffledData, setShuffledData] = useState([]);
+  const [userId, setUserId] = useState(null);
+  const [userVotes, setUserVotes] = useState({});
+  const [votePending, setVotePending] = useState({});
+  const [budgetFilters, setBudgetFilters] = useState([]);
+  const [sortOrder, setSortOrder] = useState("trending");
+  const [budgetDropdownOpen, setBudgetDropdownOpen] = useState(false);
+  const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
+  const [loadedImages, setLoadedImages] = useState({});
+  const [modalImagesLoaded, setModalImagesLoaded] = useState({});
+  const [avatarLoaded, setAvatarLoaded] = useState({});
+  const dropdownRef = useRef(null);
+  const sortRef = useRef(null);
+  const itemsPerPage = 24;
 
-  const [open, setOpen] = useState(false);
-  const itemsPerPage = 12;
-
-  useEffect(() => {
-    setShuffledData(shuffleArray(data));
+  const openModal = useCallback((item) => {
+    setSelectedItem(item);
+    setModalImagesLoaded({});
+    requestAnimationFrame(() => setSlideIn(true));
   }, []);
 
-  const toggleFilter = (filter) => {
-    setActiveFilters((prev) =>
-      prev.includes(filter)
-        ? prev.filter((f) => f !== filter)
-        : [...prev, filter]
-    );
-    setCurrentPage(1);
-  };
+  const closeModal = useCallback(() => {
+    setSlideIn(false);
+    setTimeout(() => {
+      setSelectedItem(null);
+      setModalImagesLoaded({});
+    }, 250);
+  }, []);
 
-  const removeFilter = (filter) => {
-    setActiveFilters((prev) => prev.filter((f) => f !== filter));
-    setCurrentPage(1);
-  };
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  const filteredData =
-    activeFilters.length > 0
-      ? shuffledData.filter((item) => activeFilters.includes(item.type))
-      : shuffledData;
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      setUserId(user?.uid ?? null);
+    });
+    return () => unsub();
+  }, []);
 
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredData.slice(
-    startIndex,
-    startIndex + itemsPerPage
+  const loadRings = useCallback(
+    async (isCancelled) => {
+      try {
+        setLoading(true);
+        setError("");
+        await ensureAnonAuth();
+        const ringSnap = await getDocs(query(collection(db, "rings"), where("status", "==", "live")));
+        const liveRings = ringSnap.docs.map(buildRingFromDoc).filter((ring) => ring.jewellerId);
+
+        const jewellerMap = await fetchJewellersMap(liveRings.map((r) => r.jewellerId));
+        const enriched = liveRings
+          .map((ring) => ({
+            ...ring,
+            jeweller: ring.jewellerId ? jewellerMap[ring.jewellerId] : undefined,
+          }))
+          .filter((ring) => ring.jeweller && ring.jeweller.active)
+          .filter(
+            (ring) =>
+              !containsReactNode(ring.title) &&
+              !containsReactNode(ring.description) &&
+              !containsReactNode(ring.priceDisplay) &&
+              !containsReactNode(ring.images) &&
+              !containsReactNode(ring.jeweller)
+          );
+
+        if (!isCancelled()) setRings(enriched);
+      } catch (err) {
+        console.error("[RingInspiration] Unable to load rings", err);
+        if (!isCancelled()) setError("We couldn't load rings right now. Please try again in a moment.");
+      } finally {
+        if (!isCancelled()) setLoading(false);
+      }
+    },
+    []
   );
 
-  const getPageNumbers = () => {
-    const pages = [];
-    if (totalPages <= 7) {
-      for (let i = 1; i <= totalPages; i++) pages.push(i);
-    } else {
-      if (currentPage <= 3) {
-        pages.push(1, 2, 3, "...", totalPages - 1, totalPages);
-      } else if (currentPage >= totalPages - 2) {
-        pages.push(1, 2, "...", totalPages - 2, totalPages - 1, totalPages);
-      } else {
-        pages.push(
-          1,
-          "...",
-          currentPage - 1,
-          currentPage,
-          currentPage + 1,
-          "...",
-          totalPages
-        );
+  const fetchUserVotes = useCallback(
+    async (uid, isCancelled) => {
+      if (!uid) return;
+      try {
+        const voteSnap = await getDocs(query(collection(db, "ringVotes"), where("userId", "==", uid)));
+        if (isCancelled()) return;
+        const voteMap = {};
+        voteSnap.forEach((voteDoc) => {
+          const data = voteDoc.data() || {};
+          if (typeof data.ringId === "string") {
+            voteMap[data.ringId] = true;
+          }
+        });
+        setUserVotes(voteMap);
+      } catch (err) {
+        console.error("[RingInspiration] Unable to fetch user votes", err);
       }
+    },
+    []
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+    loadRings(() => cancelled).catch(() => {
+      if (!cancelled) setError("We couldn't load rings right now. Please try again in a moment.");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [loadRings]);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (userId) {
+      fetchUserVotes(userId, () => cancelled);
+    } else {
+      setUserVotes({});
     }
-    return pages;
+    return () => {
+      cancelled = true;
+    };
+  }, [userId, fetchUserVotes]);
+
+  const toggleBudget = (value) => {
+    setBudgetFilters((prev) => {
+      if (value === "any") {
+        return prev.includes("any") ? prev.filter((v) => v !== "any") : ["any"];
+      }
+      const withoutAny = prev.filter((v) => v !== "any");
+      return withoutAny.includes(value) ? withoutAny.filter((v) => v !== value) : [...withoutAny, value];
+    });
   };
 
   useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key === "Escape") setSelectedItem(null);
+    setCurrentPage(1);
+  }, [budgetFilters, sortOrder]);
+
+  const filteredRings = useMemo(() => {
+    const activeBudgets =
+      budgetFilters.includes("any") || budgetFilters.length === 0
+        ? []
+        : BUDGET_BANDS.filter((b) => budgetFilters.includes(b.value));
+    let list = [...rings];
+
+    if (activeBudgets.length) {
+      list = list.filter((ring) => {
+        if (ring.priceNumber === null) return false;
+        return activeBudgets.some((band) => {
+          if (typeof band.min === "number" && ring.priceNumber < band.min) return false;
+          if (typeof band.max === "number" && ring.priceNumber > band.max) return false;
+          return true;
+        });
+      });
+    }
+
+    const byDate = (ring) => ring.updatedAt ?? 0;
+    const byPrice = (ring) => ring.priceNumber ?? (sortOrder === "priceAsc" ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY);
+    const byVotes = (ring) => parseCountNumber(ring.voteCount);
+    const byTrending = (ring) => computeTrendingScore(ring);
+
+    return list.sort((a, b) => {
+      if (sortOrder === "popular") return byVotes(b) - byVotes(a) || byDate(b) - byDate(a);
+      if (sortOrder === "trending") return byTrending(b) - byTrending(a);
+      if (sortOrder === "priceAsc") return byPrice(a) - byPrice(b);
+      if (sortOrder === "priceDesc") return byPrice(b) - byPrice(a);
+      return byDate(b) - byDate(a);
+    });
+  }, [rings, budgetFilters, sortOrder]);
+
+  const totalPages = Math.ceil(filteredRings.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedData = filteredRings.slice(startIndex, startIndex + itemsPerPage);
+  const budgetActiveCount = budgetFilters.includes("any") ? 0 : budgetFilters.length;
+  const pageNumbers = useMemo(() => {
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    if (currentPage <= 4) return [1, 2, 3, 4, 5, "...", totalPages];
+    if (currentPage >= totalPages - 3)
+      return [1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages];
+  }, [totalPages, currentPage]);
+
+  const handleEscClose = useCallback(
+    (e) => {
+      if (e.key === "Escape" && selectedItem) closeModal();
+    },
+    [selectedItem, closeModal]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleEscClose);
+    return () => document.removeEventListener("keydown", handleEscClose);
+  }, [handleEscClose]);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setBudgetDropdownOpen(false);
+      }
+      if (sortRef.current && !sortRef.current.contains(e.target)) {
+        setSortDropdownOpen(false);
+      }
     };
-    document.addEventListener("keydown", handleEsc);
-    return () => document.removeEventListener("keydown", handleEsc);
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return undefined;
+    const previousOverflow = document.body.style.overflow;
+    if (selectedItem) {
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = previousOverflow;
+      };
+    }
+    return undefined;
+  }, [selectedItem]);
+
+  const getOrCreateUserId = useCallback(async () => {
+    if (userId) return userId;
+    const uid = await ensureAnonAuth();
+    setUserId(uid);
+    return uid;
+  }, [userId]);
+
+  const toggleVote = useCallback(
+    async (ringId) => {
+      if (!ringId || votePending[ringId]) return;
+      setVotePending((prev) => ({ ...prev, [ringId]: true }));
+      try {
+        const uid = await getOrCreateUserId();
+        const voteRef = doc(db, "ringVotes", `${ringId}_${uid}`);
+        const ringRef = doc(db, "rings", ringId);
+
+        const result = await runTransaction(db, async (transaction) => {
+          const voteSnap = await transaction.get(voteRef);
+          const ringSnap = await transaction.get(ringRef);
+          if (!ringSnap.exists()) {
+            throw new Error("Ring not found");
+          }
+          const currentCount = parseCountNumber(ringSnap.data()?.voteCount);
+
+          if (!voteSnap.exists()) {
+            transaction.set(voteRef, { ringId, userId: uid, createdAt: serverTimestamp() });
+            transaction.set(ringRef, { voteCount: currentCount + 1 }, { merge: true });
+            return { voted: true, newCount: currentCount + 1 };
+          }
+
+          const decremented = Math.max(0, currentCount - 1);
+          transaction.delete(voteRef);
+          transaction.set(ringRef, { voteCount: decremented }, { merge: true });
+          return { voted: false, newCount: decremented };
+        });
+
+        setUserVotes((prev) => {
+          const next = { ...prev };
+          if (result.voted) next[ringId] = true;
+          else delete next[ringId];
+          return next;
+        });
+
+        setRings((prev) =>
+          prev.map((ring) => (ring.id === ringId ? { ...ring, voteCount: result.newCount } : ring))
+        );
+
+        setSelectedItem((prev) => (prev && prev.id === ringId ? { ...prev, voteCount: result.newCount } : prev));
+      } catch (err) {
+        console.error("[RingInspiration] Unable to toggle vote", err);
+      } finally {
+        setVotePending((prev) => {
+          const next = { ...prev };
+          delete next[ringId];
+          return next;
+        });
+      }
+    },
+    [getOrCreateUserId, votePending]
+  );
+
+  const heroImage = (ring) => optimizeImageUrl(ring.images[0], 600) || FALLBACK_IMAGE;
+  const slideCount = selectedItem?.images?.length || 0;
+  const multipleImages = slideCount > 1;
+  const selectedUpvoted = selectedItem ? Boolean(userVotes[selectedItem.id]) : false;
+  const selectedVoteCount = selectedItem ? parseCountNumber(selectedItem.voteCount) : 0;
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className="md:mt-[80px]">
-      <div className="flex gap-4 w-full justify-center flex-nowrap">
-        <div className="w-1/2 sm:w-auto flex items-center gap-2 py-2 px-3 bg-cardColor rounded-[12px] text-[16px] leading-[20px]">
-          <span className="text-textSecondary">Budget:</span>
-          <div className="relative flex-1">
-            <select className="cursor-pointer w-full appearance-none bg-transparent outline-none pr-6">
-              <option value="" className="!text-textPrimary !font-medium">
-                Any
-              </option>
-            </select>
-            <img
-              src={arrowDown.src}
-              alt="arrow icons"
-              className="absolute right-1 top-3 -translate-y-1/2  pointer-events-none rotate-180 w-[16px] h-5"
-            />
-          </div>
-        </div>
-
-        <div className="lg:hidden relative w-1/2 sm:w-[155px]">
-          {/* Filter Button */}
-          <div
-            onClick={() => setOpen(true)}
-            className="h-9 py-2 px-3 bg-cardColor rounded-[12px] flex justify-between items-center"
+      <div className="flex gap-3 w-full justify-center flex-wrap items-center">
+        <div className="relative" ref={dropdownRef}>
+          <button
+            type="button"
+            onClick={() => {
+              setBudgetDropdownOpen((v) => !v);
+              setSortDropdownOpen(false);
+            }}
+            className="flex items-center gap-2 py-2 px-3 bg-cardColor rounded-xl text-[16px] leading-[20px] text-textPrimary"
           >
-            <div className="flex items-center gap-1">
-              <span className="font-figtree font-medium text-[16px] leading-[20px] text-textPrimary">
-                Filters
-              </span>
-              {activeFilters.length > 0 && (
-                <div className="text-[12px] w-[20px] h-[20px] flex items-center justify-center bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] text-textPrimary font-medium rounded-full">
-                  {activeFilters.length}
-                </div>
-              )}
-            </div>
-            <img
-              src={arrowDown.src}
-              alt="arrow icons"
-              className="absolute right-3 top-4.5 -translate-y-1/2  pointer-events-none rotate-180 w-[16px] h-5"
-            />
-          </div>
+            <span className="text-textSecondary">Budget:</span>
+            <span className="font-figtree font-medium min-w-[120px] text-left">
+              {budgetFilters.length === 0 || budgetFilters.includes("any")
+                ? "Any budget"
+                : BUDGET_BANDS.filter((b) => budgetFilters.includes(b.value))
+                    .map((b) => b.label)
+                    .join(", ")}
+            </span>
+            <img src={arrowDown.src} alt="toggle budget dropdown" className="w-4 h-4 rotate-180" />
+          </button>
 
-          {/* Bottom Sheet */}
-          {open && (
-            <div className="fixed inset-0 bg-[#17171966] flex justify-center items-end z-50">
-              <div className="w-full bg-white rounded-t-[25px] pb-[20px] px-4">
-                {/* Drag Handle */}
-                <div className="h-[36px]  p-4">
-                  <div className="w-8 h-1 bg-[#79747E] rounded-full mx-auto "></div>
-                </div>
-
-                {/* Filter Options */}
-                <div className="flex flex-col gap-2 mb-[32px]  pt-3 ">
-                  {filters.map((f) => (
-                    <label key={f} className="flex items-center gap-2 h-9">
-                      <input
-                        type="checkbox"
-                        checked={activeFilters.includes(f)}
-                        onChange={() => toggleFilter(f)}
-                        className="p-1 rounded-[8px] border-2 border-textPrimary accent-textPrimary h-5 w-5"
-                      />
-                      <span className="font-figtree font-normal text-base leading-5 text-textPrimary">
-                        {f}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-
-                {/* Apply Button */}
-                <button
-                  onClick={() => setOpen(false)}
-                  className="h-[36px] py-[8px] px-[16px]  rounded-[40px] bg-textPrimary font-figtree font-medium text-base leading-5 text-white w-full"
-                >
-                  Apply
-                </button>
+          {budgetDropdownOpen && (
+            <div className="absolute z-30 mt-2 w-64 bg-white rounded-xl shadow-lg p-3">
+              <div className="flex flex-col gap-2">
+                {BUDGET_BANDS.filter((band) => band.value !== "any").map((band) => (
+                  <label key={band.value} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={budgetFilters.includes(band.value)}
+                      onChange={() => toggleBudget(band.value)}
+                      className="p-1 rounded-[6px] border-2 border-textPrimary accent-textPrimary h-4 w-4"
+                    />
+                    <span className="font-figtree text-[14px] text-textPrimary">{band.label}</span>
+                  </label>
+                ))}
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={budgetFilters.length === 0 || budgetFilters.includes("any")}
+                    onChange={() => setBudgetFilters(["any"])}
+                    className="p-1 rounded-[6px] border-2 border-textPrimary accent-textPrimary h-4 w-4"
+                  />
+                  <span className="font-figtree text-[14px] text-textPrimary">Any budget</span>
+                </label>
               </div>
             </div>
           )}
         </div>
 
-        <div className="hidden lg:flex gap-[16px] flex-wrap">
-          {filters.map((f) => (
-            <button
-              key={f}
-              onClick={() => toggleFilter(f)}
-              className={`cursor-pointer filter-btn flex items-center py-[7px] px-[12px] text-[16px] leading-[20px] text-textPrimary border border-borderOutline rounded-full font-figtree ${
-                activeFilters.includes(f) ? "bg-[#D6F99A]" : ""
-              }`}
-            >
-              {f}
-              {activeFilters.includes(f) && (
-                <span
-                  className="ml-2 cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    removeFilter(f);
-                  }}
-                >
-                  <img src={closeIcon.src} alt="arrow icons" className="" />
-                </span>
-              )}
-            </button>
-          ))}
+        <div className="relative" ref={sortRef}>
+          <button
+            type="button"
+            onClick={() => {
+              setSortDropdownOpen((v) => !v);
+              setBudgetDropdownOpen(false);
+            }}
+            className="hidden sm:flex items-center gap-2 py-2 px-3 bg-cardColor rounded-xl text-[16px] leading-[20px] text-textPrimary"
+          >
+            <span className="text-textSecondary">Sort by:</span>
+            <span className="font-figtree font-medium min-w-[140px] text-left">
+              {SORT_OPTIONS.find((o) => o.value === sortOrder)?.label || "Most recent"}
+            </span>
+            <img src={arrowDown.src} alt="toggle sort dropdown" className="w-4 h-4 rotate-180" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setSortDropdownOpen((v) => !v);
+              setBudgetDropdownOpen(false);
+            }}
+            className="sm:hidden flex items-center justify-center w-10 h-10 bg-cardColor rounded-xl text-textPrimary ml-auto"
+            aria-label="Sort"
+          >
+            <SlidersHorizontal className="w-5 h-5" />
+          </button>
+
+          {sortDropdownOpen && (
+            <div className="absolute z-30 mt-2 right-0 w-56 bg-white rounded-xl shadow-lg p-3">
+              <div className="flex flex-col gap-2">
+                {SORT_OPTIONS.map((option) => (
+                  <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="sort"
+                      value={option.value}
+                      checked={sortOrder === option.value}
+                      onChange={() => {
+                        setSortOrder(option.value);
+                        setSortDropdownOpen(false);
+                      }}
+                      className="p-1 rounded-[6px] border-2 border-textPrimary accent-textPrimary h-4 w-4"
+                    />
+                    <span className="font-figtree text-[14px] text-textPrimary">{option.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-[20px] gap-[16px] mt-[32px] overflow-hidden">
-        {paginatedData.map((item) => (
-          <div
-            key={item.id}
-            onClick={() => setSelectedItem(item)}
-            className="cursor-pointer hover:border md:rounded-[32px] rounded-[24px]"
-          >
-            <img
-              src={item.images[0].src}
-              alt={item.title}
-              className="w-full h-auto md:rounded-[32px] rounded-[24px]"
-              data-aos="fade-up"
-            />
+      <div className="mt-[24px]">
+        {loading ? (
+          <div className="flex flex-col items-center justify-center gap-3 text-textSecondary">
+            <span className="loading-spinner" aria-hidden="true" />
+            <p>Loading rings…</p>
           </div>
-        ))}
+        ) : error ? (
+          <p className="text-center text-textSecondary">{error}</p>
+        ) : filteredRings.length === 0 ? (
+          <p className="text-center text-textSecondary">No rings match your filters yet. Try adjusting the filters.</p>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-[20px] gap-[16px] mt-[8px] overflow-hidden">
+              {paginatedData.map((item) => {
+                const upvoted = Boolean(userVotes[item.id]);
+                const voteCount = parseCountNumber(item.voteCount);
+
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => openModal(item)}
+                    data-aos="fade-up"
+                    data-aos-once="true"
+                    className="cursor-pointer rounded-xl overflow-hidden bg-white border border-transparent hover:shadow-[0_10px_28px_rgba(0,0,0,0.12)] transition"
+                  >
+                    <div className="relative">
+                      <img
+                        src={heroImage(item)}
+                        alt={item.title}
+                        className={`w-full h-full object-cover aspect-square transition-opacity duration-500 ${
+                          loadedImages[item.id] ? "opacity-100" : "opacity-0"
+                        }`}
+                        loading="lazy"
+                        sizes="(min-width:1024px) 25vw, (min-width:640px) 33vw, 50vw"
+                        fetchPriority={item.id === paginatedData[0]?.id ? "high" : "auto"}
+                        onLoad={() => setLoadedImages((prev) => ({ ...prev, [item.id]: true }))}
+                        onError={(e) => {
+                          if (e.currentTarget.src !== FALLBACK_IMAGE) {
+                            e.currentTarget.src = FALLBACK_IMAGE;
+                          }
+                          setLoadedImages((prev) => ({ ...prev, [item.id]: true }));
+                        }}
+                      />
+                      {item.jeweller?.profilePhoto ? (
+                        <span className="absolute top-2 left-2 w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-md bg-cardColor">
+                          <img
+                            src={optimizeImageUrl(item.jeweller.profilePhoto, 140) || FALLBACK_IMAGE}
+                            alt={item.jeweller.companyName || "Jeweller"}
+                            className={`w-full h-full object-cover transition-opacity duration-500 ${
+                              avatarLoaded[item.id] ? "opacity-100" : "opacity-0"
+                            }`}
+                            loading="lazy"
+                            sizes="48px"
+                            onLoad={() => setAvatarLoaded((prev) => ({ ...prev, [item.id]: true }))}
+                            onError={(e) => {
+                              if (e.currentTarget.src !== FALLBACK_IMAGE) {
+                                e.currentTarget.src = FALLBACK_IMAGE;
+                              }
+                              setAvatarLoaded((prev) => ({ ...prev, [item.id]: true }));
+                            }}
+                          />
+                        </span>
+                      ) : null}
+                    </div>
+                    <div className="p-3 flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[14px] text-textPrimary font-figtree font-medium line-clamp-1">
+                          {typeof item.title === "string" ? item.title : toSafeString(item.title, "")}
+                        </p>
+                        <p className="text-[14px] text-textSecondary font-figtree">
+                          Price from{" "}
+                          {typeof item.priceDisplay === "string" ? item.priceDisplay : toSafeString(item.priceDisplay, "")}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleVote(item.id);
+                        }}
+                        disabled={votePending[item.id]}
+                        aria-pressed={upvoted}
+                        className={`group flex items-center gap-1 px-3 py-2 rounded-full border transition-colors ${
+                          upvoted
+                            ? "bg-[#DDF456] border-[#DDF456] text-black"
+                            : "bg-[#eef1f4] border-transparent text-[#4a4f5a] group-hover:text-black"
+                        } ${votePending[item.id] ? "opacity-70 cursor-not-allowed" : "cursor-pointer"}`}
+                      >
+                        <UpvoteIcon
+                          filled={upvoted}
+                          className="w-5 h-5 transition-all group-hover:fill-current group-hover:text-black"
+                        />
+                        <span
+                          className={`text-[14px] font-figtree font-semibold ${
+                            upvoted ? "text-black" : "text-[#4a4f5a] group-hover:text-black"
+                          }`}
+                        >
+                          {voteCount}
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {totalPages > 1 && (
+              <div className="flex justify-center md:mt-[80px] mt-[48px] gap-1 items-center">
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className={`px-3 py-1 rounded-full ${currentPage === 1 ? " text-gray-400 cursor-not-allowed" : ""}`}
+                  aria-label="Previous page"
+                >
+                  <img src={preIcon.src} alt="" className="cursor-pointer" />
+                </button>
+
+                {pageNumbers.map((page, idx) =>
+                  page === "..." ? (
+                    <span key={`ellipsis-${idx}`} className="px-2 text-textSecondary">
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`cursor-pointer px-3 py-1 font-figtree rounded-[8px] min-w-[36px] h-[36px] ${
+                        currentPage === page ? "bg-[#D6F99A] font-bold" : ""
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
+
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className={`px-3 py-1 rounded-full ${
+                    currentPage === totalPages ? " text-gray-400 cursor-not-allowed" : ""
+                  }`}
+                  aria-label="Next page"
+                >
+                  <img src={nextIcon.src} alt="" className="cursor-pointer" />
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </div>
-
-      {totalPages > 1 && (
-        <div className="flex justify-center md:mt-[80px] mt-[48px] gap-2">
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className={`px-3 py-1 rounded-full ${
-              currentPage === 1 ? " text-gray-400 cursor-not-allowed" : ""
-            }`}
-          >
-            <img
-              src={preIcon.src}
-              alt="arrow icons"
-              className="cursor-pointer"
-            />
-          </button>
-
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i + 1}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`cursor-pointer px-3 py-1 font-figtree rounded-[8px] w-[36px] h-[36px] ${
-                currentPage === i + 1
-                  ? "bg-[#D6F99A] font-bold w-[36px] h-[36px]"
-                  : ""
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
-
-          <button
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-            disabled={currentPage === totalPages}
-            className={`px-3 py-1 rounded-full ${
-              currentPage === totalPages
-                ? " text-gray-400 cursor-not-allowed"
-                : ""
-            }`}
-          >
-            <img
-              src={nextIcon.src}
-              alt="arrow icons"
-              className="cursor-pointer"
-            />
-          </button>
-        </div>
-      )}
 
       {selectedItem && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 flex justify-end items-center"
+          className="fixed inset-0 bg-black/50 z-50 flex justify-end items-center"
           onClick={(e) => {
-            if (e.target === e.currentTarget) setSelectedItem(null);
+            if (e.target === e.currentTarget) closeModal();
           }}
         >
-          <div className=" md:w-[calc(100%_-_16px)] w-full relative md:max-w-[520px] md:mx-[8px] md:rounded-[32px] h-full md:h-[calc(100%_-_16px)] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col">
-            <div className="flex justify-between pt-[17px] pb-[9px] pl-[24px] pr-[28px]">
+          <div
+            className={`md:w-[calc(100%_-_16px)] w-full relative md:max-w-[640px] md:mx-[8px] rounded-xl h-full md:h-[calc(100%_-_16px)] bg-white shadow-2xl transform transition-all duration-300 ease-in-out flex flex-col max-h-[calc(100vh-16px)] overflow-hidden ${
+              slideIn ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+            }`}
+          >
+            <div className="flex justify-between items-center pt-[17px] pb-[9px] pl-[24px] pr-[28px] sticky top-0 bg-white z-20">
               <h5 className="lg:text-[22px] text-[16px] lg:leading-[26px] leading-[20px] text-textPrimary font-figtree">
-                Ring info
+                {selectedItem.title}
               </h5>
-              <button onClick={() => setSelectedItem(null)}>
-                <img
-                  src={closeIcon.src}
-                  alt="arrow icons"
-                  className="w-[16.96px] h-[16.96px] cursor-pointer"
-                />
+              <button onClick={() => closeModal()}>
+                <img src={closeIcon.src} alt="close modal" className="w-[16.96px] h-[16.96px] cursor-pointer" />
               </button>
             </div>
 
-            <Swiper
-              modules={[Navigation, Pagination, Autoplay, A11y]}
-              spaceBetween={24}
-              slidesPerView={1}
-              loop
-              navigation
-              pagination={{ clickable: true }}
-              autoplay={{ delay: 4000, disableOnInteraction: false }}
-              className="!pb-[38px] swiper-modal w-full"
-            >
-              {selectedItem.images.map((it, i) => (
-                <SwiperSlide key={i}>
-                  <img
-                    src={it.src}
-                    alt="ring"
-                    className="w-full h-auto md:max-h-[520px] max-h-[375px] object-cover"
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            <div className="flex-1 overflow-y-auto custom-scrollbar">
+              <Swiper
+                modules={[Navigation, Pagination, Autoplay, A11y]}
+                spaceBetween={24}
+                slidesPerView={1}
+                loop={multipleImages}
+                allowTouchMove={multipleImages}
+                navigation={multipleImages}
+                pagination={multipleImages ? { clickable: true } : false}
+                autoplay={multipleImages ? { delay: 4000, disableOnInteraction: false } : false}
+                className="swiper-modal w-full !pb-0"
+              >
+                {(selectedItem.images || [FALLBACK_IMAGE]).map((it, i) => (
+                  <SwiperSlide key={`${selectedItem.id}-${i}`}>
+                    <img
+                      src={optimizeImageUrl(it, 900) || FALLBACK_IMAGE}
+                      alt={selectedItem.title}
+                      className={`w-full h-auto max-h-[520px] object-cover transition-opacity duration-500 ${
+                        modalImagesLoaded[`${selectedItem.id}-${i}`] ? "opacity-100" : "opacity-0"
+                      }`}
+                      onLoad={() =>
+                        setModalImagesLoaded((prev) => ({
+                          ...prev,
+                          [`${selectedItem.id}-${i}`]: true,
+                        }))
+                      }
+                      onError={(e) => {
+                        if (e.currentTarget.src !== FALLBACK_IMAGE) {
+                          e.currentTarget.src = FALLBACK_IMAGE;
+                        }
+                        setModalImagesLoaded((prev) => ({
+                          ...prev,
+                          [`${selectedItem.id}-${i}`]: true,
+                        }));
+                      }}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
 
-            <style>{`
+              <style>{`
       .swiper-button-prev, .swiper-button-next {
         width: 38px; height: 38px; border-radius: 9999px;
         background: white; box-shadow: 0 4px 16px rgba(0,0,0,.08);
@@ -450,48 +843,112 @@ export default function RingModal() {
       .swiper-pagination-bullet { opacity: .4; }
       .swiper-pagination-bullet-active { opacity: 1; background: black; }
     `}</style>
+              <style>{`
+                .loading-spinner {
+                  width: 32px;
+                  height: 32px;
+                  border-radius: 9999px;
+                  border: 3px solid #e5e7eb;
+                  border-top-color: #171719;
+                  animation: ring-spin 0.8s linear infinite;
+                }
+                @keyframes ring-spin {
+                  to { transform: rotate(360deg); }
+                }
+              `}</style>
 
-            <div className="flex-1 custom-scrollbar overflow-y-auto md:p-[24px] p-[16px] md:pt-0 mt-[30px] rounded-tl-[24px] rounded-tr-[24px] shadow-[0px_-3px_15px_0px_#5580C014] ms:rounded-0 md:shadow-none">
-              <div className="flex flex-col gap-[8px]">
-                <h2 className="text-[22px] text-textPrimary mb-[20px] font-medium leading-[26px] font-figtree">
-                  {selectedItem.title}
-                </h2>
-                <p className="lg:text-[16px] text-[14px] lg:leading-[20px] leading-[18px] font-figtree flex justify-between">
-                  <span className="text-textSecondary">Price:</span>
-                  <span className="text-textPrimary">
-                    £{selectedItem.price}
-                  </span>
-                </p>
-                <p className="lg:text-[16px] text-[14px] lg:leading-[20px] leading-[18px] font-figtree flex justify-between">
-                  <span className="text-textSecondary">Metal:</span>
-                  <span className="text-textPrimary">18ct Yellow Gold</span>
-                </p>
-                <p className="lg:text-[16px] text-[14px] lg:leading-[20px] leading-[18px] font-figtree flex justify-between">
-                  <span className="text-textSecondary">Gemstone:</span>
-                  <span className="text-textPrimary">Diamond</span>
-                </p>
-                <p className="lg:text-[16px] text-[14px] lg:leading-[20px] leading-[18px] font-figtree flex justify-between">
-                  <span className="text-textSecondary">Stone Type:</span>
-                  <span className="text-textPrimary">Lab Grown</span>
-                </p>
-                <p className="lg:text-[16px] text-[14px] lg:leading-[20px] leading-[18px] font-figtree flex justify-between">
-                  <span className="text-textSecondary">Stone Size:</span>
-                  <span className="text-textPrimary">0.72ct</span>
-                </p>
-                <p className="lg:text-[16px] text-[14px] lg:leading-[20px] leading-[18px] font-figtree flex justify-between">
-                  <span className="text-textSecondary">Color/Clarity</span>
-                  <span className="text-textPrimary">E VVS2</span>
-                </p>
+              <div className="md:p-[24px] p-[16px] md:pt-0 mt-[10px] shadow-[0px_-3px_15px_0px_#5580C014] ms:rounded-0 md:shadow-none">
+                <div className="flex flex-col gap-[8px]">
+                  <div className="flex items-center justify-between mb-[10px]">
+                    <div className="flex items-center gap-3">
+                      <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-cardColor overflow-hidden border border-borderOutline flex items-center justify-center">
+                        <img
+                          src={optimizeImageUrl(selectedItem.jeweller?.profilePhoto, 220) || FALLBACK_IMAGE}
+                          alt={selectedItem.jeweller?.companyName || "Jeweller"}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </div>
+                    <a
+                      href="https://app.boutee.co.uk"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-[16px] md:text-[18px] text-textPrimary font-ppradio font-semibold text-right hover:underline"
+                    >
+                      {selectedItem.jeweller?.companyName || "Jeweller"}
+                    </a>
+                  </div>
+
+                  <p className="lg:text-[16px] text-[14px] lg:leading-[20px] leading-[18px] font-figtree flex justify-between">
+                    <span className="text-textSecondary">Price from:</span>
+                    <span className="text-textPrimary">{selectedItem.priceDisplay}</span>
+                  </p>
+                  <p className="lg:text-[16px] text-[14px] lg:leading-[20px] leading-[18px] font-figtree flex justify-between">
+                    <span className="text-textSecondary">Metal:</span>
+                    <span className="text-textPrimary">
+                      {selectedItem.metals.length ? selectedItem.metals.join(", ") : "Not specified"}
+                    </span>
+                  </p>
+                  <p className="lg:text-[16px] text-[14px] lg:leading-[20px] leading-[18px] font-figtree flex justify-between">
+                    <span className="text-textSecondary">Gemstone:</span>
+                    <span className="text-textPrimary">
+                      {selectedItem.gemstones.length ? selectedItem.gemstones.join(", ") : "Not specified"}
+                    </span>
+                  </p>
+                  {selectedItem.styles.length ? (
+                    <p className="lg:text-[16px] text-[14px] lg:leading-[20px] leading-[18px] font-figtree flex justify-between">
+                      <span className="text-textSecondary">Style:</span>
+                      <span className="text-textPrimary">{selectedItem.styles.join(", ")}</span>
+                    </p>
+                  ) : null}
+                </div>
+                {selectedItem.description ? (
+                  <div
+                    className="lg:text-[16px] text-[14px] lg:leading-[20px] leading-[18px] font-figtree text-textPrimary mt-[16px] space-y-2"
+                    dangerouslySetInnerHTML={{ __html: selectedItem.description }}
+                  />
+                ) : null}
               </div>
-              <p className="lg:text-[16px] text-[14px] lg:leading-[20px] leading-[18px] font-figtree text-textPrimary mt-[20px]">
-                {selectedItem.description}
-              </p>
             </div>
 
             <div className="px-[24px] py-[16px]">
-              <button className="bg-textPrimary w-full h-[48px] text-white text-[16px] font-medium font-figtree rounded-[40px]">
-                Sign Up to contact Jeweller
-              </button>
+              <div className="flex flex-col sm:flex-row gap-3 items-stretch">
+                <button
+                  type="button"
+                  onClick={() => toggleVote(selectedItem.id)}
+                  disabled={votePending[selectedItem.id]}
+                  aria-pressed={selectedUpvoted}
+                  className={`group flex items-center justify-center gap-2 px-4 py-3 rounded-full border transition-colors ${
+                    selectedUpvoted
+                      ? "bg-[#DDF456] border-[#DDF456] text-black"
+                      : "bg-[#eef1f4] border-transparent text-[#4a4f5a] group-hover:text-black"
+                  } ${votePending[selectedItem.id] ? "opacity-70 cursor-not-allowed" : "cursor-pointer"}`}
+                >
+                  <UpvoteIcon
+                    filled={selectedUpvoted}
+                    className="w-5 h-5 transition-all group-hover:fill-current group-hover:text-black"
+                  />
+                  <span
+                    className={`text-[16px] font-figtree font-semibold ${
+                      selectedUpvoted ? "text-black" : "text-[#4a4f5a] group-hover:text-black"
+                    }`}
+                  >
+                    {selectedVoteCount}
+                  </span>
+                  <span className={`text-[14px] font-figtree ${selectedUpvoted ? "text-black/80" : "text-[#6b7280]"}`}>
+                    Upvote
+                  </span>
+                </button>
+
+                <a
+                  href="https://app.boutee.co.uk"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-textPrimary w-full h-[48px] text-white text-[16px] font-medium font-figtree rounded-[40px] flex items-center justify-center"
+                >
+                  View More On The Boutee App
+                </a>
+              </div>
             </div>
           </div>
         </div>

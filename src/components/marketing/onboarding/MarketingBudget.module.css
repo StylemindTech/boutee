@@ -1,0 +1,152 @@
+@import "../../../styles/_variables.css";
+
+.page {
+  min-height: 100vh;
+  background: var(--Surface-Secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl) var(--spacing-m);
+}
+
+.card {
+  width: min(520px, 100%);
+  background: var(--Surface-Primary);
+  border: 1px solid var(--Grey-100);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  box-shadow: 0 24px 60px rgba(var(--rgb-grey-900), 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+}
+
+.kicker {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--font-size-body5);
+  font-weight: 600;
+  color: var(--Text-Secondary);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-h5);
+  font-weight: var(--font-weight-h5);
+  line-height: 1.2;
+  color: var(--Text-Primary);
+}
+
+.helper {
+  margin: 0;
+  color: var(--Text-Secondary);
+  font-size: var(--font-size-body4);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-m);
+}
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-s);
+}
+
+.inputWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  border: 1px solid var(--Input-Border-Default);
+  border-radius: var(--radius-s);
+  padding: var(--spacing-xs) var(--spacing-s);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  background: var(--Surface-Primary);
+}
+
+.inputActive {
+  border-color: var(--Input-Border-Focused);
+  background: var(--Surface-Secondary);
+}
+
+.inputError {
+  border-color: var(--Input-Border-Error);
+}
+
+.currency {
+  font-size: var(--font-size-body3);
+  color: var(--Text-Secondary);
+}
+
+.inputField {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  font-size: var(--font-size-body3);
+  color: var(--Text-Primary);
+}
+
+.inputField::placeholder {
+  color: var(--Text-Disabled);
+}
+
+.inputField:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error {
+  margin: 0;
+  color: var(--Text-Error);
+  font-size: var(--font-size-body4);
+}
+
+.cta {
+  width: 100%;
+  justify-content: center;
+}
+
+.note {
+  margin: 0;
+  text-align: center;
+  color: var(--Text-Secondary);
+  font-size: var(--font-size-body5);
+}
+
+.embedded {
+  width: 100%;
+}
+
+.embeddedCard {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  padding-top: var(--spacing-s);
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.embeddedCard .form {
+  gap: var(--spacing-xs);
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: var(--spacing-l);
+    border-radius: var(--radius-l);
+  }
+
+  .embeddedCard {
+    padding: 0;
+    border-radius: 0;
+  }
+}
