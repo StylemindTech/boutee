@@ -29,6 +29,10 @@ type RingDoc = {
   metadata?: Record<string, unknown>;
 };
 
+type JewellerMatchesTabProps = {
+  onActiveJewellerCount?: (count: number) => void;
+};
+
 const profileStorageKey = "previewStyleProfile";
 const prefetchedMatchesKey = "previewPrefetchedMatches";
 
@@ -418,7 +422,7 @@ const Card: React.FC<{
   );
 };
 
-const JewellerMatchesTab: React.FC = () => {
+const JewellerMatchesTab: React.FC<JewellerMatchesTabProps> = ({ onActiveJewellerCount }) => {
   const [loading, setLoading] = useState(true);
   const [jewellers, setJewellers] = useState<Jeweller[]>([]);
   const [hasPrefetched, setHasPrefetched] = useState(false);
@@ -426,6 +430,13 @@ const JewellerMatchesTab: React.FC = () => {
   const [activeJewellerCount, setActiveJewellerCount] = useState<number | null>(null);
   const [assetsLoaded, setAssetsLoaded] = useState(0);
   const [allAssetsReady, setAllAssetsReady] = useState(false);
+
+  useEffect(() => {
+    const effectiveCount = activeJewellerCount ?? (jewellers.length ? jewellers.length : null);
+    if (effectiveCount !== null && onActiveJewellerCount) {
+      onActiveJewellerCount(effectiveCount);
+    }
+  }, [activeJewellerCount, jewellers, onActiveJewellerCount]);
   useEffect(() => {
     if (typeof document === "undefined") return;
     if (document.getElementById("jeweller-reveal-styles")) return;

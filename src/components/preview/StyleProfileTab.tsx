@@ -83,7 +83,7 @@ const StyleProfileTab: React.FC<StyleProfileTabProps> = ({ isActive = true }) =>
         </div>
         <StyleDNARadarChart key={chartKey} userData={profile} noBackground />
         <button
-          className="Button_button__rqctt Button_large__1HWt1 Button_normal__3bvFj inline-flex w-full items-center justify-center gap-2 rounded-[50px] border border-transparent bg-[#f0f1f5] text-[1rem] font-normal text-[#171719] antialiased transition-colors duration-200 ease-in-out cursor-pointer whitespace-nowrap"
+          className="Button_button__rqctt Button_large__1HWt1 Button_normal__3bvFj inline-flex w-full items-center justify-center gap-2 rounded-[50px] border border-transparent bg-[#171719] text-[1rem] font-normal text-white antialiased transition-colors duration-200 ease-in-out cursor-pointer whitespace-nowrap"
           style={{ minHeight: "48px", padding: "14px 0" }}
           type="button"
           onClick={() => {
@@ -92,7 +92,7 @@ const StyleProfileTab: React.FC<StyleProfileTabProps> = ({ isActive = true }) =>
             }
           }}
         >
-          <ExternalLink className="h-[15px] w-[15px] text-[#171719]" aria-hidden="true" />
+          <ExternalLink className="h-[15px] w-[15px] text-white" aria-hidden="true" />
           See Your Full Style Profile
         </button>
       </div>
