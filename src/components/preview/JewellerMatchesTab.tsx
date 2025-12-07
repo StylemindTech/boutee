@@ -743,7 +743,7 @@ const JewellerMatchesTab: React.FC<JewellerMatchesTabProps> = ({ onActiveJewelle
             >
               <BadgeCheck className="h-5 w-5 text-[#171719] shrink-0" aria-hidden="true" />
               <span className="flex-1 text-[0.875rem] font-normal leading-tight" style={{ color: "#171719" }}>
-                Create an account to see the rest of your matches. It's completely free and helps us make better suggestions!
+                Please create an account to see the rest of your matches. It's completely free and helps us make better suggestions!
               </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
