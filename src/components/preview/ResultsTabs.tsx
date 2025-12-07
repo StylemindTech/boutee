@@ -10,6 +10,19 @@ type TabKey = "matches" | "profile";
 
 const ResultsTabs: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabKey>("matches");
+  const [activeJewellerCount, setActiveJewellerCount] = useState<number | null>(null);
+
+  const visibleJewellers = 4;
+  const remainingJewellers =
+    activeJewellerCount !== null ? Math.max(activeJewellerCount - visibleJewellers, 0) : null;
+  const helperText =
+    activeTab === "matches" ? "See all your matches with a free account!" : "Refine your style profile on Boutee";
+  const actionLabel =
+    activeTab === "matches"
+      ? remainingJewellers !== null
+        ? `See ${remainingJewellers} More Jewellers For Free`
+        : "See More Jewellers For Free"
+      : "Continue Exploring For Free";
 
   return (
     <MobileOnlyGate>
@@ -47,7 +60,7 @@ const ResultsTabs: React.FC = () => {
                     width: "100%",
                   }}
                 >
-                  <JewellerMatchesTab />
+                  <JewellerMatchesTab onActiveJewellerCount={setActiveJewellerCount} />
                 </div>
                 <div
                   aria-hidden={activeTab !== "profile"}
@@ -67,10 +80,8 @@ const ResultsTabs: React.FC = () => {
           </div>
         </div>
         <ActionBar
-          helperText={
-            activeTab === "matches" ? "See all your matches on Boutee for free!" : "Refine your style profile on Boutee"
-          }
-          label="Continue Exploring For Free"
+          helperText={helperText}
+          label={actionLabel}
           href="https://app.boutee.co.uk/"
         />
       </div>
