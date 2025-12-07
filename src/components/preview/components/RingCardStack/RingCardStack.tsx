@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import styles from "./RingCardStack.module.css";
 
 export type RingCard = {
@@ -41,30 +41,9 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   const handlePointerDown = (e: React.PointerEvent) => {
     if (!topRing || isLeaving) return;
     activePointerId.current = e.pointerId;
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
     setIsDragging(true);
     dragStart.current = { x: e.clientX, y: e.clientY };
     dragCurrent.current = { x: e.clientX, y: e.clientY };
-  };
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isDragging || !topRing || isLeaving) return;
-    if (activePointerId.current !== e.pointerId) return;
-    if (e.cancelable) e.preventDefault();
-    dragCurrent.current = { x: e.clientX, y: e.clientY };
-    const deltaX = e.clientX - dragStart.current.x;
-    const deltaY = e.clientY - dragStart.current.y;
-    const rotation = deltaX * 0.08;
-    setPosition({ x: deltaX, y: deltaY, rotation });
-
-    if (onSwipeDirectionChange) {
-      const threshold = 30;
-      if (Math.abs(deltaX) > threshold) {
-        onSwipeDirectionChange(deltaX > 0 ? "right" : "left");
-      } else {
-        onSwipeDirectionChange(null);
-      }
-    }
   };
 
   const animateOut = (direction: "left" | "right", ring: RingCard) => {
@@ -85,11 +64,10 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   };
 
   const handlePointerUp = useCallback(
-    (e: React.PointerEvent) => {
+    (e: { pointerId: number }) => {
       if (!isDragging || !topRing || isLeaving) return;
       if (activePointerId.current !== e.pointerId) return;
       activePointerId.current = null;
-      (e.target as HTMLElement).releasePointerCapture(e.pointerId);
       resetDirection();
       setIsDragging(false);
 
@@ -106,8 +84,7 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
     [isDragging, isLeaving, topRing, resetDirection]
   );
 
-  const handlePointerCancel = useCallback((e: React.PointerEvent) => {
-    if (activePointerId.current !== e.pointerId) return;
+  const handlePointerCancel = useCallback(() => {
     activePointerId.current = null;
     setIsDragging(false);
     resetDirection();
@@ -118,6 +95,49 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
     setPosition({ x: 0, y: 0, rotation: 0 });
     setIsLeaving(false);
   }, [topRing?.id]);
+
+  useEffect(() => {
+    if (!isDragging || activePointerId.current === null) return;
+
+    const handleMove = (e: PointerEvent) => {
+      if (activePointerId.current !== e.pointerId) return;
+      if (!topRing || isLeaving) return;
+      if (e.cancelable) e.preventDefault();
+      dragCurrent.current = { x: e.clientX, y: e.clientY };
+      const deltaX = e.clientX - dragStart.current.x;
+      const deltaY = e.clientY - dragStart.current.y;
+      const rotation = deltaX * 0.08;
+      setPosition({ x: deltaX, y: deltaY, rotation });
+
+      if (onSwipeDirectionChange) {
+        const threshold = 30;
+        if (Math.abs(deltaX) > threshold) {
+          onSwipeDirectionChange(deltaX > 0 ? "right" : "left");
+        } else {
+          onSwipeDirectionChange(null);
+        }
+      }
+    };
+
+    const handleUp = (e: PointerEvent) => {
+      if (activePointerId.current !== e.pointerId) return;
+      handlePointerUp(e as unknown as React.PointerEvent);
+    };
+
+    const handleCancel = (e: PointerEvent) => {
+      if (activePointerId.current !== e.pointerId) return;
+      handlePointerCancel();
+    };
+
+    window.addEventListener("pointermove", handleMove, { passive: false });
+    window.addEventListener("pointerup", handleUp);
+    window.addEventListener("pointercancel", handleCancel);
+    return () => {
+      window.removeEventListener("pointermove", handleMove);
+      window.removeEventListener("pointerup", handleUp);
+      window.removeEventListener("pointercancel", handleCancel);
+    };
+  }, [isDragging, isLeaving, onSwipeDirectionChange, handlePointerUp, handlePointerCancel, topRing]);
 
   return (
     <div className={styles.wrapper}>
@@ -142,9 +162,6 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
               className={styles.swipeCard}
               style={cardStyle}
               onPointerDown={isTop ? handlePointerDown : undefined}
-              onPointerMove={isTop ? handlePointerMove : undefined}
-              onPointerUp={isTop ? handlePointerUp : undefined}
-              onPointerCancel={isTop ? handlePointerCancel : undefined}
             >
               <div className={styles.ringCard}>
                 <img src={ring.imageUrl} alt="Ring for selection" className={styles.ringImage} draggable={false} />

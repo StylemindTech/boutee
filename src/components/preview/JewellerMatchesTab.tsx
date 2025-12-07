@@ -728,17 +728,22 @@ const JewellerMatchesTab: React.FC<JewellerMatchesTabProps> = ({ onActiveJewelle
               className="pointer-events-auto absolute left-1/2 bottom-[12px] w-full max-w-[520px] -translate-x-1/2 px-3"
             >
               <button
-                className="flex w-full items-center gap-3 rounded-[1rem] border border-[#c8c1f2] bg-white px-4 py-5 text-left text-[#73737d]"
-                style={{ minHeight: "64px" }}
+                className="flex w-full items-center gap-3 rounded-[1rem] px-4 py-5 text-left"
+                style={{
+                  minHeight: "64px",
+                  background: "linear-gradient(135deg, #ddf456 0%, #b9f551 100%)",
+                  border: "1px solid #171719",
+                  color: "#171719",
+                }}
               onClick={() => {
                 if (typeof window !== "undefined") {
                   window.location.href = "https://app.boutee.co.uk/";
                 }
               }}
             >
-              <BadgeCheck className="h-5 w-5 text-[#73737d] shrink-0" aria-hidden="true" />
-              <span className="flex-1 text-[0.875rem] font-normal leading-tight">
-                  {`Create a free account to browse all ${activeJewellerCount ?? jewellers.length} Boutee jewellers and see your top ten matches`}
+              <BadgeCheck className="h-5 w-5 text-[#171719] shrink-0" aria-hidden="true" />
+              <span className="flex-1 text-[0.875rem] font-normal leading-tight" style={{ color: "#171719" }}>
+                Create an account to see the rest of your matches. It's completely free and helps us make better suggestions!
               </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -750,7 +755,7 @@ const JewellerMatchesTab: React.FC<JewellerMatchesTabProps> = ({ onActiveJewelle
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="h-5 w-5 text-[#73737d]"
+                  className="h-5 w-5 text-[#171719]"
                   aria-hidden="true"
                 >
                   <path d="m9 18 6-6-6-6"></path>
