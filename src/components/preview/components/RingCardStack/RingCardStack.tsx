@@ -106,6 +106,10 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   }, [resetDirection]);
 
   const handlePointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType === "touch") {
+      // Touch path handled separately to avoid Safari quirks.
+      return;
+    }
     beginDrag({ x: e.clientX, y: e.clientY }, e.pointerId, "pointer");
   };
 
@@ -183,13 +187,13 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
         cancelDrag();
       };
 
-      window.addEventListener("touchmove", handleMove, { passive: false });
-      window.addEventListener("touchend", handleEnd);
-      window.addEventListener("touchcancel", handleCancel);
+      document.addEventListener("touchmove", handleMove, { passive: false });
+      document.addEventListener("touchend", handleEnd, { passive: false });
+      document.addEventListener("touchcancel", handleCancel, { passive: false });
       return () => {
-        window.removeEventListener("touchmove", handleMove);
-        window.removeEventListener("touchend", handleEnd);
-        window.removeEventListener("touchcancel", handleCancel);
+        document.removeEventListener("touchmove", handleMove);
+        document.removeEventListener("touchend", handleEnd);
+        document.removeEventListener("touchcancel", handleCancel);
       };
     }
 
@@ -211,13 +215,13 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
       cancelDrag();
     };
 
-    window.addEventListener("pointermove", handleMove, { passive: false });
-    window.addEventListener("pointerup", handleUp);
-    window.addEventListener("pointercancel", handleCancel);
+    document.addEventListener("pointermove", handleMove, { passive: false });
+    document.addEventListener("pointerup", handleUp, { passive: false });
+    document.addEventListener("pointercancel", handleCancel, { passive: false });
     return () => {
-      window.removeEventListener("pointermove", handleMove);
-      window.removeEventListener("pointerup", handleUp);
-      window.removeEventListener("pointercancel", handleCancel);
+      document.removeEventListener("pointermove", handleMove);
+      document.removeEventListener("pointerup", handleUp);
+      document.removeEventListener("pointercancel", handleCancel);
     };
   }, [isDragging, isLeaving, updateDragPosition, finishDrag, cancelDrag, topRing]);
 
