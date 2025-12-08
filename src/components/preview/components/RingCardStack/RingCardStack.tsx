@@ -107,10 +107,11 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
 
   const handlePointerDown = (e: React.PointerEvent) => {
     if (e.pointerType === "touch") {
-      // Touch path handled separately to avoid Safari quirks.
+      // Let the touch path handle it to avoid iOS pointer quirks.
       return;
     }
     beginDrag({ x: e.clientX, y: e.clientY }, e.pointerId, "pointer");
+    if (e.cancelable) e.preventDefault();
   };
 
   const animateOut = (direction: "left" | "right", ring: RingCard) => {
@@ -149,6 +150,7 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
+      if (e.touches.length !== 1) return;
       const touch = e.touches[0];
       if (!touch) return;
       beginDrag({ x: touch.clientX, y: touch.clientY }, touch.identifier, "touch");
