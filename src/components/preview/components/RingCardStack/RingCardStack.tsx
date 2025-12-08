@@ -160,6 +160,10 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   useLayoutEffect(() => {
     setPosition({ x: 0, y: 0, rotation: 0 });
     setIsLeaving(false);
+    activePointerId.current = null;
+    activePointerType.current = null;
+    setIsDragging(false);
+    resetDirection();
   }, [topRing?.id]);
 
   useEffect(() => {
@@ -237,9 +241,11 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
                 transition: isDragging ? "none" : "transform 0.3s ease-out, opacity 0.2s ease-out",
                 opacity: isLeaving && isLeavingCard ? 0 : 1,
                 zIndex: displayStack.length - index,
+                pointerEvents: isLeaving && isLeavingCard ? "none" : "auto",
               }
             : {
                 zIndex: displayStack.length - index,
+                pointerEvents: isLeaving && isLeavingCard ? "none" : "auto",
               };
 
           return (
