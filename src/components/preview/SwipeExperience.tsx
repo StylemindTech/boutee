@@ -120,6 +120,33 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
   const [loadingRings, setLoadingRings] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const prefetchingRef = useRef(false);
+  const scrollLockRef = useRef<number>(0);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const body = document.body;
+    if (stage === "swipe") {
+      scrollLockRef.current = window.scrollY;
+      body.style.position = "fixed";
+      body.style.width = "100%";
+      body.style.top = `-${scrollLockRef.current}px`;
+      body.style.overflow = "hidden";
+    } else {
+      body.style.position = "";
+      body.style.width = "";
+      body.style.top = "";
+      body.style.overflow = "";
+    }
+    return () => {
+      body.style.position = "";
+      body.style.width = "";
+      body.style.top = "";
+      body.style.overflow = "";
+      if (scrollLockRef.current) {
+        window.scrollTo(0, scrollLockRef.current);
+      }
+    };
+  }, [stage]);
 
   const setPreviewAnonCookie = useCallback((uid: string) => {
     if (typeof document === "undefined") return;
@@ -837,7 +864,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
       </div>
 
       <div
-        className="fixed inset-x-0 bottom-0 px-3 pt-3 z-30"
+        className="fixed inset-x-0 bottom-0 px-3 pt-3 z-50"
         style={{ paddingBottom: "calc(16px + env(safe-area-inset-bottom, 0px))", background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 35%)" }}
       >
         <div className="w-full mx-auto">
@@ -868,7 +895,11 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
 
   return (
     <MobileOnlyGate>
-      <div className="relative bg-white text-[#171719] min-h-[100dvh] flex flex-col overflow-x-hidden">
+      <div
+        className={`relative bg-white text-[#171719] min-h-[100dvh] flex flex-col overflow-x-hidden ${
+          stage === "swipe" ? "overflow-hidden" : ""
+        }`}
+      >
         <PreviewHeader title={headerTitle} onClose={handleClose} />
 
         <div className="flex-1 flex flex-col">{renderStageContent()}</div>
