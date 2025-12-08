@@ -82,8 +82,8 @@ function calculateReadTime(body: any[]): string {
       >
         <!-- Slider behind buttons -->
         <div
-          id="slider"
-          class="absolute top-1 left-0 h-10 bg-white rounded-xl shadow-md transition-all duration-300 z-0"
+        id="slider"
+          class="absolute top-1 left-0 h-10 bg-white rounded-2xl shadow-md transition-all duration-300 z-0"
         >
         </div>
 
@@ -194,18 +194,17 @@ function calculateReadTime(body: any[]): string {
           posts?.slice(1).map((item, idx) => {
             if (!item?.slug?.current) return null;
             const overallIndex = idx + 1; // account for the first featured post
-            const wide = overallIndex === 4 || overallIndex === 10;
-            let pillLabel = "";
-            if (overallIndex === 4) pillLabel = "FEATURED";
-            if (overallIndex === 10) pillLabel = "YOU MIGHT LIKE";
+            const isAlternate = overallIndex === 4 || overallIndex === 10;
+            const pillLabel = overallIndex === 4 ? "FEATURED" : overallIndex === 10 ? "YOU MIGHT LIKE" : "";
 
             const cardClasses = [
               "min-w-[240px]",
               "rounded-[20px]",
               "border",
               "border-cardColor",
+              isAlternate ? "bg-secondary border-secondary" : "",
               "post-item",
-              wide ? "md:col-span-2 lg:col-span-2 bg-secondary md:flex md:flex-row md:items-center md:border-secondary" : "flex flex-col",
+              "flex flex-col",
             ]
               .filter(Boolean)
               .join(" "); 
@@ -217,7 +216,7 @@ function calculateReadTime(body: any[]): string {
               >
                 <a
                   href={`/blog/${item?.slug?.current}`}
-                  class={`relative block ${wide ? "md:w-1/2" : ""}`}
+                  class="relative block"
                 >
                   {pillLabel ? (
                     <span class="absolute top-3 left-3 z-10 px-3 py-1 rounded-full bg-brand-4 text-textPrimary text-[12px] font-figtree font-semibold shadow">
@@ -229,12 +228,10 @@ function calculateReadTime(body: any[]): string {
                       item?.mainImage ? optimizeImageUrl(urlForImage(item.mainImage).url(), 700, 70) : ""
                     }
                     alt={item?.mainImage?.alt || item?.title || "blog image"}
-                    class={`lg:rounded-[24px] rounded-[20px] mb-[8px] w-full object-cover ${
-                      wide ? "md:mb-0 md:h-full" : "aspect-square"
-                    }`}
+                    class="lg:rounded-[24px] rounded-[20px] mb-[8px] w-full object-cover aspect-square"
                   />
                 </a>
-                <div class={`p-[12px] lg:py-4 lg:px-5 ${wide ? "md:w-1/2" : ""}`}>
+                <div class="p-[12px] lg:py-4 lg:px-5">
                   {item?.categories && (
                     <span class="inline-block grid uppercase place-content-center h-[22px] py-1 px-3 rounded-[40px] bg-cardColor md:bg-[#E3E4E8] font-figtree font-normal text-[10px] leading-[14px] text-textPrimary">
                       {item?.categories?.map((cat) => cat?.title).join(", ")}
