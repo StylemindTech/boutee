@@ -160,6 +160,8 @@ function calculateReadTime(body: any[]): string {
                     src={post?.mainImage ? optimizeImageUrl(urlForImage(post.mainImage).url(), 900, 70) : ""}
                     alt={post?.mainImage?.alt || post?.title || "blog image"}
                     class="lg:rounded-[24px] rounded-[20px] mb-[8px] md:mb-0 md:w-[350px] lg:w-[440px] w-full object-cover aspect-square"
+                    loading="eager"
+                    fetchpriority="high"
                   />
                 </a>
                 <div class="p-[12px] md:py-[24px] md:pl-[48px] md:pr-[32px]">

@@ -42,6 +42,7 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   const beginDrag = useCallback(
     (point: { x: number; y: number }, id: number, type: "pointer" | "touch") => {
       if (!topRing || isLeaving) return;
+      if (activePointerId.current !== null) return;
       activePointerId.current = id;
       activePointerType.current = type;
       setIsDragging(true);
@@ -105,10 +106,6 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   }, [resetDirection]);
 
   const handlePointerDown = (e: React.PointerEvent) => {
-    if (e.pointerType === "touch") {
-      // Use the dedicated touch path for iOS Safari to avoid touch-action issues.
-      return;
-    }
     beginDrag({ x: e.clientX, y: e.clientY }, e.pointerId, "pointer");
   };
 

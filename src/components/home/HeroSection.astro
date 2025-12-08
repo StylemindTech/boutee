@@ -61,7 +61,7 @@ const { content }: { content: HeroCopy } = Astro.props;
           <div class="card-detail floating" data-speed="0.4" data-float="6">
             <div class="profile-img">
               <span class="match-badge font-normal font-figtree text-textPrimary text-body-desktop leading-body-mobile">{content.matchBadge}</span>
-              <Image src={heroImg2} alt="Ring" />
+              <Image src={heroImg2} alt="Ring" loading="eager" fetchpriority="high" />
             </div>
             <div class="profile-info">
               <h2 class="font-figtree font-bold text-textPrimary uppercase text-large-desktop md:text-[22px] leading-6 md:leading-[26px]">{content.jewellerName}</h2>
