@@ -106,11 +106,8 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   }, [resetDirection]);
 
   const handlePointerDown = (e: React.PointerEvent) => {
-    if (e.pointerType === "touch") {
-      // Let the touch path handle it to avoid iOS pointer quirks.
-      return;
-    }
-    beginDrag({ x: e.clientX, y: e.clientY }, e.pointerId, "pointer");
+    const type = e.pointerType === "touch" ? "touch" : "pointer";
+    beginDrag({ x: e.clientX, y: e.clientY }, e.pointerId, type);
     if (e.cancelable) e.preventDefault();
   };
 
@@ -257,6 +254,13 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
               style={cardStyle}
               onPointerDown={isTop ? handlePointerDown : undefined}
               onTouchStart={isTop ? handleTouchStart : undefined}
+              onTouchMove={
+                isTop
+                  ? (e) => {
+                      if (isDragging && e.cancelable) e.preventDefault();
+                    }
+                  : undefined
+              }
             >
               <div className={styles.ringCard}>
                 <img src={ring.imageUrl} alt="Ring for selection" className={styles.ringImage} draggable={false} />

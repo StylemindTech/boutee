@@ -16,7 +16,7 @@
   justify-content: center;
   align-items: center;
   overflow: visible;
-  touch-action: pan-y;
+  touch-action: none;
   overscroll-behavior: contain;
   -webkit-user-select: none;
   user-select: none;
@@ -38,7 +38,7 @@
   justify-content: center;
   align-items: center;
   overflow: visible;
-  touch-action: pan-y;
+  touch-action: none;
   -webkit-user-select: none;
   user-select: none;
   -moz-user-select: none;
@@ -57,7 +57,7 @@
   background-color: #f0f1f5;
   cursor: grab;
   backface-visibility: hidden;
-  touch-action: pan-y;
+  touch-action: none;
   box-shadow: none;
   -webkit-user-select: none;
   user-select: none;
