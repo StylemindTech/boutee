@@ -16,6 +16,8 @@ console.log('[GA] Initialising GA4 with ID', '${gaMeasurementId}');
 gtag('js', new Date());
 gtag('config', '${gaMeasurementId}', { debug_mode: true });`
   : null;
+
+const fontHref = "https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap";
 ---
 
 <!doctype html>
@@ -27,6 +29,10 @@ gtag('config', '${gaMeasurementId}', { debug_mode: true });`
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href={fontHref} />
+    <link rel="stylesheet" href={fontHref} />
     <!-- Google Tag Manager -->
     <script>
       (function (w, d, s, l, i) {

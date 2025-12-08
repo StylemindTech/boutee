@@ -41,7 +41,7 @@ import heroRating from "../../assets/icons/hero-rating.svg";
         <div class="md:max-w-[600px] max-w-[327px] h-full min-h-[450px] md:min-h-[600px] relative w-full">
           <!-- All floating elements remain unchanged as they're animation-specific -->
           <div class="profile-img floating rotate-[-3.73deg]" data-speed="0.2" data-float="2">
-            <Image src={heroImg} class="" alt="hero-image" />
+            <Image src={heroImg} class="" alt="hero-image" loading="eager" fetchpriority="high" />
           </div>
 
           <!-- Ring Box -->
