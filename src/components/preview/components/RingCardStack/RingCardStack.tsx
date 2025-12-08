@@ -23,10 +23,6 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   const leavingRingRef = useRef<RingCard | null>(null);
   const activePointerId = useRef<number | null>(null);
   const activePointerType = useRef<"pointer" | "touch" | null>(null);
-  const prefersTouch = useMemo(
-    () => (typeof navigator !== "undefined" ? /iPhone|iPad|iPod/i.test(navigator.userAgent) : false),
-    []
-  );
 
   const displayStack = useMemo(() => {
     const baseStack = rings.slice(0, 4);
@@ -109,7 +105,10 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   }, [resetDirection]);
 
   const handlePointerDown = (e: React.PointerEvent) => {
-    if (prefersTouch) return;
+    if (e.pointerType === "touch") {
+      // Use the dedicated touch path for iOS Safari to avoid touch-action issues.
+      return;
+    }
     beginDrag({ x: e.clientX, y: e.clientY }, e.pointerId, "pointer");
   };
 
@@ -132,11 +131,11 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
 
   const handlePointerUp = useCallback(
     (e: { pointerId: number }) => {
-      if (prefersTouch) return;
+      if (activePointerType.current !== "pointer") return;
       if (activePointerId.current !== e.pointerId) return;
       finishDrag("pointer");
     },
-    [prefersTouch, finishDrag]
+    [finishDrag]
   );
 
   const handlePointerCancel = useCallback(
@@ -149,13 +148,12 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
-      if (!prefersTouch) return;
       const touch = e.touches[0];
       if (!touch) return;
       beginDrag({ x: touch.clientX, y: touch.clientY }, touch.identifier, "touch");
       if (e.cancelable) e.preventDefault();
     },
-    [prefersTouch, beginDrag]
+    [beginDrag]
   );
 
   useLayoutEffect(() => {
@@ -249,7 +247,7 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
               className={styles.swipeCard}
               style={cardStyle}
               onPointerDown={isTop ? handlePointerDown : undefined}
-              onTouchStart={isTop && prefersTouch ? handleTouchStart : undefined}
+              onTouchStart={isTop ? handleTouchStart : undefined}
             >
               <div className={styles.ringCard}>
                 <img src={ring.imageUrl} alt="Ring for selection" className={styles.ringImage} draggable={false} />
