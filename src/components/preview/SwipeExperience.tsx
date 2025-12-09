@@ -131,7 +131,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
       body.style.width = "100%";
       body.style.top = `-${scrollLockRef.current}px`;
       body.style.overflowY = "hidden";
-      body.style.overflowX = "visible";
+      body.style.overflowX = "hidden";
     } else {
       body.style.position = "";
       body.style.width = "";
