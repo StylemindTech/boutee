@@ -37,13 +37,6 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
   const dragStart = useRef({ x: 0, y: 0 });
   const dragCurrent = useRef({ x: 0, y: 0 });
 
-  const handleStart = (clientX: number, clientY: number) => {
-    if (!isTop || isLeaving) return;
-    setIsDragging(true);
-    dragStart.current = { x: clientX, y: clientY };
-    dragCurrent.current = { x: clientX, y: clientY };
-  };
-
   const handleMove = useCallback(
     (clientX: number, clientY: number) => {
       if (!isTop || isLeaving) return;
@@ -68,6 +61,13 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
     [isLeaving, isTop, onSwipeDirectionChange]
   );
 
+  const handleStart = (clientX: number, clientY: number) => {
+    if (!isTop || isLeaving) return;
+    setIsDragging(true);
+    dragStart.current = { x: clientX, y: clientY };
+    dragCurrent.current = { x: clientX, y: clientY };
+  };
+
   const animateOut = useCallback(
     (direction: "left" | "right") => {
       setIsLeaving(true);
@@ -77,7 +77,9 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
 
       setPosition({ x: finalX, y: 0, rotation: finalRotation });
 
-      if (onSwipe) onSwipe(direction, ring);
+      window.setTimeout(() => {
+        if (onSwipe) onSwipe(direction, ring);
+      }, 300);
     },
     [onSwipe, ring]
   );
@@ -148,6 +150,17 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
     transition: isDragging ? "none" : "transform 0.3s ease-out, opacity 0.2s ease-out",
     opacity: isLeaving ? 0 : 1,
   };
+
+  // Reset drag state when a new card becomes top
+  useEffect(() => {
+    if (isTop) {
+      setIsLeaving(false);
+      setIsDragging(false);
+      dragStart.current = { x: 0, y: 0 };
+      dragCurrent.current = { x: 0, y: 0 };
+      setPosition({ x: 0, y: 0, rotation: 0 });
+    }
+  }, [isTop]);
 
   return (
     <div
