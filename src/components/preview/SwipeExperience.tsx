@@ -130,18 +130,21 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
       body.style.position = "fixed";
       body.style.width = "100%";
       body.style.top = `-${scrollLockRef.current}px`;
-      body.style.overflow = "hidden";
+      body.style.overflowY = "hidden";
+      body.style.overflowX = "visible";
     } else {
       body.style.position = "";
       body.style.width = "";
       body.style.top = "";
-      body.style.overflow = "";
+      body.style.overflowX = "";
+      body.style.overflowY = "";
     }
     return () => {
       body.style.position = "";
       body.style.width = "";
       body.style.top = "";
-      body.style.overflow = "";
+      body.style.overflowX = "";
+      body.style.overflowY = "";
       if (scrollLockRef.current) {
         window.scrollTo(0, scrollLockRef.current);
       }
@@ -847,7 +850,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
         <ProgressDots total={totalRings} completed={swipes.length} />
       </div>
 
-      <div className="px-3 mt-6 flex-1 flex flex-col items-stretch gap-5 pb-[140px] overflow-hidden">
+      <div className="px-3 mt-6 flex-1 flex flex-col items-stretch gap-5 pb-[140px] overflow-visible">
         <div className="w-full">
           <RingCardStack
             rings={visibleRings}
@@ -896,8 +899,8 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
   return (
     <MobileOnlyGate>
       <div
-        className={`relative bg-white text-[#171719] min-h-[100dvh] flex flex-col overflow-x-hidden ${
-          stage === "swipe" ? "overflow-hidden" : ""
+        className={`relative bg-white text-[#171719] min-h-[100dvh] flex flex-col ${
+          stage === "swipe" ? "overflow-visible" : "overflow-x-hidden"
         }`}
       >
         <PreviewHeader title={headerTitle} onClose={handleClose} />

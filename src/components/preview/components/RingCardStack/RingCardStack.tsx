@@ -131,8 +131,8 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
     setIsLeaving(false);
     activePointerId.current = null;
     setIsDragging(false);
-    resetDirection();
-  }, [topRing?.id, resetDirection]);
+    if (onSwipeDirectionChange) onSwipeDirectionChange(null);
+  }, [topRing?.id]);
 
   useEffect(() => {
     if (!isDragging || activePointerId.current === null) return;
@@ -158,7 +158,6 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
       cancelDrag();
     };
 
-    // Use the container element for event listeners
     const container = containerRef.current;
     if (!container) return;
 
