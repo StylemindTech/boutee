@@ -45,7 +45,7 @@
   -webkit-backface-visibility: hidden;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
   pointer-events: auto;
-  touch-action: pan-y;
+  touch-action: none;
   -webkit-user-select: none;
   user-select: none;
   -moz-user-select: none;
