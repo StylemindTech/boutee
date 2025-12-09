@@ -41,6 +41,7 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
 
   const beginDrag = useCallback(
     (point: { x: number; y: number }, id: number) => {
+      console.log('beginDrag called', { point, id, topRing: !!topRing, isLeaving });
       if (!topRing || isLeaving) return;
       if (activePointerId.current !== null) return;
       activePointerId.current = id;
@@ -74,6 +75,7 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   );
 
   const finishDrag = useCallback(() => {
+    console.log('finishDrag called');
     if (!topRing || activePointerId.current === null) return;
     resetDirection();
     setIsDragging(false);
@@ -82,6 +84,8 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
     const width = typeof window !== "undefined" ? window.innerWidth : 375;
     const threshold = width * 0.22;
     activePointerId.current = null;
+
+    console.log('finishDrag deltaX:', deltaX, 'threshold:', threshold);
 
     if (Math.abs(deltaX) > threshold) {
       const direction = deltaX > 0 ? "right" : "left";
@@ -92,6 +96,7 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   }, [topRing, resetDirection]);
 
   const cancelDrag = useCallback(() => {
+    console.log('cancelDrag called');
     activePointerId.current = null;
     setIsDragging(false);
     resetDirection();
@@ -117,6 +122,7 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
+      console.log('touchStart', { touches: e.touches.length, target: e.target });
       if (e.touches.length !== 1) return;
       const touch = e.touches[0];
       if (!touch) return;
@@ -135,6 +141,7 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   }, [topRing?.id]);
 
   useEffect(() => {
+    console.log('isDragging changed:', isDragging);
     if (!isDragging || activePointerId.current === null) return;
 
     const handleMove = (e: TouchEvent) => {
@@ -147,6 +154,7 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
     };
 
     const handleEnd = (e: TouchEvent) => {
+      console.log('touchEnd event');
       const id = activePointerId.current;
       if (id === null) return;
       const ended = Array.from(e.changedTouches).some((t) => t.identifier === id);
@@ -155,17 +163,23 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
     };
 
     const handleCancel = () => {
+      console.log('touchCancel event');
       cancelDrag();
     };
 
     const container = containerRef.current;
-    if (!container) return;
+    if (!container) {
+      console.log('No container ref!');
+      return;
+    }
 
+    console.log('Adding touch listeners to container');
     container.addEventListener("touchmove", handleMove, { passive: false });
     container.addEventListener("touchend", handleEnd, { passive: false });
     container.addEventListener("touchcancel", handleCancel, { passive: false });
     
     return () => {
+      console.log('Removing touch listeners');
       container.removeEventListener("touchmove", handleMove);
       container.removeEventListener("touchend", handleEnd);
       container.removeEventListener("touchcancel", handleCancel);
