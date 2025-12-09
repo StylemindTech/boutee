@@ -149,18 +149,8 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
       : `scale(${1 - index * 0.05}) translateY(${index * 10}px)`,
     transition: isDragging ? "none" : "transform 0.3s ease-out, opacity 0.2s ease-out",
     opacity: isLeaving ? 0 : 1,
+    pointerEvents: isTop && !isLeaving ? "auto" : "none",
   };
-
-  // Reset drag state when a new card becomes top
-  useEffect(() => {
-    if (isTop) {
-      setIsLeaving(false);
-      setIsDragging(false);
-      dragStart.current = { x: 0, y: 0 };
-      dragCurrent.current = { x: 0, y: 0 };
-      setPosition({ x: 0, y: 0, rotation: 0 });
-    }
-  }, [isTop]);
 
   return (
     <div
