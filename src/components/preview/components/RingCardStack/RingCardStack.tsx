@@ -22,7 +22,7 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   const dragCurrent = useRef({ x: 0, y: 0 });
   const leavingRingRef = useRef<RingCard | null>(null);
   const activePointerId = useRef<number | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const topCardRef = useRef<HTMLDivElement>(null);
 
   const displayStack = useMemo(() => {
     const baseStack = rings.slice(0, 4);
@@ -35,21 +35,11 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
   }, [rings, isLeaving, leavingRingId]);
   const topRing = displayStack[0];
 
-  const resetDirection = useCallback(() => {
-    if (onSwipeDirectionChange) onSwipeDirectionChange(null);
-  }, [onSwipeDirectionChange]);
-
-  const beginDrag = useCallback(
-    (point: { x: number; y: number }, id: number) => {
-      console.log('beginDrag called', { point, id, topRing: !!topRing, isLeaving });
-      if (!topRing || isLeaving) return;
-      if (activePointerId.current !== null) return;
-      activePointerId.current = id;
-      setIsDragging(true);
-      dragStart.current = point;
-      dragCurrent.current = point;
+  const handleDirectionChange = useCallback(
+    (dir: "left" | "right" | null) => {
+      if (onSwipeDirectionChange) onSwipeDirectionChange(dir);
     },
-    [topRing, isLeaving]
+    [onSwipeDirectionChange]
   );
 
   const updateDragPosition = useCallback(
@@ -62,22 +52,39 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
       const rotation = deltaX * 0.08;
       setPosition({ x: deltaX, y: deltaY, rotation });
 
-      if (onSwipeDirectionChange) {
-        const threshold = 30;
-        if (Math.abs(deltaX) > threshold) {
-          onSwipeDirectionChange(deltaX > 0 ? "right" : "left");
-        } else {
-          onSwipeDirectionChange(null);
-        }
+      const threshold = 30;
+      if (Math.abs(deltaX) > threshold) {
+        handleDirectionChange(deltaX > 0 ? "right" : "left");
+      } else {
+        handleDirectionChange(null);
       }
     },
-    [topRing, isLeaving, onSwipeDirectionChange]
+    [topRing, isLeaving, handleDirectionChange]
+  );
+
+  const animateOut = useCallback(
+    (direction: "left" | "right", ring: RingCard) => {
+      setIsLeaving(true);
+      leavingRingRef.current = ring;
+      setLeavingRingId(ring.id);
+      const width = typeof window !== "undefined" ? window.innerWidth : 375;
+      const finalX = direction === "left" ? -width * 1.5 : width * 1.5;
+      const finalRotation = direction === "left" ? -28 : 28;
+      setPosition({ x: finalX, y: 0, rotation: finalRotation });
+      onSwipe?.(direction, ring);
+      window.setTimeout(() => {
+        setIsLeaving(false);
+        setLeavingRingId(null);
+        leavingRingRef.current = null;
+        setPosition({ x: 0, y: 0, rotation: 0 });
+      }, 280);
+    },
+    [onSwipe]
   );
 
   const finishDrag = useCallback(() => {
-    console.log('finishDrag called');
     if (!topRing || activePointerId.current === null) return;
-    resetDirection();
+    handleDirectionChange(null);
     setIsDragging(false);
 
     const deltaX = dragCurrent.current.x - dragStart.current.x;
@@ -85,51 +92,60 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
     const threshold = width * 0.22;
     activePointerId.current = null;
 
-    console.log('finishDrag deltaX:', deltaX, 'threshold:', threshold);
-
     if (Math.abs(deltaX) > threshold) {
       const direction = deltaX > 0 ? "right" : "left";
       animateOut(direction, topRing);
     } else {
       setPosition({ x: 0, y: 0, rotation: 0 });
     }
-  }, [topRing, resetDirection]);
+  }, [topRing, handleDirectionChange, animateOut]);
 
-  const cancelDrag = useCallback(() => {
-    console.log('cancelDrag called');
-    activePointerId.current = null;
-    setIsDragging(false);
-    resetDirection();
-    setPosition({ x: 0, y: 0, rotation: 0 });
-  }, [resetDirection]);
+  const handleTouchMove = useCallback(
+    (e: TouchEvent) => {
+      const id = activePointerId.current;
+      if (id === null) return;
+      const touch = Array.from(e.touches).find((t) => t.identifier === id);
+      if (!touch) return;
+      if (e.cancelable) e.preventDefault();
+      updateDragPosition({ x: touch.clientX, y: touch.clientY });
+    },
+    [updateDragPosition]
+  );
 
-  const animateOut = (direction: "left" | "right", ring: RingCard) => {
-    setIsLeaving(true);
-    leavingRingRef.current = ring;
-    setLeavingRingId(ring.id);
-    const width = typeof window !== "undefined" ? window.innerWidth : 375;
-    const finalX = direction === "left" ? -width * 1.5 : width * 1.5;
-    const finalRotation = direction === "left" ? -28 : 28;
-    setPosition({ x: finalX, y: 0, rotation: finalRotation });
-    onSwipe?.(direction, ring);
-    window.setTimeout(() => {
-      setIsLeaving(false);
-      setLeavingRingId(null);
-      leavingRingRef.current = null;
-      setPosition({ x: 0, y: 0, rotation: 0 });
-    }, 280);
-  };
+  const handleTouchEnd = useCallback(
+    (e: TouchEvent) => {
+      const id = activePointerId.current;
+      if (id === null) return;
+      const ended = Array.from(e.changedTouches).some((t) => t.identifier === id);
+      if (!ended) return;
+
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+      document.removeEventListener("touchcancel", handleTouchEnd);
+
+      finishDrag();
+    },
+    [finishDrag, handleTouchMove]
+  );
 
   const handleTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      console.log('touchStart', { touches: e.touches.length, target: e.target });
+    (e: TouchEvent) => {
+      if (!topRing || isLeaving || activePointerId.current !== null) return;
       if (e.touches.length !== 1) return;
       const touch = e.touches[0];
       if (!touch) return;
-      beginDrag({ x: touch.clientX, y: touch.clientY }, touch.identifier);
-      e.preventDefault();
+      if (e.cancelable) e.preventDefault();
+
+      activePointerId.current = touch.identifier;
+      dragStart.current = { x: touch.clientX, y: touch.clientY };
+      dragCurrent.current = { x: touch.clientX, y: touch.clientY };
+      setIsDragging(true);
+
+      document.addEventListener("touchmove", handleTouchMove, { passive: false });
+      document.addEventListener("touchend", handleTouchEnd, { passive: false });
+      document.addEventListener("touchcancel", handleTouchEnd, { passive: false });
     },
-    [beginDrag]
+    [topRing, isLeaving, handleTouchMove, handleTouchEnd]
   );
 
   useLayoutEffect(() => {
@@ -137,58 +153,26 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
     setIsLeaving(false);
     activePointerId.current = null;
     setIsDragging(false);
-    if (onSwipeDirectionChange) onSwipeDirectionChange(null);
-  }, [topRing?.id]);
+    handleDirectionChange(null);
+  }, [topRing?.id, handleDirectionChange]);
 
   useEffect(() => {
-    console.log('isDragging changed:', isDragging);
-    if (!isDragging || activePointerId.current === null) return;
+    const el = topCardRef.current;
+    if (!el) return;
 
-    const handleMove = (e: TouchEvent) => {
-      const id = activePointerId.current;
-      if (id === null) return;
-      const touch = Array.from(e.touches).find((t) => t.identifier === id);
-      if (!touch) return;
-      e.preventDefault();
-      updateDragPosition({ x: touch.clientX, y: touch.clientY });
-    };
+    el.addEventListener("touchstart", handleTouchStart, { passive: false });
 
-    const handleEnd = (e: TouchEvent) => {
-      console.log('touchEnd event');
-      const id = activePointerId.current;
-      if (id === null) return;
-      const ended = Array.from(e.changedTouches).some((t) => t.identifier === id);
-      if (!ended) return;
-      finishDrag();
-    };
-
-    const handleCancel = () => {
-      console.log('touchCancel event');
-      cancelDrag();
-    };
-
-    const container = containerRef.current;
-    if (!container) {
-      console.log('No container ref!');
-      return;
-    }
-
-    console.log('Adding touch listeners to container');
-    container.addEventListener("touchmove", handleMove, { passive: false });
-    container.addEventListener("touchend", handleEnd, { passive: false });
-    container.addEventListener("touchcancel", handleCancel, { passive: false });
-    
     return () => {
-      console.log('Removing touch listeners');
-      container.removeEventListener("touchmove", handleMove);
-      container.removeEventListener("touchend", handleEnd);
-      container.removeEventListener("touchcancel", handleCancel);
+      el.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+      document.removeEventListener("touchcancel", handleTouchEnd);
     };
-  }, [isDragging, updateDragPosition, finishDrag, cancelDrag]);
+  }, [handleTouchStart, handleTouchMove, handleTouchEnd, topRing?.id]);
 
   return (
     <div className={styles.wrapper}>
-      <div ref={containerRef} className={styles.cardStack}>
+      <div className={styles.cardStack}>
         {displayStack.map((ring, index) => {
           const isTop = index === 0;
           const isLeavingCard = leavingRingId === ring.id;
@@ -208,9 +192,9 @@ const RingCardStack: React.FC<RingCardStackProps> = ({ rings = [], onSwipe, onSw
           return (
             <div
               key={ring.id}
+              ref={isTop ? topCardRef : undefined}
               className={styles.swipeCard}
               style={cardStyle}
-              onTouchStart={isTop ? handleTouchStart : undefined}
             >
               <div className={styles.ringCard}>
                 <img src={ring.imageUrl} alt="Ring for selection" className={styles.ringImage} draggable={false} />

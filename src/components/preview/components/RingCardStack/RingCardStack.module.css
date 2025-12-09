@@ -59,6 +59,7 @@
   backface-visibility: hidden;
   touch-action: none;
   box-shadow: none;
+  pointer-events: auto;
   -webkit-user-select: none;
   user-select: none;
   -moz-user-select: none;
