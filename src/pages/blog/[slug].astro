@@ -14,6 +14,15 @@ import arrow from "../../assets/icons/ArrowRight.svg";
 import { urlForImage } from "../../sanity/lib/url-for-image";
 import { optimizeImageUrl } from "../../lib/imageKit";
 
+const blocksToPlainText = (blocks: any[]): string => {
+  if (!Array.isArray(blocks)) return "";
+  return blocks
+    .filter((block) => block?._type === "block" && Array.isArray(block.children))
+    .map((block) => block.children.map((child) => child?.text || "").join(""))
+    .join("\n\n")
+    .trim();
+};
+
 export async function getStaticPaths() {
   const { data: posts } = await loadQuery<SanityDocument[]>({
     query: `*[_type == "post"]`,
@@ -32,12 +41,15 @@ const { data: post } = await loadQuery({
   query: `*[_type == "post" && slug.current == $slug][0]{
     title,
     description,
+    metaTitle,
+    metaDescription,
     slug,
     "author": author->{
       _id,
       name,
-      image,
-      profession
+      image{..., alt},
+      profession,
+      bio
     },
     "mainImage": mainImage{ ..., "url": asset->url },
     "categories": categories[]->{ _id, title },
@@ -58,6 +70,15 @@ function formatDate(dateString: string) {
 
 const mainImageUrl = post?.mainImage ? optimizeImageUrl(urlForImage(post.mainImage).url(), 900, 70) : null;
 const authorImageUrl = post?.author?.image ? optimizeImageUrl(urlForImage(post.author.image).url(), 200, 70) : null;
+const resolvedAuthor = {
+  name: post?.author?.name || "",
+  role: post?.author?.profession || "",
+  bio: blocksToPlainText(post?.author?.bio),
+  photoSrc: authorImageUrl,
+  photoAlt: post?.author?.image?.alt || post?.author?.name || "Blog author",
+};
+const pageTitle = post?.metaTitle || (post?.title ? `Boutee - ${post.title}` : "Boutee - Blog");
+const pageDescription = post?.metaDescription || post?.description;
 
 const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
   query: `*[_type == "post" && slug.current != $slug && count(categories[@._ref in $categoryIds]) > 0] 
@@ -108,15 +129,15 @@ function calculateReadTime(content: any[]): string {
 }
 ---
 
-<BaseLayout title={`Boutee - ${post?.title || "Blog"}`}>
+<BaseLayout title={pageTitle} description={pageDescription}>
   {
     post ? (
       <>
         {/* <!-- Post Header --> */}
         <section class="md:pt-[112px] md:pb-[32px] pt-[24px]">
           <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto pb-[8px]">
-            <div class="flex flex-col justify-between lg:flex-row lg:gap-10 xl:gap-20">
-              <div class="flex flex-col justify-between mb-[48px] lg:mb-0">
+            <div class="flex flex-col lg:flex-row lg:gap-10 xl:gap-20 gap-6 md:gap-8">
+              <div class="flex flex-col justify-between mb-[24px] md:mb-[32px] lg:mb-0 order-2 lg:order-1">
                 <div class="pb-[20px] md:pb-[24px] mb-[24px] md:mb-[20px]">
                   <div class="mb-[20px] md:mb-[24px] flex justify-start items-center gap-1">
                     <a
@@ -137,19 +158,41 @@ function calculateReadTime(content: any[]): string {
                   </h1>
                 </div>
 
-                <div>
-                  <div class="mb-[16px] md:mb-[32px] w-full flex items-center gap-[12px]">
-                    <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
-                      {formatDate(post?.publishedAt)}
-                    </span>
-                    <Image src={badge} alt="dot" class="h-2 w-2" />
-                    <span class="font-figtree font-normal text-sm leading-[18px] text-textSecondary">
-                      {calculateReadTime(post?.body)}
-                    </span>
-                  </div>
+                <div class="flex flex-col gap-3 md:gap-4">
+                  {resolvedAuthor?.name && (
+                    <>
+                      <div class="flex items-center gap-3">
+                        {resolvedAuthor.photoSrc && (
+                          <img
+                            src={resolvedAuthor.photoSrc}
+                            alt={resolvedAuthor.photoAlt}
+                            class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover"
+                            loading="lazy"
+                          />
+                        )}
+                        <div class="flex flex-col leading-tight">
+                          <span class="font-figtree text-[12px] leading-[14px] uppercase tracking-[0.08em] text-textSecondary">
+                            Written by
+                          </span>
+                          <span class="font-figtree font-semibold text-[16px] leading-[20px] text-textPrimary">
+                            {resolvedAuthor.name}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="flex items-center gap-[12px] text-textSecondary">
+                        <span class="font-figtree font-normal text-sm leading-[18px]">
+                          {formatDate(post?.publishedAt)}
+                        </span>
+                        <Image src={badge} alt="dot" class="h-2 w-2" />
+                        <span class="font-figtree font-normal text-sm leading-[18px]">
+                          {calculateReadTime(post?.body)}
+                        </span>
+                      </div>
+                    </>
+                  )}
 
                   <div>
-                    <p class="font-figtree font-normal text-[16px] leading-[20px] text-textPrimary mb-[16px]">
+                    <p class="font-figtree font-normal text-[16px] leading-[20px] text-textPrimary mb-[12px]">
                       Share this post
                     </p>
                     <div class="flex items-center gap-2">
@@ -186,11 +229,7 @@ function calculateReadTime(content: any[]): string {
                 <img
                   src={mainImageUrl}
                   alt={post?.mainImage?.alt || "blog image"}
-                  class="rounded-[24px] w-full max-w-[600px] aspect-square object-cover" 
-                  w-full h-full 
-                  lg:w-[450px] lg:h-[380px]
-                  xl:w-[600px] xl:h-[425px] 
-                  object-cover"
+                  class="rounded-[24px] w-full max-w-[600px] aspect-square object-cover order-1 lg:order-2 lg:w-[450px] lg:h-[380px] xl:w-[600px] xl:h-[425px]"
                 />
               )}
             </div>
@@ -203,16 +242,29 @@ function calculateReadTime(content: any[]): string {
             <div class="flex flex-col justify-between lg:flex-row gap-10 lg:gap-20 xl:gap-[120px]">
               {/* <!-- Mobile TOC --> */}
               {toc?.length > 0 && (
-                <div class="flex lg:hidden items-center w-full py-2 px-3 h-13 gap-1 bg-white border border-[#F2F3F7] acd-shadow rounded-[16px]">
-                  <select
-                    id="mobile-toc"
-                    name="category"
-                    class="w-full font-figtree font-bold text-[18px] leading-[22px] text-textPrimary outline-none"
-                  >
+                <div id="mobile-toc" class="lg:hidden flex flex-col w-full bg-[#F2F3F7] rounded-[12px] px-3 py-2">
+                  <div id="mobile-toc-toggle" class="cursor-pointer flex items-center justify-between gap-3 w-full min-h-[44px]">
+                    <span class="font-ppradio font-black text-[16px] leading-[20px] text-textPrimary flex items-center">
+                      Skip to:
+                    </span>
+                    <svg class="mobile-toc-chevron w-4 h-4 mt-1 transition-transform duration-200 ease-in-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </div>
+                  <div id="mobile-toc-options" class="flex flex-col gap-1 overflow-hidden" style="max-height: 0; transition: max-height 200ms ease-in-out;">
                     {toc.map((heading) => (
-                      <option value={heading?.id}>{heading?.text}</option>
+                      <button
+                        type="button"
+                        data-mobile-toc-option
+                        data-id={heading?.id}
+                        data-text={heading?.text}
+                        class="w-full text-left px-1 py-2 font-figtree text-[16px] leading-[20px] text-textPrimary transition-colors duration-150 active:bg-[#e4e6eb]"
+                        style="white-space: normal;"
+                      >
+                        {heading?.text}
+                      </button>
                     ))}
-                  </select>
+                  </div>
                 </div>
               )}
 
@@ -407,24 +459,37 @@ function calculateReadTime(content: any[]): string {
             </div>
 
             {/* <!-- Author --> */}
-            {post?.author && (
-              <div class="flex flex-row justify-start items-center gap-2 md:gap-4 mt-4 md:mt-6">
-                {authorImageUrl && (
-                  <img
-                    src={authorImageUrl}
-                    alt={post?.author?.name || "author"}
-                    class="w-12 h-12 sm:w-14 sm:h-14 md:h-16 md:w-16 rounded-full object-cover"
-                  />
-                )}
-                <div class="text-center sm:text-left">
-                  <h3 class="font-figtree font-medium text-textPrimary text-start text-sm sm:text-base leading-5">
-                    {post?.author?.name}
-                  </h3>
-                  {post?.author?.profession && (
-                    <p class="font-figtree text-sm text-textSecondary">
-                      {post.author.profession}
-                    </p>
+            {resolvedAuthor?.name && (
+              <div class="mt-8 md:mt-12">
+                <div class="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 bg-[#F2F3F7] border border-[#E4E6EB] rounded-[16px] p-4 md:p-6">
+                  {resolvedAuthor.photoSrc && (
+                    <img
+                      src={resolvedAuthor.photoSrc}
+                      alt={resolvedAuthor.photoAlt}
+                      class="w-16 h-16 sm:w-[72px] sm:h-[72px] md:w-20 md:h-20 rounded-full object-cover flex-shrink-0"
+                      loading="lazy"
+                    />
                   )}
+                  <div class="space-y-2">
+                    <div class="space-y-1">
+                      <p class="font-figtree text-[12px] leading-[14px] uppercase tracking-[0.08em] text-textSecondary">
+                        About the author
+                      </p>
+                      <h3 class="font-figtree font-semibold text-textPrimary text-lg leading-[24px]">
+                        {resolvedAuthor.name}
+                      </h3>
+                      {resolvedAuthor?.role && (
+                        <p class="font-figtree text-sm text-textSecondary">
+                          {resolvedAuthor.role}
+                        </p>
+                      )}
+                    </div>
+                    {resolvedAuthor?.bio && (
+                      <p class="font-figtree text-[16px] leading-[22px] text-textPrimary">
+                        {resolvedAuthor.bio}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
@@ -512,7 +577,16 @@ function calculateReadTime(content: any[]): string {
         ".blog_content__list h1, .blog_content__list h2"
       );
       const tocItems = document.querySelectorAll("ul li[data-id]");
-      const mobileSelect = document.getElementById("mobile-toc");
+      const mobileToc = document.getElementById("mobile-toc");
+      const mobileTocToggle = document.getElementById("mobile-toc-toggle");
+      const mobileTocButtons = document.querySelectorAll("[data-mobile-toc-option]");
+      const mobileChevron = document.querySelector(".mobile-toc-chevron");
+      const mobileTocOptions = document.getElementById("mobile-toc-options");
+      let mobileTocOpen = false;
+      const mobileOptionsById = {};
+      mobileTocButtons.forEach((btn) => {
+        mobileOptionsById[btn.dataset.id] = btn.dataset.text;
+      });
 
       function clearActive() {
         tocItems.forEach((li) =>
@@ -531,9 +605,9 @@ function calculateReadTime(content: any[]): string {
         const activeItem = document.querySelector(
           `ul li[data-id="${currentId}"]`
         );
-        if (activeItem)
+        if (activeItem) {
           activeItem.classList.add("text-textPrimary", "bg-cardColor");
-        if (mobileSelect) mobileSelect.value = currentId;
+        }
       }
 
       window.addEventListener("scroll", onScroll);
@@ -548,14 +622,53 @@ function calculateReadTime(content: any[]): string {
         });
       });
 
-      if (mobileSelect) {
-        mobileSelect.addEventListener("change", (e) => {
-          const id = e.target.value;
+      const closeMobileToc = () => {
+        setMobileTocOpen(false);
+      };
+
+      const syncChevron = () => {
+        if (!mobileChevron) return;
+        if (mobileTocOpen) {
+          mobileChevron.classList.add("rotate-180");
+        } else {
+          mobileChevron.classList.remove("rotate-180");
+        }
+        if (mobileTocOptions) {
+          if (mobileTocOpen) {
+            mobileTocOptions.style.maxHeight = `${mobileTocOptions.scrollHeight}px`;
+          } else {
+            mobileTocOptions.style.maxHeight = "0px";
+          }
+        }
+      };
+
+      const setMobileTocOpen = (open) => {
+        mobileTocOpen = open;
+        if (mobileToc) {
+          mobileToc.dataset.open = open ? "true" : "false";
+        }
+        syncChevron();
+      };
+
+      syncChevron();
+
+      mobileTocToggle?.addEventListener("click", (e) => {
+        e.preventDefault();
+        setMobileTocOpen(!mobileTocOpen);
+      });
+
+      mobileTocButtons.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const id = btn.dataset.id;
           const heading = document.getElementById(id);
-          if (heading)
+          if (heading) {
             heading.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+          closeMobileToc();
+          syncChevron();
         });
-      }
+      });
     });
   </script>
 </BaseLayout>
