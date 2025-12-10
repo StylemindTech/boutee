@@ -14,6 +14,19 @@ export const postType = defineType({
       type: "string",
     }),
     defineField({
+      name: "metaTitle",
+      title: "Meta Title",
+      type: "string",
+      description: "Optional: custom title for SEO and social sharing.",
+    }),
+    defineField({
+      name: "metaDescription",
+      title: "Meta Description",
+      type: "text",
+      rows: 3,
+      description: "Optional: 150–160 characters for search engines.",
+    }),
+    defineField({
       name: "slug",
       type: "slug",
       options: {

@@ -77,7 +77,7 @@ export type HomeVariant = {
 
 const baseVariant: HomeVariant = {
   meta: {
-    title: "Boutee - Home",
+    title: "Boutee | Your Ring Starts Here",
     description:
       "Find your perfect handcrafted ring by connecting directly with independent UK jewellers. Boutee helps you define your style, match with makers, and bring your ideas to life.",
   },
