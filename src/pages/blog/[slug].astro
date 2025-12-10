@@ -38,24 +38,24 @@ export async function getStaticPaths() {
 const { params } = Astro;
 
 const { data: post } = await loadQuery({
-  query: `*[_type == "post" && slug.current == $slug][0]{
-    title,
-    description,
-    metaTitle,
-    metaDescription,
-    slug,
-    "author": author->{
-      _id,
-      name,
-      image{..., alt},
-      profession,
-      bio
-    },
-    "mainImage": mainImage{ ..., "url": asset->url },
-    "categories": categories[]->{ _id, title },
-    publishedAt,
-    body
-  }`,
+    query: `*[_type == "post" && slug.current == $slug][0]{
+  title,
+  description,
+  metaTitle,
+  metaDescription,
+  "ogImage": ogImage{ ..., "url": asset->url },
+  slug,
+  "author": author->{
+    _id,
+    name,
+    image,
+    profession
+  },
+  "mainImage": mainImage{ ..., "url": asset->url },
+  "categories": categories[]->{ _id, title },
+  publishedAt,
+  body
+}`,
   params,
 });
 
@@ -129,7 +129,9 @@ function calculateReadTime(content: any[]): string {
 }
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription}>
+<BaseLayout title={post?.metaTitle || "Boutee Blog"}
+description={post?.metaDescription || post?.summary}
+ogImage={post?.ogImage ? urlForImage(post.ogImage) : urlForImage(post?.mainImage)}>
   {
     post ? (
       <>
