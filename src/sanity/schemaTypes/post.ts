@@ -13,19 +13,19 @@ export const postType = defineType({
       name: "description",
       type: "string",
     }),
-    defineField({
-      name: "metaTitle",
-      title: "Meta Title",
-      type: "string",
-      description: "Optional: custom title for SEO and social sharing.",
-    }),
-    defineField({
-      name: "metaDescription",
-      title: "Meta Description",
-      type: "text",
-      rows: 3,
-      description: "Optional: 150–160 characters for search engines.",
-    }),
+    // defineField({
+    //   name: "metaTitle",
+    //   title: "Meta Title",
+    //   type: "string",
+    //   description: "Optional: custom title for SEO and social sharing.",
+    // }),
+    // defineField({
+    //   name: "metaDescription",
+    //   title: "Meta Description",
+    //   type: "text",
+    //   rows: 3,
+    //   description: "Optional: 150–160 characters for search engines.",
+    // }),
     defineField({
       name: "slug",
       type: "slug",
@@ -66,6 +66,26 @@ export const postType = defineType({
       name: "body",
       type: "blockContent",
     }),
+     // -------------------------------------
+    // ⭐ NEW SEO FIELDS ADDED HERE
+    // -------------------------------------
+    defineField({
+      name: "metaTitle",
+      title: "Meta Title",
+      type: "string",
+    }),
+    defineField({
+      name: "metaDescription",
+      title: "Meta Description",
+      type: "text", // short text
+    }),
+    defineField({
+      name: "ogImage",
+      title: "Open Graph Image",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    // -------------------------------------
   ],
 
   preview: {

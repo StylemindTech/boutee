@@ -3,7 +3,11 @@ import Navbar from "../components/common/Navbar.astro";
 import Footer from "../components/common/Footer.astro";
 import "aos/dist/aos.css";
 import "../styles/global.css";
-const { title = "Boutee", description = "Find your perfect handcrafted ring by connecting directly with independent UK jewellers. Boutee helps you define your style, match with makers, and bring your ideas to life." } = Astro.props;
+const {
+  title = "Boutee",
+  description = "Find your perfect handcrafted ring by connecting directly with independent UK jewellers. Boutee helps you define your style, match with makers, and bring your ideas to life.",
+  ogImage,
+} = Astro.props;
 import { VisualEditing } from "@sanity/astro/visual-editing";
 
 const visualEditingEnabled =
@@ -17,7 +21,8 @@ gtag('js', new Date());
 gtag('config', '${gaMeasurementId}', { debug_mode: true });`
   : null;
 
-const fontHref = "https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap";
+const fontHref =
+  "https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap";
 ---
 
 <!doctype html>
@@ -29,6 +34,10 @@ const fontHref = "https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,3
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+       <!-- Open Graph Image -->
+    {ogImage && <meta property="og:image" content={ogImage} />}
+
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preload" as="style" href={fontHref} />
@@ -47,15 +56,17 @@ const fontHref = "https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,3
       })(window, document, "script", "dataLayer", "GTM-TQBT9XVS");
     </script>
     <!-- End Google Tag Manager -->
-    {gaMeasurementId && (
-      <>
-        <script
-          async
-          src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
-        ></script>
-        <script set:html={gaInlineScript}></script>
-      </>
-    )}
+    {
+      gaMeasurementId && (
+        <>
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+          />
+          <script set:html={gaInlineScript} />
+        </>
+      )
+    }
   </head>
   <body class="flex flex-col min-h-screen scroll-smooth">
     <!-- Google Tag Manager (noscript) -->
@@ -64,8 +75,7 @@ const fontHref = "https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,3
         src="https://www.googletagmanager.com/ns.html?id=GTM-TQBT9XVS"
         height="0"
         width="0"
-        style="display:none;visibility:hidden"
-      ></iframe>
+        style="display:none;visibility:hidden"></iframe>
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
     <!-- Header -->
@@ -76,7 +86,6 @@ const fontHref = "https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,3
       <slot />
       <VisualEditing enabled={visualEditingEnabled} />
     </main>
-
 
     <!-- Footer -->
     <Footer />
@@ -93,143 +102,143 @@ const fontHref = "https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,3
 </html>
 
 <script>
-const captureGclid = () => {
-  if (typeof window === "undefined" || typeof document === "undefined") return;
+  const captureGclid = () => {
+    if (typeof window === "undefined" || typeof document === "undefined")
+      return;
 
-  const params = new URLSearchParams(window.location.search);
-  const gclid = params.get("gclid");
-  if (!gclid) return;
+    const params = new URLSearchParams(window.location.search);
+    const gclid = params.get("gclid");
+    if (!gclid) return;
 
-  const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
-  const host = window.location.hostname;
-  const cookieDomain =
-    host === "boutee.co.uk" || host.endsWith(".boutee.co.uk")
-      ? ".boutee.co.uk"
-      : host;
+    const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
+    const host = window.location.hostname;
+    const cookieDomain =
+      host === "boutee.co.uk" || host.endsWith(".boutee.co.uk")
+        ? ".boutee.co.uk"
+        : host;
 
-  document.cookie = [
-    `gclid=${encodeURIComponent(gclid)}`,
-    "path=/",
-    `domain=${cookieDomain}`,
-    `max-age=${ninetyDaysInSeconds}`,
-    "SameSite=Lax",
-  ].join(";");
-};
-
-const getStoredGclid = () => {
-  if (typeof document === "undefined") return null;
-  const match = document.cookie.match(/(?:^|;\s*)gclid=([^;]+)/);
-  return match ? decodeURIComponent(match[1]) : null;
-};
-
-if (typeof window !== "undefined") {
-  window.goToApp = () => {
-    const gclid = getStoredGclid();
-    const base = "https://app.boutee.co.uk/";
-    const url = gclid ? `${base}?gclid=${encodeURIComponent(gclid)}` : base;
-    window.location.href = url;
+    document.cookie = [
+      `gclid=${encodeURIComponent(gclid)}`,
+      "path=/",
+      `domain=${cookieDomain}`,
+      `max-age=${ninetyDaysInSeconds}`,
+      "SameSite=Lax",
+    ].join(";");
   };
-}
 
-captureGclid();
+  const getStoredGclid = () => {
+    if (typeof document === "undefined") return null;
+    const match = document.cookie.match(/(?:^|;\s*)gclid=([^;]+)/);
+    return match ? decodeURIComponent(match[1]) : null;
+  };
 
-document.addEventListener("DOMContentLoaded", () => {
-  const initImageFade = () => {
-    const process = (img) => {
-      if (!img || img.dataset.fadeBound) return;
-      img.dataset.fadeBound = "1";
-      img.classList.add("img-fade");
-      const markLoaded = () => img.classList.add("img-loaded");
-      if (img.complete && img.naturalWidth > 0) {
-        markLoaded();
-      } else {
-        img.addEventListener("load", markLoaded, { once: true });
-        img.addEventListener("error", markLoaded, { once: true });
-      }
+  if (typeof window !== "undefined") {
+    window.goToApp = () => {
+      const gclid = getStoredGclid();
+      const base = "https://app.boutee.co.uk/";
+      const url = gclid ? `${base}?gclid=${encodeURIComponent(gclid)}` : base;
+      window.location.href = url;
     };
+  }
 
-    const scan = (root = document) => {
-      root.querySelectorAll("img").forEach(process);
-    };
+  captureGclid();
 
-    scan();
+  document.addEventListener("DOMContentLoaded", () => {
+    const initImageFade = () => {
+      const process = (img) => {
+        if (!img || img.dataset.fadeBound) return;
+        img.dataset.fadeBound = "1";
+        img.classList.add("img-fade");
+        const markLoaded = () => img.classList.add("img-loaded");
+        if (img.complete && img.naturalWidth > 0) {
+          markLoaded();
+        } else {
+          img.addEventListener("load", markLoaded, { once: true });
+          img.addEventListener("error", markLoaded, { once: true });
+        }
+      };
 
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((m) => {
-        m.addedNodes.forEach((node) => {
-          if (node.nodeType !== 1) return;
-          if (node.tagName === "IMG") {
-            process(node);
-          } else if (node.querySelectorAll) {
-            scan(node);
-          }
+      const scan = (root = document) => {
+        root.querySelectorAll("img").forEach(process);
+      };
+
+      scan();
+
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((m) => {
+          m.addedNodes.forEach((node) => {
+            if (node.nodeType !== 1) return;
+            if (node.tagName === "IMG") {
+              process(node);
+            } else if (node.querySelectorAll) {
+              scan(node);
+            }
+          });
         });
       });
-    });
 
-    observer.observe(document.body, { childList: true, subtree: true });
-  };
-
-  // 🔹 Spin Button Icons
-  const initSpinButtons = () => {
-    const buttons = document.querySelectorAll(".spinBtn");
-
-    buttons.forEach((btn) => {
-      const icon = btn.querySelector(".btnIcon");
-      if (!icon) return;
-
-      btn.addEventListener("click", () => {
-        icon.classList.remove("animate-spin-once");
-        // Force reflow to restart animation
-        void icon.offsetWidth;
-        icon.classList.add("animate-spin-once");
-      });
-    });
-  };
-
-  // 🔹 Floating Parallax for Hero
-  const initParallax = () => {
-    let ticking = false;
-
-    const updateParallax = () => {
-      document.querySelectorAll(".floating").forEach((el) => {
-        const speed = parseFloat(el.dataset.speed) || 0.3;
-        const offset = window.scrollY * speed * -0.4;
-        el.style.setProperty("--parallaxY", `${offset}px`);
-      });
-      ticking = false;
+      observer.observe(document.body, { childList: true, subtree: true });
     };
 
-    window.addEventListener("scroll", () => {
-      if (!ticking) {
-        window.requestAnimationFrame(updateParallax);
-        ticking = true;
-      }
-    });
-  };
+    // 🔹 Spin Button Icons
+    const initSpinButtons = () => {
+      const buttons = document.querySelectorAll(".spinBtn");
 
-  // 🔹 Intersection Observer Animations
-  const initIntersectionAnimations = () => {
-    const target = document.querySelector(".wrapper");
-    if (!target) return;
+      buttons.forEach((btn) => {
+        const icon = btn.querySelector(".btnIcon");
+        if (!icon) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          target.classList.toggle("animate", entry.isIntersecting);
+        btn.addEventListener("click", () => {
+          icon.classList.remove("animate-spin-once");
+          // Force reflow to restart animation
+          void icon.offsetWidth;
+          icon.classList.add("animate-spin-once");
         });
-      },
-      { threshold: 0.3 }
-    );
+      });
+    };
 
-    observer.observe(target);
-  };
+    // 🔹 Floating Parallax for Hero
+    const initParallax = () => {
+      let ticking = false;
 
-  // Initialize all features
-  initSpinButtons();
-  initParallax();
-  initIntersectionAnimations();
-  initImageFade();
-});
+      const updateParallax = () => {
+        document.querySelectorAll(".floating").forEach((el) => {
+          const speed = parseFloat(el.dataset.speed) || 0.3;
+          const offset = window.scrollY * speed * -0.4;
+          el.style.setProperty("--parallaxY", `${offset}px`);
+        });
+        ticking = false;
+      };
+
+      window.addEventListener("scroll", () => {
+        if (!ticking) {
+          window.requestAnimationFrame(updateParallax);
+          ticking = true;
+        }
+      });
+    };
+
+    // 🔹 Intersection Observer Animations
+    const initIntersectionAnimations = () => {
+      const target = document.querySelector(".wrapper");
+      if (!target) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            target.classList.toggle("animate", entry.isIntersecting);
+          });
+        },
+        { threshold: 0.3 }
+      );
+
+      observer.observe(target);
+    };
+
+    // Initialize all features
+    initSpinButtons();
+    initParallax();
+    initIntersectionAnimations();
+    initImageFade();
+  });
 </script>
-
