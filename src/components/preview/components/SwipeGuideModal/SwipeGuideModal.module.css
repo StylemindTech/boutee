@@ -11,52 +11,35 @@
 }
 
 .modal {
-  width: min(360px, 100%);
-  background: #171719;
-  color: #ffffff;
+  width: min(400px, 100%);
+  background: #ffffff;
+  color: #171719;
   border-radius: 18px;
-  padding: 22px 18px 18px;
+  padding: 18px 18px 16px;
   font-family: var(--font-ppradio, "PPRadioGrotesk", "Figtree", sans-serif);
   font-feature-settings: var(--font-ppradio-features, "ss01" 1, "ss02" 1, "dlig" 0, "calt" 1);
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   text-align: center;
 }
 
-.gif {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto;
-  border-radius: 50%;
-  background: #1a1c22;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
-}
-
-.iconRow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.message {
-  margin: 0;
-  font-size: 45px;
-  font-weight: 800;
-  line-height: 52px;
-  letter-spacing: 0.01em;
+.guideImage {
+  width: 100%;
+  border-radius: 14px;
+  object-fit: cover;
 }
 
 .button {
   align-self: center;
-  margin-top: 6px;
-  padding: 12px 22px;
+  width: 100%;
+  margin-top: 4px;
+  padding: 14px 22px;
   border: none;
   border-radius: 25px;
-  background: #ffffff;
-  color: #171719;
+  background: #000000;
+  color: #ffffff;
   font-family: inherit;
   font-weight: 400;
   letter-spacing: 0.01em;
