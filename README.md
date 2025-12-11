@@ -261,6 +261,10 @@ Sanity Studio is the backend interface for managing content.
 
 
 
+---
+---
+---
+
 # 📄 Adding New Fields in Sanity.io (Astro.js Project)
 
 This document explains how to add new fields in **Sanity Studio** and how to fetch and use them inside your **Astro.js** website (e.g., Boutee project).
