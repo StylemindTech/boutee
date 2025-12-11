@@ -257,3 +257,169 @@ Sanity Studio is the backend interface for managing content.
 - [Sanity + Astro Blog Guide](https://www.sanity.io/docs/developer-guides/sanity-astro-blog) – Guide for step by step setup
 - [Sanity Studio Documentation](https://www.sanity.io/docs) – Guide for content management
 - [Astro Documentation](https://docs.astro.build) – Guide for website behavior
+
+
+
+
+# 📄 Adding New Fields in Sanity.io (Astro.js Project)
+
+This document explains how to add new fields in **Sanity Studio** and how to fetch and use them inside your **Astro.js** website (e.g., Boutee project).
+
+---
+
+## ✅ 1. Add New Fields in Your Sanity Schema
+
+Go to your Sanity Studio → `/schemas` folder → open the schema where you want to add the new field.  
+Example: `post.ts`, `author.ts`, etc.
+
+```ts
+// example: /schemas/post.ts
+
+import { defineType, defineField } from 'sanity'
+
+export default defineType({
+  name: 'post',
+  title: 'Post',
+  type: 'document',
+  fields: [
+    defineField({ name: 'title', title: 'Title', type: 'string' }),
+
+
+    // 👉 New SEO Fields
+    defineField({
+      name: 'metaTitle',
+      title: 'Meta Title',
+      type: 'string',
+      description: 'SEO title for search engines'
+    }),
+
+    defineField({
+      name: 'metaDescription',
+      title: 'Meta Description',
+      type: 'text',
+      description: 'Short SEO description'
+    }),
+
+    defineField({
+      name: 'ogImage',
+      title: 'Open Graph Image',
+      type: 'image',
+      options: { hotspot: true }
+    }),
+  ],
+})
+```
+
+## ✅ 2. Fetch New Fields in Your Astro Page
+
+Use the loadQuery function inside your Astro page.
+
+```ts
+//./src/pages/post/[slug].astro (Boutee project)
+
+---
+const params = Astro.params;
+
+const { data: post } = await loadQuery({
+  query: `*[_type == "post" && slug.current == $slug][0]{
+    // 👉 Add new SEO fields here
+    metaTitle,
+    metaDescription,
+
+    // 👉 Fetch OG image with URL
+    "ogImage": ogImage{ ..., "url": asset->url },
+    body
+  }`,
+  params,
+});
+---
+
+```
+
+## ✅ 3. Pass SEO Props to Your Base Layout
+
+If fields are related to metadata, pass them as props to your layout..
+
+```ts
+//./src/pages/post/[slug].astro (Boutee project)
+
+---
+<BaseLayout
+  title={post?.metaTitle || "Boutee Blog"}
+  description={post?.metaDescription || post?.summary}
+  ogImage={
+    post?.ogImage
+      ? urlForImage(post.ogImage)
+      : urlForImage(post?.mainImage)
+  }
+>
+  { /* Post content here */ }
+</BaseLayout>
+
+---
+
+```
+
+> **Note:**  
+> Note: If the data does not include metadata, there is no need to pass metadata props to the layout.
+You can simply use like this.
+
+
+```ts
+//./src/pages/post/[slug].astro (Boutee project)
+
+
+ <h1>
+{post?.title}
+</h1>
+
+**Note:** Replace `title` with the name of your field from the schema. For example, if your field is `postName`, use `{post?.postName}` instead of `{post?.title}`.
+
+```
+
+
+
+
+## ✅ 4. Use These Props in BaseLayout.astro
+
+If fields are related to metadata, pass them as props to your layout..
+
+```ts
+//./src/layouts/layout.astro (Boutee project)
+
+---
+const {
+  title = "Boutee",
+  description = "Find your perfect handcrafted ring by connecting directly with independent UK jewellers. Boutee helps you define your style, match with makers, and bring your ideas to life.",
+  ogImage,
+} = Astro.props;
+
+import { VisualEditing } from "@sanity/astro/visual-editing";
+---
+<html>
+  <head>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph Image -->
+    {ogImage && <meta property="og:image" content={ogImage} />}
+  </head>
+
+  <body>
+    <slot />
+    <VisualEditing />
+  </body>
+</html>
+
+
+```
+
+
+## ✅ 5. Restart Your Astro Dev Server
+
+For changes to apply:
+
+```ts
+npm run dev
+```
+
