@@ -18,6 +18,7 @@
   cursor: pointer;
   position: relative;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scale(1);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -61,6 +62,25 @@
   pointer-events: none;
 }
 
+.nudge {
+  animation: likeNudge 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 .emphasized {
   transform: scale(1.2);
+}
+
+@keyframes likeNudge {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.28);
+  }
+  70% {
+    transform: scale(1.14);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

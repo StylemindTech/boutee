@@ -7,6 +7,7 @@ type SwipeActionsProps = {
   onDislike: () => void;
   disabled?: boolean;
   emphasizedDirection?: "left" | "right" | null;
+  nudgeLikeButton?: boolean;
 };
 
 const SwipeActions: React.FC<SwipeActionsProps> = ({
@@ -14,6 +15,7 @@ const SwipeActions: React.FC<SwipeActionsProps> = ({
   onDislike,
   disabled = false,
   emphasizedDirection = null,
+  nudgeLikeButton = false,
 }) => {
   return (
     <div className={styles.actions}>
@@ -29,7 +31,7 @@ const SwipeActions: React.FC<SwipeActionsProps> = ({
 
       <button
         type="button"
-        className={`${styles.button} ${styles.like} ${emphasizedDirection === "right" ? styles.emphasized : ""}`}
+        className={`${styles.button} ${styles.like} ${emphasizedDirection === "right" ? styles.emphasized : ""} ${nudgeLikeButton ? styles.nudge : ""}`}
         onClick={onLike}
         disabled={disabled}
         aria-label="Like"

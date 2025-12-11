@@ -117,6 +117,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
   const [completionStep, setCompletionStep] = useState(0);
   const [highlightDirection, setHighlightDirection] = useState<"left" | "right" | null>(null);
   const [guideOpen, setGuideOpen] = useState(false);
+  const [likeButtonBounce, setLikeButtonBounce] = useState(false);
   const [loadingRings, setLoadingRings] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const prefetchingRef = useRef(false);
@@ -376,6 +377,12 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
       setGuideOpen(false);
     }
   }, [stage]);
+
+  useEffect(() => {
+    if (!likeButtonBounce) return;
+    const timer = window.setTimeout(() => setLikeButtonBounce(false), 450);
+    return () => window.clearTimeout(timer);
+  }, [likeButtonBounce]);
 
   const baseStyleProfile = useMemo<RingStyleProfile>(
     () => ({
@@ -729,6 +736,11 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
     setStage("swipe");
   };
 
+  const handleGuideClose = () => {
+    setGuideOpen(false);
+    setLikeButtonBounce(true);
+  };
+
   const headerTitle =
     stage === "welcome"
       ? "Welcome"
@@ -876,6 +888,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
             onLike={() => handleSwipe("like")}
             disabled={redirecting || guideOpen || loadingRings}
             emphasizedDirection={highlightDirection === "left" ? "left" : highlightDirection === "right" ? "right" : null}
+            nudgeLikeButton={likeButtonBounce}
           />
         </div>
       </div>
@@ -963,7 +976,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
           </div>
         )}
 
-        {stage === "swipe" && <SwipeGuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />}
+        {stage === "swipe" && <SwipeGuideModal open={guideOpen} onClose={handleGuideClose} />}
       </div>
     </MobileOnlyGate>
   );
