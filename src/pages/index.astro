@@ -6,6 +6,7 @@ import CTA from "../components/home/CTA.astro";
 import Testimonials from "../components/home/Testimonials.astro";
 import WhyChooseUs from "../components/home/WhyChooseUs.astro";
 import ConsiderstionBespoke from "../components/home/ConsideringBespoke.astro";
+import FounderHello from "../components/home/FounderHello.astro";
 import { defaultVariant } from "../content/homeVariants";
 
 const copy = defaultVariant;
@@ -16,6 +17,7 @@ const copy = defaultVariant;
    <ProcessSection content={copy.process} /> 
    <WhyChooseUs content={copy.why}/> 
    <ConsiderstionBespoke content={copy.bespoke}/>
+   <FounderHello />
    <Testimonials content={copy.testimonials}/> 
    <CTA content={copy.cta}/> 
 </BaseLayout>

@@ -1,8 +1,5 @@
 ---
-import { Image } from "astro:assets";
-import about1 from "../../assets/icons/about-1.svg";
-import about2 from "../../assets/icons/about-2.svg";
-import about3 from "../../assets/icons/about-3.svg";
+import { Eye, Gem, Handshake } from "lucide-react";
 ---
 
 <section class="py-section-padding-mobile lg:py-section-padding-desktop">
@@ -26,7 +23,7 @@ import about3 from "../../assets/icons/about-3.svg";
         <div
           class="w-[64px] h-[64px] flex items-center justify-center bg-brand-1 rounded-xl mb-text-gap-medium"
         >
-          <Image src={about1} alt="icon" class="w-[32px] h-[32px]" />
+          <Gem className="w-8 h-8 text-textPrimary" />
         </div>
         <h3
           class="lg:text-heading-mobile text-[22px] lg:leading-heading-mobile leading-[26px] font-black mb-s text-textPrimary font-ppradio"
@@ -47,7 +44,7 @@ import about3 from "../../assets/icons/about-3.svg";
         <div
           class="w-[64px] h-[64px] flex items-center justify-center bg-brand-1 rounded-xl mb-text-gap-medium"
         >
-          <Image src={about2} alt="icon" class="w-[32px] h-[32px]" />
+          <Eye className="w-8 h-8 text-textPrimary" />
         </div>
         <h3
           class="lg:text-heading-mobile text-[22px] lg:leading-heading-mobile leading-[26px] font-black mb-s text-textPrimary font-ppradio"
@@ -68,7 +65,7 @@ import about3 from "../../assets/icons/about-3.svg";
         <div
           class="w-[64px] h-[64px] flex items-center justify-center bg-brand-1 rounded-xl mb-text-gap-medium"
         >
-          <Image src={about3} alt="icon" class="w-[32px] h-[32px]" />
+          <Handshake className="w-8 h-8 text-textPrimary" />
         </div>
         <h3
           class="lg:text-heading-mobile text-[22px] lg:leading-heading-mobile leading-[26px] font-black mb-s text-textPrimary font-ppradio"

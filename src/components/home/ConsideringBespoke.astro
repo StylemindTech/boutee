@@ -1,8 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import whoImg from "../../assets/Image/who-img.png";
-import walletImg from "../../assets/icons/Wallet.svg";
-import clockImg from "../../assets/icons/Clock.svg";
+import { Clock3, Wallet } from "lucide-react";
 import type { BespokeCopy } from "../../content/homeVariants";
 
 const { content }: { content: BespokeCopy } = Astro.props;
@@ -80,11 +79,7 @@ const { content }: { content: BespokeCopy } = Astro.props;
                                 class="bg-[linear-gradient(76deg,#B9F551_22.87%,#DDF456_74.01%)] 
 lg:rounded-[20px] rounded-[16px] lg:w-[64px] w-[52px] lg:h-[64px] h-[52px] flex items-center justify-center font-bold"
                             >
-                                <Image
-                                    src={walletImg}
-                                    alt="wallet"
-                                    class="w-[27.35px] h-auto rounded-[40px]"
-                                />
+                                <Wallet className="w-[27.35px] h-[27.35px] text-textPrimary" />
                             </div>
                             <div>
                                 <p
@@ -111,11 +106,7 @@ lg:rounded-[20px] rounded-[16px] lg:w-[64px] w-[52px] lg:h-[64px] h-[52px] flex 
                             <div
                                 class="bg-[linear-gradient(76deg,#B9F551_22.87%,#DDF456_74.01%)] lg:rounded-[20px] rounded-[16px] lg:w-[64px] w-[52px] lg:h-[64px] h-[52px] flex items-center justify-center font-bold"
                             >
-                                <Image
-                                    src={clockImg}
-                                    alt="wallet"
-                                    class="w-[27.35px] h-auto rounded-[40px]"
-                                />
+                                <Clock3 className="w-[27.35px] h-[27.35px] text-textPrimary" />
                             </div>
                             <div>
                                 <p
