@@ -1,0 +1,36 @@
+---
+import { Image } from "astro:assets";
+import founderOne from "../../assets/Image/Billy-Homepage.jpg";
+import founderTwo from "../../assets/Image/Ethan-Homepage.jpg";
+---
+
+<section class="lg:py-[48px] py-[28px]">
+  <div class="max-w-screen-2xl lg:px-20 px-[24px] mx-auto">
+    <div class="bg-[linear-gradient(25deg,#F6CAF6_0%,#FBDCFC_100%)] rounded-[28px] px-[20px] lg:px-[32px] py-[20px] lg:py-[24px]">
+      <div class="flex flex-col md:flex-row items-center gap-[20px] lg:gap-[28px]">
+        <div class="flex justify-center md:justify-start w-full md:w-auto">
+          <div class="relative flex items-center">
+            <div class="rounded-full overflow-hidden shadow-lg w-[88px] h-[88px] md:w-[104px] md:h-[104px] lg:w-[116px] lg:h-[116px]">
+              <Image src={founderOne} alt="Billy from Boutee" class="w-full h-full object-cover" />
+            </div>
+            <div class="rounded-full overflow-hidden shadow-lg w-[88px] h-[88px] md:w-[104px] md:h-[104px] lg:w-[116px] lg:h-[116px] ml-[-20px] md:ml-[-32px]">
+              <Image src={founderTwo} alt="Ethan from Boutee" class="w-full h-full object-cover" />
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-1 w-full flex flex-col md:flex-row items-center justify-between gap-[16px]">
+          <p class="font-figtree text-textPrimary text-[19px] leading-[25px] text-center md:text-left">
+            <span class="font-bold">Unsure where to start?</span> Reach out to Boutee founders Billy & Ethan for some free personal recommendations.
+          </p>
+          <a
+            href="mailto:info@boutee.co.uk?subject=I%27d%20love%20a%20recommendation&body=Hi%20Billy%20%26%20Ethan,%20I%27d%20love%20to%20chat%20about..."
+            class="cursor-pointer bg-btnPrimary btn-after text-white text-body-mobile leading-body-mobile py-button-padding-y min-h-[56px] min-w-[194px] px-button-padding-x-desktop rounded-full font-figtree font-medium inline-flex items-center justify-center btn-cta w-full md:w-auto max-w-[260px] mx-auto md:mx-0 md:mr-[32px]"
+          >
+            Say Hello
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

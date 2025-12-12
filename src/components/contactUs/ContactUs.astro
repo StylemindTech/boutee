@@ -1,7 +1,5 @@
 ---
-import { Image } from "astro:assets";
-import contact from "../../assets/icons/contacts-icons.svg";
-import diamond from "../../assets/icons/daimond-contact.svg";
+import { Gem, Headset } from "lucide-react";
 ---
 
 <section class="lg:py-[112px] py-[48px]">
@@ -30,7 +28,7 @@ import diamond from "../../assets/icons/daimond-contact.svg";
         <div
           class="w-[64px] h-[64px] flex items-center justify-center bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] rounded-[20px] mb-[24px]"
         >
-          <Image src={contact} alt="icon" class="w-[32px] h-[32px]" />
+          <Headset className="w-8 h-8 text-textPrimary" />
         </div>
         <h3
           class="lg:text-[32px] text-[22px] lg:leading-[36px] leading-[26px] font-black mb-[12px] text-textPrimary font-ppradio"
@@ -49,7 +47,7 @@ import diamond from "../../assets/icons/daimond-contact.svg";
         <div
           class="w-[64px] h-[64px] flex items-center justify-center bg-[linear-gradient(76deg,#B9F551_22.87%,#D7F650_74.01%)] rounded-[20px] mb-[24px]"
         >
-          <Image src={diamond} alt="icon" class="w-[32px] h-[32px]" />
+          <Gem className="w-8 h-8 text-textPrimary" />
         </div>
         <h3
           class="lg:text-[32px] text-[22px] lg:leading-[36px] leading-[26px] font-black mb-[12px] text-textPrimary font-ppradio"
