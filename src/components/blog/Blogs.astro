@@ -40,15 +40,44 @@ function formatDate(dateString: string) {
   }).format(new Date(dateString));
 }
 
+function extractPlainTextFromContent(content: any[]): string {
+  if (!Array.isArray(content)) return "";
+
+  const segments: string[] = [];
+
+  content.forEach((block) => {
+    if (block?._type === "block" && Array.isArray(block.children)) {
+      segments.push(block.children.map((child) => child?.text).join(" "));
+    }
+
+    if (block?._type === "tableBlock" && Array.isArray(block.rows)) {
+      block.rows.forEach((row: any) => {
+        row?.cells?.forEach((cell: any) => {
+          if (Array.isArray(cell?.content)) {
+            cell.content.forEach((cellBlock: any) => {
+              if (
+                cellBlock?._type === "block" &&
+                Array.isArray(cellBlock.children)
+              ) {
+                segments.push(
+                  cellBlock.children.map((child: any) => child?.text).join(" ")
+                );
+              }
+            });
+          }
+        });
+      });
+    }
+  });
+
+  return segments.join(" ");
+}
+
 function calculateReadTime(body: any[]): string {
-  if (!body || body.length === 0) return "1 min read";
+  const text = extractPlainTextFromContent(body).trim();
+  if (!text) return "1 min read";
 
-  const text = body
-    .filter((block) => block._type === "block" && block.children)
-    .map((block) => block.children.map((child) => child.text).join(" "))
-    .join(" ");
-
-  const words = text.trim().split(/\s+/).length;
+  const words = text.split(/\s+/).length;
   const wordsPerMinute = 200;
   const minutes = Math.ceil(words / wordsPerMinute);
 
