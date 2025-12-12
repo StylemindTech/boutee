@@ -493,11 +493,11 @@ ogImage={post?.ogImage ? urlForImage(post.ogImage) : urlForImage(post?.mainImage
                       if (block._type === "image" && block.asset?._ref) {
                         const url = optimizeImageUrl(urlForImage(block).url(), 900, 70);
                         elements.push(
-                          <figure>
+                          <figure class="my-[24px]">
                             <img
                               src={url}
                               alt={block.alt || "Blog image"}
-                              class="rounded-[24px] w-full h-auto object-cover mb-[8px]"
+                              class="rounded-[24px] w-full h-auto object-cover"
                             />
                             {block.caption && (
                               <figcaption>{block.caption}</figcaption>
