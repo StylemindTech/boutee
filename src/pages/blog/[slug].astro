@@ -113,13 +113,44 @@ const extractHeadings = (content) => {
 
 const toc = extractHeadings(post?.body || []);
 
+const extractPlainTextFromContent = (content: any[]): string => {
+  if (!Array.isArray(content)) return "";
+
+  const segments: string[] = [];
+
+  content.forEach((block) => {
+    if (block?._type === "block" && Array.isArray(block.children)) {
+      segments.push(block.children.map((child) => child?.text).join(" "));
+    }
+
+    if (block?._type === "tableBlock" && Array.isArray(block.rows)) {
+      block.rows.forEach((row: any) => {
+        row?.cells?.forEach((cell: any) => {
+          if (Array.isArray(cell?.content)) {
+            cell.content.forEach((cellBlock: any) => {
+              if (
+                cellBlock?._type === "block" &&
+                Array.isArray(cellBlock.children)
+              ) {
+                segments.push(
+                  cellBlock.children.map((child: any) => child?.text).join(" ")
+                );
+              }
+            });
+          }
+        });
+      });
+    }
+  });
+
+  return segments.join(" ");
+};
+
 function calculateReadTime(content: any[]): string {
   if (!content || content.length === 0) return "1 min read";
 
-  const text = content
-    .filter((block) => block?._type === "block" && block?.children)
-    .map((block) => block.children.map((child) => child.text).join(" "))
-    .join(" ");
+  const text = extractPlainTextFromContent(content).trim();
+  if (!text) return "1 min read";
 
   const words = text.trim().split(/\s+/).length;
   const wordsPerMinute = 200;
@@ -298,7 +329,9 @@ ogImage={post?.ogImage ? urlForImage(post.ogImage) : urlForImage(post?.mainImage
     [&>h2]:mb-[24px] [&>h2]:text-[22px] [&>h2]:lg:text-[32px] [&>h2]:font-ppradio [&>h2]:text-textPrimary [&>h2]:leading-[28px] [&>h2]:lg:leading-[40px]
     [&>h3]:mb-[24px] [&>h3]:text-[20px] [&>h3]:lg:text-[28px] [&>h3]:font-ppradio [&>h3]:text-textPrimary [&>h3]:leading-[24px] [&>h3]:lg:leading-[36px]
     [&>h4]:mb-[24px] [&>h4]:text-[18px] [&>h4]:lg:text-[24px] [&>h4]:font-ppradio [&>h4]:text-textPrimary [&>h4]:leading-[20px] [&>h4]:lg:leading-[32px]
-    [&>p]:mb-[16px] [&>p]:text-[16px] [&>p]:lg:text-[18px]"
+    [&>p]:mb-[16px] [&>p]:text-[16px] [&>p]:lg:text-[18px]
+    [&>table]:w-full [&>table]:border-collapse [&>table]:border-spacing-0 [&>table]:my-[24px] [&>table]:text-left [&>table]:text-textPrimary
+    [&>table>tbody>tr>td]:align-top [&>table>tbody>tr>td]:py-[12px] [&>table>tbody>tr>td]:pr-[24px] [&>table>tbody>tr>td:last-child]:pr-0 [&>table>tbody>tr>td]:text-[16px] [&>table>tbody>tr>td]:lg:text-[18px] [&>table>tbody>tr>td]:leading-[20px] [&>table>tbody>tr>td]:lg:leading-[22px] [&>table>tbody>tr>td]:font-normal [&>table>tbody>tr>td]:text-textPrimary [&>table>tbody>tr>td]:bg-transparent [&>table>tbody>tr>td]:border-0"
               >
                 {(() => {
                   // ✅ Render inline marks (bold, italic, code, link)
@@ -311,6 +344,12 @@ ogImage={post?.ogImage ? urlForImage(post.ogImage) : urlForImage(post?.mainImage
                       }
                       if (c.marks?.includes("em")) {
                         node = <em class="italic">{node}</em>;
+                      }
+                      if (c.marks?.includes("underline")) {
+                        node = <u class="underline">{node}</u>;
+                      }
+                      if (c.marks?.includes("strike-through") || c.marks?.includes("strike")) {
+                        node = <s>{node}</s>;
                       }
                       if (c.marks?.includes("code")) {
                         node = (
@@ -335,6 +374,24 @@ ogImage={post?.ogImage ? urlForImage(post.ogImage) : urlForImage(post?.mainImage
                       }
                       return node;
                     });
+
+                  const renderTableCell = (cell) => {
+                    if (!Array.isArray(cell?.content)) return null;
+                    return (
+                      <div class="space-y-2">
+                        {cell.content
+                          .filter((child) => child?._type === "block")
+                          .map((child) => (
+                            <p
+                              class="text-textPrimary text-[16px] lg:text-[18px] leading-[20px] lg:leading-[22px] mb-0"
+                              key={child?._key}
+                            >
+                              {renderChildren(child.children || [], child.markDefs || [])}
+                            </p>
+                          ))}
+                      </div>
+                    );
+                  };
 
                   // ✅ Group blocks into lists
                   const elements = [];
@@ -408,6 +465,25 @@ ogImage={post?.ogImage ? urlForImage(post.ogImage) : urlForImage(post?.mainImage
                               <figcaption>{block.caption}</figcaption>
                             )}
                           </figure>
+                        );
+                      }
+
+                      if (block._type === "tableBlock") {
+                        const rows = Array.isArray(block.rows) ? block.rows : [];
+                        elements.push(
+                          <table class="blog-table" key={block._key || `table-${elements.length}`}>
+                            <tbody>
+                              {rows.map((row, rowIndex) => (
+                                <tr key={row?._key || `row-${rowIndex}`}>
+                                  {(row?.cells || []).map((cell, cellIndex) => (
+                                    <td key={cell?._key || `cell-${rowIndex}-${cellIndex}`}>
+                                      {renderTableCell(cell)}
+                                    </td>
+                                  ))}
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
                         );
                       }
 
