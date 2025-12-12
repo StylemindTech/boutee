@@ -165,5 +165,20 @@ export const blockContentType = defineType({
     defineArrayMember({
       type: "tableBlock",
     }),
+    defineArrayMember({
+      title: "Divider",
+      name: "divider",
+      type: "object",
+      fields: [
+        defineField({
+          name: "hiddenLabel",
+          title: "Hidden",
+          type: "string",
+          initialValue: "divider",
+          hidden: true,
+          readOnly: true,
+        }),
+      ],
+    }),
   ],
 });
