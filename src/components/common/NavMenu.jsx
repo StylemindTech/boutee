@@ -15,7 +15,7 @@ const links = [
   { name: "Ring Inspiration", href: "/inspiration" },
   { name: "Our Technology", href: "/our-technology" },
   { name: "About Us", href: "/about-us" },
-  { name: "Blog", href: "/blog" },
+  { name: "Advice & Guides", href: "/blog" },
 ]
 
 // DESKTOP LINKS WITH DROPDOWN
@@ -28,7 +28,7 @@ const originalLinks = [
     dropdown: [
       { name: "Our Technology", href: "/our-technology" },
       { name: "About Us", href: "/about-us" },
-      { name: "Blog", href: "/blog" },
+      { name: "Advice & Guides", href: "/blog" },
     ],
   },
 ]

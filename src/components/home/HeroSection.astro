@@ -25,16 +25,16 @@ const { content }: { content: HeroCopy } = Astro.props;
           </p>
         </div>
 
-        <h1 class="md:text-hero-desktop text-hero-mobile text-center md:text-start leading-hero-mobile text-textPrimary font-black md:leading-hero-desktop font-ppradio md:mb-text-gap-medium mb-text-gap-small">
+        <h1 class="md:text-[60px] text-[40px] md:leading-[64px] leading-[44px] text-center md:text-start text-textPrimary font-black font-ppradio md:mb-text-gap-medium mb-text-gap-small">
           <span set:html={content.heading} />
         </h1>
 
-        <p class="md:text-large-desktop text-body-mobile text-center md:text-start leading-body-mobile md:leading-large-desktop text-textSecondary font-figtree mb-12">
+        <p class="md:text-[23px] text-[18px] md:leading-[29px] leading-[24px] text-center md:text-start text-textSecondary font-figtree mb-12">
           {content.body}
         </p>
 
         <div class="flex justify-center md:justify-start">
-          <a href={content.ctaHref} class="spinBtn cursor-pointer bg-btnPrimary btn-after text-white text-body-mobile leading-body-mobile py-button-padding-y inline-flex md:min-h-[56px] min-h-[48px] min-w-[212px] px-button-padding-x-desktop rounded-full font-figtree font-medium items-center gap-3">
+          <a href={content.ctaHref} class="spinBtn cursor-pointer bg-btnPrimary btn-after text-white text-body-mobile leading-body-mobile py-button-padding-y inline-flex md:min-h-[56px] min-h-[48px] px-button-padding-x-desktop rounded-full font-figtree font-medium items-center gap-3">
             <Image src={btnIcon} class="btnIcon w-5 h-5 transition-transform duration-500" alt="image" />
             {content.ctaLabel}
           </a>

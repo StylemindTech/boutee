@@ -83,10 +83,10 @@ const baseVariant: HomeVariant = {
   },
   hero: {
     badgeText: "60+ jewellers are on Boutee",
-    heading: "More quality.<br />Less mark-up.",
-    body: "We match you with the perfect independent jeweller for your style and budget. Work directly with them to create a ring, without the traditional overhead.",
+    heading: "This is Britain's free jeweller matchmaking service",
+    body: "A handcrafted ring from an independent jeweller costs the same or less than the big brands. Get more ring for your money.",
     ctaHref: "/app",
-    ctaLabel: "Find Your Jeweller",
+    ctaLabel: "Let's Find Yours",
     trustpilotLink: "https://www.trustpilot.com/review/boutee.co.uk",
     trustpilotAlt: "Boutee Trustpilot rating",
     matchBadge: "93% match",
@@ -98,7 +98,7 @@ const baseVariant: HomeVariant = {
     ratingLabel: "reviews",
   },
   process: {
-    heading: "Your journey to a <br /> bespoke ring, made simple",
+    heading: "Your journey to a <br /> custom ring, made simple",
     steps: [
       {
         title: "Define Your Style",
@@ -130,7 +130,7 @@ const baseVariant: HomeVariant = {
     ctaHref: "/app",
   },
   bespoke: {
-    heading: "Considering bespoke?",
+    heading: "Considering a custom ring?",
     intro: "You'll need:",
     budgetValue: "£1000",
     budgetLabel: "or more",
@@ -167,7 +167,7 @@ const baseVariant: HomeVariant = {
       {
         id: 4,
         review:
-          "Fantastic way to find bespoke, custom-made rings from independent designers who love what they do. If you're looking for a personal, affordable option for either designing or buying a ring, this is the place.",
+          "Fantastic way to find custom rings from independent designers who love what they do. If you're looking for a personal, affordable option for either designing or buying a ring, this is the place.",
         name: "Luke",
         location: "Matched with Jodie Gearing",
       },
