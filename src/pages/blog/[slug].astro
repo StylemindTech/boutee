@@ -25,7 +25,7 @@ const blocksToPlainText = (blocks: any[]): string => {
 
 export async function getStaticPaths() {
   const { data: posts } = await loadQuery<SanityDocument[]>({
-    query: `*[_type == "post"]`,
+    query: `*[_type == "post" && !(_id in path("drafts.**")) && !defined(*[_id == "drafts." + _id][0])]`,
   });
 
   return posts
@@ -38,7 +38,7 @@ export async function getStaticPaths() {
 const { params } = Astro;
 
 const { data: post } = await loadQuery({
-    query: `*[_type == "post" && slug.current == $slug][0]{
+    query: `*[_type == "post" && slug.current == $slug && !(_id in path("drafts.**")) && !defined(*[_id == "drafts." + _id][0])][0]{
   title,
   description,
   metaTitle,
@@ -49,7 +49,8 @@ const { data: post } = await loadQuery({
     _id,
     name,
     image,
-    profession
+    profession,
+    bio
   },
   "mainImage": mainImage{ ..., "url": asset->url },
   "categories": categories[]->{ _id, title },
@@ -81,7 +82,7 @@ const pageTitle = post?.metaTitle || (post?.title ? `Boutee - ${post.title}` : "
 const pageDescription = post?.metaDescription || post?.description;
 
 const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
-  query: `*[_type == "post" && slug.current != $slug && count(categories[@._ref in $categoryIds]) > 0] 
+  query: `*[_type == "post" && !(_id in path("drafts.**")) && !defined(*[_id == "drafts." + _id][0]) && slug.current != $slug && count(categories[@._ref in $categoryIds]) > 0] 
     | order(publishedAt desc)[0...3]{
       title,
       slug,
@@ -137,6 +138,21 @@ const extractPlainTextFromContent = (content: any[]): string => {
                 );
               }
             });
+          }
+        });
+      });
+    }
+
+    if (block?._type === "table" && Array.isArray(block.rows)) {
+      block.rows.forEach((row: any) => {
+        row?.cells?.forEach((cell: any) => {
+          if (typeof cell === "string") {
+            segments.push(cell);
+          } else if (
+            cell?._type === "block" &&
+            Array.isArray(cell?.children)
+          ) {
+            segments.push(cell.children.map((child: any) => child?.text).join(" "));
           }
         });
       });
@@ -364,7 +380,7 @@ ogImage={post?.ogImage ? urlForImage(post.ogImage) : urlForImage(post?.mainImage
                           node = (
                             <a
                               href={def.href}
-                              class="text-blue-600 underline"
+                              class="underline text-textPrimary"
                               target="_blank"
                             >
                               {node}
@@ -376,21 +392,43 @@ ogImage={post?.ogImage ? urlForImage(post.ogImage) : urlForImage(post?.mainImage
                     });
 
                   const renderTableCell = (cell) => {
-                    if (!Array.isArray(cell?.content)) return null;
-                    return (
-                      <div class="space-y-2">
-                        {cell.content
-                          .filter((child) => child?._type === "block")
-                          .map((child) => (
-                            <p
-                              class="text-textPrimary text-[16px] lg:text-[18px] leading-[20px] lg:leading-[22px] mb-0"
-                              key={child?._key}
-                            >
-                              {renderChildren(child.children || [], child.markDefs || [])}
-                            </p>
-                          ))}
-                      </div>
-                    );
+                    // Plugin (@sanity/table) shape: cell is a string
+                    if (typeof cell === "string") {
+                      return <p class="text-textPrimary text-[16px] lg:text-[18px] leading-[20px] lg:leading-[22px] mb-0">{cell}</p>;
+                    }
+
+                    // Custom shape with content blocks
+                    if (Array.isArray(cell?.content)) {
+                      return (
+                        <div class="space-y-2">
+                          {cell.content
+                            .filter((child) => child?._type === "block")
+                            .map((child) => (
+                              <p
+                                class="text-textPrimary text-[16px] lg:text-[18px] leading-[20px] lg:leading-[22px] mb-0"
+                                key={child?._key}
+                              >
+                                {renderChildren(child.children || [], child.markDefs || [])}
+                              </p>
+                            ))}
+                        </div>
+                      );
+                    }
+
+                    // Fallback: try a text property or children
+                    if (typeof cell === "object" && cell) {
+                      const text =
+                        (Array.isArray(cell.children)
+                          ? cell.children.map((c) => c?.text || "").join(" ")
+                          : cell.text) || "";
+                      return text ? (
+                        <p class="text-textPrimary text-[16px] lg:text-[18px] leading-[20px] lg:leading-[22px] mb-0">
+                          {text}
+                        </p>
+                      ) : null;
+                    }
+
+                    return null;
                   };
 
                   // ✅ Group blocks into lists
@@ -468,7 +506,7 @@ ogImage={post?.ogImage ? urlForImage(post.ogImage) : urlForImage(post?.mainImage
                         );
                       }
 
-                      if (block._type === "tableBlock") {
+                      if (block._type === "tableBlock" || block._type === "table") {
                         const rows = Array.isArray(block.rows) ? block.rows : [];
                         elements.push(
                           <table class="blog-table" key={block._key || `table-${elements.length}`}>
@@ -484,6 +522,15 @@ ogImage={post?.ogImage ? urlForImage(post.ogImage) : urlForImage(post?.mainImage
                               ))}
                             </tbody>
                           </table>
+                        );
+                      }
+
+                      if (block._type === "divider") {
+                        elements.push(
+                          <hr
+                            key={block._key || `divider-${elements.length}`}
+                            class="w-full border-0 border-t border-[#E4E6EB] my-4"
+                          />
                         );
                       }
 
@@ -538,7 +585,7 @@ ogImage={post?.ogImage ? urlForImage(post.ogImage) : urlForImage(post?.mainImage
 
             {/* <!-- Author --> */}
             {resolvedAuthor?.name && (
-              <div class="mt-8 md:mt-12">
+              <div class="mt-8 md:mt-12 max-w-4xl">
                 <div class="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 bg-[#F2F3F7] border border-[#E4E6EB] rounded-[16px] p-4 md:p-6">
                   {resolvedAuthor.photoSrc && (
                     <img

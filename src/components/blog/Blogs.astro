@@ -8,7 +8,7 @@ import { optimizeImageUrl } from "../../lib/imageKit";
 
 // Fetch all posts
 const { data: posts } = await loadQuery<SanityDocument[]>({
-  query: `*[_type == "post"] | order(publishedAt desc) {
+  query: `*[_type == "post" && !(_id in path("drafts.**")) && !defined(*[_id == "drafts." + _id][0])] | order(publishedAt desc) {
     title,
     slug,
     publishedAt,
@@ -64,6 +64,21 @@ function extractPlainTextFromContent(content: any[]): string {
                 );
               }
             });
+          }
+        });
+      });
+    }
+
+    if (block?._type === "table" && Array.isArray(block.rows)) {
+      block.rows.forEach((row: any) => {
+        row?.cells?.forEach((cell: any) => {
+          if (typeof cell === "string") {
+            segments.push(cell);
+          } else if (
+            cell?._type === "block" &&
+            Array.isArray(cell?.children)
+          ) {
+            segments.push(cell.children.map((child: any) => child?.text).join(" "));
           }
         });
       });
