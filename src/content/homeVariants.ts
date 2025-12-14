@@ -83,7 +83,7 @@ const baseVariant: HomeVariant = {
   },
   hero: {
     badgeText: "60+ jewellers are on Boutee",
-    heading: "This is Britain's free jeweller matchmaking service",
+    heading: "This is Britain's<br class=\"md:hidden\" /> free jeweller matchmaking service",
     body: "A handcrafted ring from an independent jeweller costs the same or less than the big brands. Get more ring for your money.",
     ctaHref: "/app",
     ctaLabel: "Let's Find Yours",
