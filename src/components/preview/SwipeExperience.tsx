@@ -621,7 +621,12 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
       disableAutoRedirect || forceRedirectOverlay
         ? undefined
         : window.setTimeout(() => {
-            window.location.href = "/preview/results";
+            const goToApp = (window as any).goToApp;
+            if (typeof goToApp === "function") {
+              goToApp();
+              return;
+            }
+            window.location.href = "https://app.boutee.co.uk/";
           }, 3200);
     return () => {
       stepTimers.forEach((t) => window.clearTimeout(t));
