@@ -887,15 +887,17 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
         className="fixed inset-x-0 bottom-0 px-3 pt-3 z-50"
         style={{ paddingBottom: "calc(16px + env(safe-area-inset-bottom, 0px))", background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 35%)" }}
       >
-        <div className="w-full mx-auto">
-          <SwipeActions
-            onDislike={() => handleSwipe("dislike")}
-            onLike={() => handleSwipe("like")}
-            disabled={redirecting || guideOpen || loadingRings}
-            emphasizedDirection={highlightDirection === "left" ? "left" : highlightDirection === "right" ? "right" : null}
-            nudgeLikeButton={likeButtonBounce}
-          />
-        </div>
+        {!redirecting && (
+          <div className="w-full mx-auto">
+            <SwipeActions
+              onDislike={() => handleSwipe("dislike")}
+              onLike={() => handleSwipe("like")}
+              disabled={guideOpen || loadingRings}
+              emphasizedDirection={highlightDirection === "left" ? "left" : highlightDirection === "right" ? "right" : null}
+              nudgeLikeButton={likeButtonBounce}
+            />
+          </div>
+        )}
       </div>
     </>
   );
