@@ -3,12 +3,23 @@ import Navbar from "../components/common/Navbar.astro";
 import Footer from "../components/common/Footer.astro";
 import "aos/dist/aos.css";
 import "../styles/global.css";
+import Schema from '../components/common/Schema.astro';
+import { getOrganizationSchema } from '../lib/schema/organization.ts';
+import { getWebSiteSchema } from '../lib/schema/website.ts';
+
+const schema = [
+  getOrganizationSchema(),
+  getWebSiteSchema(),
+];
+
 const {
   title = "Boutee",
   description = "Find your perfect handcrafted ring by connecting directly with independent UK jewellers. Boutee helps you define your style, match with makers, and bring your ideas to life.",
   ogImage,
 } = Astro.props;
 import { VisualEditing } from "@sanity/astro/visual-editing";
+
+
 
 const visualEditingEnabled =
   import.meta.env.PUBLIC_SANITY_VISUAL_EDITING_ENABLED == "true";
@@ -36,6 +47,7 @@ const fontHref =
     <meta name="description" content={description} />
        <!-- Open Graph Image -->
     {ogImage && <meta property="og:image" content={ogImage} />}
+    <Schema data={[getOrganizationSchema(), getWebSiteSchema()]} />
 
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />

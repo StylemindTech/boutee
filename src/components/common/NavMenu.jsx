@@ -23,6 +23,7 @@ const originalLinks = [
   { name: "How It Works", href: "/how-it-works" },
   { name: "Our Jewellers", href: "/our-jewellers" },
   { name: "Ring Inspiration", href: "/inspiration" },
+  { name: "Advice & Guides", href: "/blog" },
   {
     name: "Learn More",
     dropdown: [
@@ -61,7 +62,7 @@ const itemVariants = {
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
-  
+
   // Toggle dropdown navigation
   const useDropdownMenu = true
 
@@ -96,7 +97,7 @@ export default function Header() {
               originalLinks.map((link, idx) =>
                 link.dropdown ? (
                   <div key={idx} className="relative group">
-                    <button 
+                    <button
                       className="flex items-center gap-1 cursor-pointer font-figtree text-textPrimary"
                       aria-expanded="false"
                       aria-haspopup="true"
@@ -146,8 +147,8 @@ export default function Header() {
 
         {/* Mobile Hamburger */}
         <div className="lg:hidden">
-          <button 
-            onClick={() => setIsOpen(true)} 
+          <button
+            onClick={() => setIsOpen(true)}
             className="focus:outline-none cursor-pointer"
             aria-label="Open menu"
           >

@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Block app / logged-in areas
+Disallow: /app
+Disallow: /app/
+
+# Block preview / internal tools
+Disallow: /preview
+Disallow: /preview/
+
+# Block API endpoints (if present now or later)
+Disallow: /api/
+
+# Block tracking & crawl-waste parameters
+Disallow: /*?utm_
+Disallow: /*&utm_
+Disallow: /*?gclid=
+Disallow: /*?fbclid=
+
+Sitemap: https://www.boutee.co.uk/sitemap-index.xml
