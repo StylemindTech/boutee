@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { collection, doc, getDocs, limit, query, serverTimestamp, setDoc, where } from "firebase/firestore";
+import { collection, doc, getDocs, increment, limit, query, serverTimestamp, setDoc, where } from "firebase/firestore";
 import MobileOnlyGate from "./MobileOnlyGate";
 import PreviewHeader from "./components/PreviewHeader/PreviewHeader";
 import ProgressDots from "./components/ProgressDots/ProgressDots";
@@ -122,6 +122,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
   const [fetchError, setFetchError] = useState<string | null>(null);
   const prefetchingRef = useRef(false);
   const scrollLockRef = useRef<number>(0);
+  const loggedLoadRef = useRef(false);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -204,6 +205,27 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
     }
   }, []);
 
+  const logPreviewSwipeLoad = useCallback(
+    async (uid: string) => {
+      try {
+        const userDoc = doc(db, "users", uid);
+        await setDoc(
+          userDoc,
+          {
+            previewSwipe: {
+              lastLoadedAt: serverTimestamp(),
+              loadCount: increment(1),
+            },
+          },
+          { merge: true }
+        );
+      } catch (err) {
+        console.warn("[SwipeExperience] Unable to log preview swipe load", err);
+      }
+    },
+    []
+  );
+
   useEffect(() => {
     let isCancelled = false;
 
@@ -222,6 +244,10 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
         setLoadingRings(true);
         setFetchError(null);
         const uid = await ensureAnonAuth();
+        if (!loggedLoadRef.current) {
+          loggedLoadRef.current = true;
+          logPreviewSwipeLoad(uid);
+        }
         // Helpful diagnostics in browser console for env/auth
         console.log("[SwipeExperience] Authenticated as anonymous user:", uid);
         console.log("[SwipeExperience] Firebase project:", import.meta.env.PUBLIC_FIREBASE_PROJECT_ID);
