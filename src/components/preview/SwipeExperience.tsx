@@ -621,12 +621,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
       disableAutoRedirect || forceRedirectOverlay
         ? undefined
         : window.setTimeout(() => {
-            const goToApp = (window as any).goToApp;
-            if (typeof goToApp === "function") {
-              goToApp();
-              return;
-            }
-            window.location.href = "https://app.boutee.co.uk/";
+            window.location.href = "/preview/results";
           }, 3200);
     return () => {
       stepTimers.forEach((t) => window.clearTimeout(t));
@@ -887,17 +882,15 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
         className="fixed inset-x-0 bottom-0 px-3 pt-3 z-50"
         style={{ paddingBottom: "calc(16px + env(safe-area-inset-bottom, 0px))", background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 35%)" }}
       >
-        {!redirecting && (
-          <div className="w-full mx-auto">
-            <SwipeActions
-              onDislike={() => handleSwipe("dislike")}
-              onLike={() => handleSwipe("like")}
-              disabled={guideOpen || loadingRings}
-              emphasizedDirection={highlightDirection === "left" ? "left" : highlightDirection === "right" ? "right" : null}
-              nudgeLikeButton={likeButtonBounce}
-            />
-          </div>
-        )}
+        <div className="w-full mx-auto">
+          <SwipeActions
+            onDislike={() => handleSwipe("dislike")}
+            onLike={() => handleSwipe("like")}
+            disabled={redirecting || guideOpen || loadingRings}
+            emphasizedDirection={highlightDirection === "left" ? "left" : highlightDirection === "right" ? "right" : null}
+            nudgeLikeButton={likeButtonBounce}
+          />
+        </div>
       </div>
     </>
   );

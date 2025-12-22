@@ -1,28 +1,28 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
-import tailwindcss from '@tailwindcss/vite';
-import react from '@astrojs/react';
+import { defineConfig } from "astro/config";
+import tailwindcss from "@tailwindcss/vite";
+import react from "@astrojs/react";
 import sanity from "@sanity/astro";
-import vercel from '@astrojs/vercel';
+import vercel from "@astrojs/vercel";
+import sitemap from "@astrojs/sitemap";
 
-// https://astro.build/config
 export default defineConfig({
+  site: "https://www.boutee.co.uk",
   output: "server",
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
   },
   integrations: [
     sanity({
-      projectId: "we90e4mg",     // Hardcoded directly
-      dataset: "production",      // Hardcoded directly
+      projectId: "we90e4mg",
+      dataset: "production",
       useCdn: true,
       apiVersion: "2025-01-10",
-      studioBasePath: '/studio',
-      stega: {
-        studioUrl: "/studio",
-      },
+      studioBasePath: "/studio",
+      stega: { studioUrl: "/studio" },
     }),
-    react()
-  ],    
+    react(),
+    sitemap(),
+  ],
   adapter: vercel({}),
 });
