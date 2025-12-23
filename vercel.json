@@ -1,0 +1,48 @@
+{
+  "redirects": [
+    { "source": "/pages/about-boutee", "destination": "/about-us", "permanent": true },
+    { "source": "/pages/our-jewellers", "destination": "/our-jewellers", "permanent": true },
+
+    { "source": "/blogs/:section/:slug", "destination": "/blog/:slug", "permanent": true },
+    { "source": "/blogs/:a/:b/:slug", "destination": "/blog/:slug", "permanent": true },
+    { "source": "/blogs/:path*", "destination": "/blog", "permanent": true },
+
+    { "source": "/products/human-tooth-necklace", "destination": "/blog", "permanent": true },
+    { "source": "/products/apple-ring", "destination": "/blog", "permanent": true },
+    { "source": "/products/:path*", "destination": "/inspiration", "permanent": true },
+
+    {
+      "source": "/collections/vendors",
+      "has": [{ "type": "query", "key": "q", "value": "boutee" }],
+      "destination": "/inspiration",
+      "permanent": true
+    },
+    { "source": "/collections/vendors", "destination": "/inspiration", "permanent": true },
+
+    { "source": "/collections/all-jewellery", "destination": "/inspiration", "permanent": true },
+
+    { "source": "/collections/boutee-proposal-rings", "destination": "/inspiration", "permanent": true },
+    { "source": "/collections/gifts-for-her-under-200", "destination": "/inspiration", "permanent": true },
+    { "source": "/collections/2024-wedding-page", "destination": "/inspiration", "permanent": true },
+
+    { "source": "/collections/rings", "destination": "/inspiration", "permanent": true },
+    { "source": "/collections/eternity-rings", "destination": "/inspiration", "permanent": true },
+    { "source": "/collections/signet-rings", "destination": "/inspiration", "permanent": true },
+    { "source": "/collections/earrings", "destination": "/inspiration", "permanent": true },
+    { "source": "/collections/necklaces", "destination": "/inspiration", "permanent": true },
+    { "source": "/collections/pendant-necklaces", "destination": "/inspiration", "permanent": true },
+    { "source": "/collections/statement-rings", "destination": "/inspiration", "permanent": true },
+    { "source": "/collections/statement-earrings", "destination": "/inspiration", "permanent": true },
+
+    { "source": "/collections/rose-gold", "destination": "/inspiration", "permanent": true },
+    { "source": "/collections/diamond", "destination": "/inspiration", "permanent": true },
+    { "source": "/collections/pearl", "destination": "/inspiration", "permanent": true },
+    { "source": "/collections/platinum", "destination": "/inspiration", "permanent": true },
+    { "source": "/collections/gold-1", "destination": "/inspiration", "permanent": true },
+
+    { "source": "/collections/chain-necklaces-1", "destination": "/inspiration", "permanent": true },
+    { "source": "/collections/slider-collection", "destination": "/inspiration", "permanent": true },
+
+    { "source": "/collections/:path*", "destination": "/our-jewellers", "permanent": true }
+  ]
+}

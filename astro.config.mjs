@@ -4,10 +4,8 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
 import sanity from "@sanity/astro";
 import vercel from "@astrojs/vercel";
-import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  site: "https://www.boutee.co.uk",
   output: "server",
   vite: {
     plugins: [tailwindcss()],
@@ -22,7 +20,6 @@ export default defineConfig({
       stega: { studioUrl: "/studio" },
     }),
     react(),
-    sitemap(),
   ],
   adapter: vercel({}),
 });
