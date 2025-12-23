@@ -29,7 +29,6 @@ const originalLinks = [
     dropdown: [
       { name: "Our Technology", href: "/our-technology" },
       { name: "About Us", href: "/about-us" },
-      { name: "Advice & Guides", href: "/blog" },
     ],
   },
 ]

@@ -82,7 +82,7 @@ const pageTitle = post?.metaTitle || (post?.title ? `Boutee - ${post.title}` : "
 const pageDescription = post?.metaDescription || post?.description;
 
 const { data: relatedPosts } = await loadQuery<SanityDocument[]>({
-  query: `*[_type == "post" && !(_id in path("drafts.**")) && !defined(*[_id == "drafts." + _id][0]) && slug.current != $slug && count(categories[@._ref in $categoryIds]) > 0] 
+  query: `*[_type == "post" && !(_id in path("drafts.**")) && !defined(*[_id == "drafts." + _id][0]) && slug.current != $slug && count(categories[@._ref in $categoryIds]) > 0]
     | order(publishedAt desc)[0...3]{
       title,
       slug,
