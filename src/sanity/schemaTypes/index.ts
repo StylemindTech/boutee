@@ -5,6 +5,8 @@ import { blockContentType, tableBlockType } from "./blockContent";
 import { categoryType } from "./category";
 import { postType } from "./post";
 
+
+// export
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [authorType, blockContentType, tableBlockType, categoryType, postType],
 };
