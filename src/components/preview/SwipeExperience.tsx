@@ -226,6 +226,16 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
     []
   );
 
+  const resetLikedStorage = useCallback(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(likedStorageKey, "[]");
+      window.localStorage.setItem(profileStorageKey, "");
+    } catch (err) {
+      console.warn("[SwipeExperience] Unable to reset liked storage", err);
+    }
+  }, []);
+
   useEffect(() => {
     let isCancelled = false;
 
@@ -248,7 +258,6 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
           loggedLoadRef.current = true;
           logPreviewSwipeLoad(uid);
         }
-        // Helpful diagnostics in browser console for env/auth
         console.log("[SwipeExperience] Authenticated as anonymous user:", uid);
         console.log("[SwipeExperience] Firebase project:", import.meta.env.PUBLIC_FIREBASE_PROJECT_ID);
         setPreviewAnonCookie(uid);
@@ -378,7 +387,7 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
     return () => {
       isCancelled = true;
     };
-  }, [maxSwipes]);
+  }, [logPreviewSwipeLoad, maxSwipes, setPreviewAnonCookie]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -482,7 +491,9 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
         return baseStyleProfile;
       })();
 
-      const jewellerSnap = await getDocs(query(collection(db, "jewellers"), where("active", "==", true), limit(20)));
+      const jewellerSnap = await getDocs(
+        query(collection(db, "jewellers"), where("active", "==", true), limit(20))
+      );
       const jewellerDocs = jewellerSnap.docs.map((doc) => {
         const data = doc.data() as Record<string, any>;
         const tagsRaw = (data.tags || {}) as Record<string, boolean>;
@@ -515,7 +526,9 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
       const jewellersWithRings = await Promise.all(
         jewellerDocs.map(async (jeweller) => {
           try {
-            const snap = await getDocs(query(collection(db, "rings"), where("jewellerId", "==", jeweller.id), limit(20)));
+            const snap = await getDocs(
+              query(collection(db, "rings"), where("jewellerId", "==", jeweller.id), limit(20))
+            );
             const rings = snap.docs.map((doc) => {
               const data = doc.data() as Record<string, any>;
               return {
@@ -797,10 +810,10 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
 
       <div
         className="fixed inset-x-0 bottom-0 px-3 pt-3 pb-4"
-        style={{
-          background: "linear-gradient(180deg, rgba(255,255,255,0.72) 0%, #ffffff 45%)",
-          paddingBottom: "calc(20px + env(safe-area-inset-bottom, 0px))",
-        }}
+      style={{
+        background: "linear-gradient(180deg, rgba(255,255,255,0.72) 0%, #ffffff 45%)",
+        paddingBottom: "calc(20px + env(safe-area-inset-bottom, 0px))",
+      }}
       >
         <div className="w-full max-w-[520px] mx-auto flex flex-col gap-4">
           <button
@@ -856,10 +869,10 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
 
       <div
         className="fixed inset-x-0 bottom-0 px-3 pt-3 pb-4"
-        style={{
-          background: "linear-gradient(180deg, rgba(255,255,255,0.72) 0%, #ffffff 45%)",
-          paddingBottom: "calc(20px + env(safe-area-inset-bottom, 0px))",
-        }}
+      style={{
+        background: "linear-gradient(180deg, rgba(255,255,255,0.72) 0%, #ffffff 45%)",
+        paddingBottom: "calc(20px + env(safe-area-inset-bottom, 0px))",
+      }}
       >
         <div className="w-full max-w-[520px] mx-auto flex flex-col gap-4">
           <button
