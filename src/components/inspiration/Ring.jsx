@@ -186,21 +186,32 @@ const chunk = (arr, size) => {
 };
 
 const fetchJewellersMap = async (ids) => {
-  const unique = Array.from(new Set(ids.filter(Boolean)));
+  const unique = Array.from(new Set(ids.filter((id) => typeof id === "string" && id.trim().length > 0)));
   if (!unique.length) return {};
   const map = {};
 
   for (const batch of chunk(unique, 10)) {
-    const snap = await getDocs(query(collection(db, "jewellers"), where(documentId(), "in", batch), where("active", "==", true)));
-    snap.forEach((docSnap) => {
-      const data = docSnap.data() || {};
-      map[docSnap.id] = {
-        id: docSnap.id,
-        companyName: toSafeString(data.companyName || data.name || data.displayName, "Jeweller"),
-        profilePhoto: toSafeString(data.profilePhoto || data.avatar || data.logo, ""),
-        active: Boolean(data.active),
-      };
-    });
+    try {
+      const snap = await getDocs(
+        query(collection(db, "jewellers"), where(documentId(), "in", batch), where("active", "==", true))
+      );
+      snap.forEach((docSnap) => {
+        const data = docSnap.data() || {};
+        map[docSnap.id] = {
+          id: docSnap.id,
+          companyName: toSafeString(data.companyName || data.name || data.displayName, "Jeweller"),
+          profilePhoto: toSafeString(data.profilePhoto || data.avatar || data.logo, ""),
+          active: Boolean(data.active),
+        };
+      });
+    } catch (err) {
+      console.warn(
+        "[RingInspiration] Skipping a batch of jewellers due to permission error (likely deleted/inactive)",
+        batch,
+        err
+      );
+      // continue with next batch
+    }
   }
 
   return map;
@@ -234,7 +245,7 @@ const UpvoteIcon = ({ filled = false, className = "" }) => (
 export default function RingModal() {
   const [mounted, setMounted] = useState(false);
   const [rings, setRings] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [slideIn, setSlideIn] = useState(false);
@@ -283,7 +294,6 @@ export default function RingModal() {
       try {
         setLoading(true);
         setError("");
-        await ensureAnonAuth();
         const ringSnap = await getDocs(query(collection(db, "rings"), where("status", "==", "live")));
         const liveRings = ringSnap.docs.map(buildRingFromDoc).filter((ring) => ring.jewellerId);
 
@@ -396,7 +406,10 @@ export default function RingModal() {
 
     return list.sort((a, b) => {
       if (sortOrder === "popular") return byVotes(b) - byVotes(a) || byDate(b) - byDate(a);
-      if (sortOrder === "trending") return byTrending(b) - byTrending(a);
+      if (sortOrder === "trending") {
+        const diff = byTrending(b) - byTrending(a);
+        return diff || byDate(b) - byDate(a) || byVotes(b) - byVotes(a);
+      }
       if (sortOrder === "priceAsc") return byPrice(a) - byPrice(b);
       if (sortOrder === "priceDesc") return byPrice(b) - byPrice(a);
       return byDate(b) - byDate(a);

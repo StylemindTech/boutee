@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { BadgeCheck, Check, ExternalLink } from "lucide-react";
 import { collection, getCountFromServer, getDocs, limit, query, where } from "firebase/firestore";
 import { db, ensureAnonAuth } from "../../lib/firebaseClient";
+import { useBotCheck } from "../../lib/useBotCheck";
 
 type StyleProfile = Record<string, number>;
 
@@ -423,13 +424,23 @@ const Card: React.FC<{
 };
 
 const JewellerMatchesTab: React.FC<JewellerMatchesTabProps> = ({ onActiveJewellerCount }) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [jewellers, setJewellers] = useState<Jeweller[]>([]);
   const [hasPrefetched, setHasPrefetched] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeJewellerCount, setActiveJewellerCount] = useState<number | null>(null);
   const [assetsLoaded, setAssetsLoaded] = useState(0);
   const [allAssetsReady, setAllAssetsReady] = useState(false);
+  const [hasUserConsent, setHasUserConsent] = useState(false);
+  const [gateError, setGateError] = useState<string | null>(null);
+  const {
+    checked: botChecked,
+    setChecked: setBotChecked,
+    honeypot: botTrap,
+    setHoneypot: setBotTrap,
+    delayPassed: botDelayPassed,
+    isReady: botReady,
+  } = useBotCheck(900);
 
   useEffect(() => {
     const effectiveCount = activeJewellerCount ?? (jewellers.length ? jewellers.length : null);
@@ -437,6 +448,23 @@ const JewellerMatchesTab: React.FC<JewellerMatchesTabProps> = ({ onActiveJewelle
       onActiveJewellerCount(effectiveCount);
     }
   }, [activeJewellerCount, jewellers, onActiveJewellerCount]);
+
+  useEffect(() => {
+    if (botReady && gateError) {
+      setGateError(null);
+    }
+  }, [botReady, gateError]);
+
+  const handleGateContinue = () => {
+    if (!botReady) {
+      setGateError("Please confirm you're not a bot to load your matches.");
+      return;
+    }
+    setGateError(null);
+    setError(null);
+    setHasUserConsent(true);
+  };
+
   useEffect(() => {
     if (typeof document === "undefined") return;
     if (document.getElementById("jeweller-reveal-styles")) return;
@@ -585,6 +613,7 @@ const JewellerMatchesTab: React.FC<JewellerMatchesTabProps> = ({ onActiveJewelle
   }, []);
 
   useEffect(() => {
+    if (!hasUserConsent) return;
     let cancelled = false;
     const load = async () => {
       try {
@@ -593,7 +622,9 @@ const JewellerMatchesTab: React.FC<JewellerMatchesTabProps> = ({ onActiveJewelle
         await ensureAnonAuth();
 
         try {
-          const totalSnap = await getCountFromServer(query(collection(db, "jewellers"), where("active", "==", true)));
+          const totalSnap = await getCountFromServer(
+            query(collection(db, "jewellers"), where("active", "==", true))
+          );
           setActiveJewellerCount(totalSnap.data().count);
         } catch (err) {
           console.warn("[JewellerMatchesTab] Unable to fetch active jeweller count", err);
@@ -623,7 +654,12 @@ const JewellerMatchesTab: React.FC<JewellerMatchesTabProps> = ({ onActiveJewelle
 
         const ringPromises = jewellerDocs.map(async (jeweller) => {
           const snap = await getDocs(
-            query(collection(db, "rings"), where("jewellerId", "==", jeweller.id), limit(20))
+            query(
+              collection(db, "rings"),
+              where("jewellerId", "==", jeweller.id),
+              where("status", "==", "active"),
+              limit(20)
+            )
           );
           const rings = snap.docs.map((doc) => {
             const data = doc.data() as Record<string, any>;
@@ -672,7 +708,7 @@ const JewellerMatchesTab: React.FC<JewellerMatchesTabProps> = ({ onActiveJewelle
     return () => {
       cancelled = true;
     };
-  }, [profile, hasPrefetched]);
+  }, [profile, hasPrefetched, hasUserConsent]);
 
   const displayedJewellers = useMemo(() => jewellers.slice(0, 4), [jewellers]);
   const totalAssets = displayedJewellers.length * 3;
@@ -687,6 +723,52 @@ const JewellerMatchesTab: React.FC<JewellerMatchesTabProps> = ({ onActiveJewelle
       setAllAssetsReady(true);
     }
   }, [assetsLoaded, totalAssets]);
+
+  if (!hasUserConsent) {
+    return (
+      <div className="flex flex-col gap-4 pb-3">
+        <Intro />
+
+        <div className="rounded-2xl border border-[#eceef3] bg-white p-4 shadow-sm">
+          <p className="text-sm text-[#4b4f58] mb-3">
+            We run this preview against Firebase. Please complete a quick human check before we load it, to keep bots
+            from creating anonymous sessions.
+          </p>
+          <div className="flex items-start gap-3 bg-[#f7f8fa] border border-[#eceef3] rounded-xl px-3 py-2">
+            <input
+              type="checkbox"
+              checked={botChecked}
+              onChange={(e) => setBotChecked(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border border-[#b3b7be] accent-[#171719]"
+            />
+            <div className="flex-1">
+              <p className="m-0 text-[0.95rem] font-semibold text-[#171719]">I'm not a bot</p>
+              <p className="m-0 text-[0.85rem] text-[#4b4f58]">Tick to unlock your jeweller matches.</p>
+              {!botDelayPassed && <p className="m-0 text-[0.78rem] text-[#6b7280]">Unlocking in a second…</p>}
+            </div>
+          </div>
+          <input
+            type="text"
+            value={botTrap}
+            onChange={(e) => setBotTrap(e.target.value)}
+            tabIndex={-1}
+            aria-hidden="true"
+            autoComplete="off"
+            style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px", opacity: 0 }}
+          />
+          {gateError && <p className="text-sm text-red-700 mt-2">{gateError}</p>}
+          <button
+            type="button"
+            onClick={handleGateContinue}
+            disabled={!botReady}
+            className="mt-3 w-full rounded-xl bg-[#171719] text-white py-3 text-[0.95rem] font-semibold disabled:bg-[#cdd1da] disabled:shadow-none"
+          >
+            Load my jeweller matches
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4 pb-3">
