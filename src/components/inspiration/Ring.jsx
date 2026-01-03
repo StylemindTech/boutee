@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
-import { doc, collection, documentId, getDocs, query, where, runTransaction, serverTimestamp } from "firebase/firestore";
+import { doc, collection, documentId, getDocs, getDoc, query, where, runTransaction, serverTimestamp } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay, A11y } from "swiper/modules";
@@ -186,34 +186,54 @@ const chunk = (arr, size) => {
 };
 
 const fetchJewellersMap = async (ids) => {
+  // Filter out any nulls or empties
   const unique = Array.from(new Set(ids.filter((id) => typeof id === "string" && id.trim().length > 0)));
   if (!unique.length) return {};
   const map = {};
 
   for (const batch of chunk(unique, 10)) {
     try {
-      const snap = await getDocs(
-        query(collection(db, "jewellers"), where(documentId(), "in", batch), where("active", "==", true))
-      );
+      // If unauthenticated, this query MUST include the 'active' filter
+      // to match the security rule requirement.
+      const q = query(collection(db, "jewellers"), where(documentId(), "in", batch), where("active", "==", true));
+
+      const snap = await getDocs(q);
       snap.forEach((docSnap) => {
-        const data = docSnap.data() || {};
+        const data = docSnap.data();
         map[docSnap.id] = {
           id: docSnap.id,
-          companyName: toSafeString(data.companyName || data.name || data.displayName, "Jeweller"),
-          profilePhoto: toSafeString(data.profilePhoto || data.avatar || data.logo, ""),
-          active: Boolean(data.active),
+          companyName: toSafeString(data.companyName || data.name, "Jeweller"),
+          profilePhoto: toSafeString(data.profilePhoto || "", ""),
+          active: true,
         };
       });
     } catch (err) {
-      console.warn(
-        "[RingInspiration] Skipping a batch of jewellers due to permission error (likely deleted/inactive)",
-        batch,
-        err
+      // This is where it was likely failing.
+      // If one jeweller in the batch is deleted or inactive,
+      // the whole batch might fail for guest users.
+      await Promise.all(
+        batch.map(async (id) => {
+          try {
+            const docRef = doc(db, "jewellers", id);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              const data = docSnap.data();
+              if (data.active === true) {
+                map[id] = {
+                  id,
+                  companyName: toSafeString(data.companyName || data.name, "Jeweller"),
+                  profilePhoto: toSafeString(data.profilePhoto || "", ""),
+                  active: true,
+                };
+              }
+            }
+          } catch {
+            // Individual fetch failed; skip silently.
+          }
+        })
       );
-      // continue with next batch
     }
   }
-
   return map;
 };
 
@@ -295,23 +315,26 @@ export default function RingModal() {
         setLoading(true);
         setError("");
         const ringSnap = await getDocs(query(collection(db, "rings"), where("status", "==", "live")));
-        const liveRings = ringSnap.docs.map(buildRingFromDoc).filter((ring) => ring.jewellerId);
+        const rawRings = ringSnap.docs.map(buildRingFromDoc);
+        const liveRings = rawRings.filter((ring) => ring.jewellerId);
+        const jewellerIds = Array.from(new Set(liveRings.map((r) => r.jewellerId)));
 
-        const jewellerMap = await fetchJewellersMap(liveRings.map((r) => r.jewellerId));
-        const enriched = liveRings
-          .map((ring) => ({
-            ...ring,
-            jeweller: ring.jewellerId ? jewellerMap[ring.jewellerId] : undefined,
-          }))
-          .filter((ring) => ring.jeweller && ring.jeweller.active)
-          .filter(
-            (ring) =>
-              !containsReactNode(ring.title) &&
-              !containsReactNode(ring.description) &&
-              !containsReactNode(ring.priceDisplay) &&
-              !containsReactNode(ring.images) &&
-              !containsReactNode(ring.jeweller)
-          );
+        const jewellerMap = await fetchJewellersMap(jewellerIds);
+
+        const withJeweller = liveRings.map((ring) => ({
+          ...ring,
+          jeweller: ring.jewellerId ? jewellerMap[ring.jewellerId] : undefined,
+        }));
+        const withActiveJeweller = withJeweller.filter((ring) => ring.jeweller && ring.jeweller.active);
+
+        const enriched = withActiveJeweller.filter(
+          (ring) =>
+            !containsReactNode(ring.title) &&
+            !containsReactNode(ring.description) &&
+            !containsReactNode(ring.priceDisplay) &&
+            !containsReactNode(ring.images) &&
+            !containsReactNode(ring.jeweller)
+        );
 
         if (!isCancelled()) setRings(enriched);
       } catch (err) {
