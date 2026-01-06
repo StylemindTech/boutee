@@ -50,12 +50,20 @@
           </div>
 
           <!-- Instagram -->
-          <input 
-            type="text" 
-            name="instagram"
-            placeholder="Instagram Handle"
-            class="w-full px-s py-[14px] text-[15px] leading-[18px] text-textPrimary focus:outline-none focus:ring-2 focus:ring-btnPrimary bg-white border border-borderOutline rounded-m mb-xs md:mb-m" 
-          />
+          <div class="grid md:grid-cols-2 gap-xs md:gap-m mb-xs md:mb-m">
+            <input 
+              type="text" 
+              name="instagram"
+              placeholder="Instagram Handle"
+              class="w-full px-s py-[14px] text-[15px] leading-[18px] text-textPrimary focus:outline-none focus:ring-2 focus:ring-btnPrimary bg-white border border-borderOutline rounded-m" 
+            />
+            <input 
+              type="tel" 
+              name="phone"
+              placeholder="Phone number (optional)"
+              class="w-full px-s py-[14px] text-[15px] leading-[18px] text-textPrimary focus:outline-none focus:ring-2 focus:ring-btnPrimary bg-white border border-borderOutline rounded-m" 
+            />
+          </div>
 
           <!-- Message -->
           <textarea 
@@ -64,6 +72,20 @@
             placeholder="Message (optional)"
             class="w-full min-h-[88px] px-s py-[14px] text-[15px] leading-[18px] text-textPrimary focus:outline-none focus:ring-2 focus:ring-btnPrimary bg-white border border-borderOutline rounded-m mb-xs md:mb-m resize-none"
           ></textarea>
+
+          <!-- Referral source -->
+          <div class="mb-xs md:mb-m">
+            <select 
+              name="heardAboutUs"
+              class="w-full px-s py-[14px] text-[15px] leading-[18px] text-textPrimary focus:outline-none focus:ring-2 focus:ring-btnPrimary bg-white border border-borderOutline rounded-m"
+            >
+              <option value="">How did you hear about us? (optional)</option>
+              <option value="I came across you on Google">I came across you on Google</option>
+              <option value="Another jeweller recommended you">Another jeweller recommended you</option>
+              <option value="I found you on Social Media">I found you on Social Media</option>
+              <option value="You've reached out to me before">You've reached out to me before</option>
+            </select>
+          </div>
 
           <!-- Terms -->
           <div class="flex gap-xxs lg:mt-2">
@@ -151,6 +173,9 @@
           website = 'https://' + website;
         }
         
+        const phone = (formData.get('phone') as string) || '';
+        const heardAboutUs = (formData.get('heardAboutUs') as string) || '';
+
         const data = {
           name: formData.get('name') as string,
           brandName: formData.get('brandName') as string,
@@ -158,6 +183,8 @@
           website: website,
           instagram: formData.get('instagram') as string,
           message: formData.get('message') as string,
+          phone,
+          heardAboutUs,
         };
 
         const response = await fetch('/api/send-email', {
