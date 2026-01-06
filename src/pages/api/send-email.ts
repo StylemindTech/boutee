@@ -1,5 +1,6 @@
 // src/pages/api/send-email.ts
 import type { APIRoute } from 'astro';
+import { getSecret } from 'astro:env/server';
 
 interface FormData {
   name: string;
@@ -37,7 +38,7 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    const postmarkToken = import.meta.env.POSTMARK_SERVER_TOKEN;
+    const postmarkToken = getSecret('POSTMARK_SERVER_TOKEN');
     
     if (!postmarkToken) {
       console.error('POSTMARK_SERVER_TOKEN is not configured');

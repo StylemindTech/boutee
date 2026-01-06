@@ -146,10 +146,21 @@ const fontHref =
   };
 
   if (typeof window !== "undefined") {
+    const getPreviewAnonUid = () => {
+      if (typeof document === "undefined") return null;
+      const match = document.cookie.match(/(?:^|;\s*)previewAnonUid=([^;]+)/);
+      return match ? decodeURIComponent(match[1]) : null;
+    };
+
     window.goToApp = () => {
       const gclid = getStoredGclid();
+      const previewUid = getPreviewAnonUid();
       const base = "https://app.boutee.co.uk/";
-      const url = gclid ? `${base}?gclid=${encodeURIComponent(gclid)}` : base;
+      const params = new URLSearchParams();
+      if (gclid) params.set("gclid", gclid);
+      if (previewUid) params.set("previewUid", previewUid);
+      const qs = params.toString();
+      const url = qs ? `${base}?${qs}` : base;
       window.location.href = url;
     };
   }

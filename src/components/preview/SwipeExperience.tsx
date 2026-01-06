@@ -162,6 +162,12 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
     document.cookie = `previewAnonUid=${encodeURIComponent(uid)}; domain=.boutee.co.uk; path=/; max-age=${maxAge}; SameSite=Lax; Secure`;
   }, []);
 
+  const getPreviewAnonUid = useCallback(() => {
+    if (typeof document === "undefined") return null;
+    const match = document.cookie.match(/(?:^|;\s*)previewAnonUid=([^;]+)/);
+    return match ? decodeURIComponent(match[1]) : null;
+  }, []);
+
   const handleClose = () => {
     if (typeof window === "undefined") return;
     if (window.history.length > 1) {
@@ -665,13 +671,17 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
               goToApp();
               return;
             }
-            window.location.href = "https://app.boutee.co.uk/";
+            const previewUid = getPreviewAnonUid();
+            const base = "https://app.boutee.co.uk/";
+            const params = new URLSearchParams();
+            if (previewUid) params.set("previewUid", previewUid);
+            window.location.href = params.toString() ? `${base}?${params.toString()}` : base;
           }, 3200);
     return () => {
       stepTimers.forEach((t) => window.clearTimeout(t));
       if (redirectTimer) window.clearTimeout(redirectTimer);
     };
-  }, [redirecting, disableAutoRedirect, forceRedirectOverlay, prefetchResults]);
+  }, [redirecting, disableAutoRedirect, forceRedirectOverlay, prefetchResults, getPreviewAnonUid]);
 
   const persistLike = async (ring: RingWithStyle) => {
     if (typeof window === "undefined") return;
@@ -703,11 +713,20 @@ const SwipeExperience: React.FC<SwipeExperienceProps> = ({
         profile,
         updatedAt: Date.now(),
       };
+      const previewMetadata = {
+        previewStyleProfile: profile,
+        previewLikedCount: next.length,
+        styleProfile: profile,
+      };
+
       try {
-        await setDoc(previewDoc, payload, { merge: true });
+        await Promise.all([
+          setDoc(previewDoc, payload, { merge: true }),
+          setDoc(userDoc, previewMetadata, { merge: true }),
+        ]);
         console.log("[SwipeExperience] Synced preview likes to Firestore for uid:", uid);
       } catch (firestoreErr) {
-        console.error("[SwipeExperience] Firestore sync failed", firestoreErr, "payload:", payload);
+        console.error("[SwipeExperience] Firestore sync failed", firestoreErr, "payload:", { ...payload, ...previewMetadata });
       }
     } catch (err) {
       console.warn("[SwipeExperience] Unable to persist liked ring", err);
