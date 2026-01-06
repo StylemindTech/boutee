@@ -6,6 +6,11 @@ import Layout from "../layouts/Layout.astro";
   <!-- Mobile Detection - Runs IMMEDIATELY -->
   <script is:inline>
     (function () {
+      const getPreviewAnonUid = () => {
+        const match = document.cookie.match(/(?:^|;\s*)previewAnonUid=([^;]+)/);
+        return match ? decodeURIComponent(match[1]) : null;
+      };
+
       const redirectToApp = () => {
         if (typeof window !== "undefined" && typeof window.goToApp === "function") {
           window.goToApp();
@@ -14,8 +19,12 @@ import Layout from "../layouts/Layout.astro";
 
         const match = document.cookie.match(/(?:^|;\s*)gclid=([^;]+)/);
         const gclid = match ? decodeURIComponent(match[1]) : null;
+        const previewUid = getPreviewAnonUid();
         const base = "https://app.boutee.co.uk/";
-        const url = gclid ? `${base}?gclid=${encodeURIComponent(gclid)}` : base;
+        const params = new URLSearchParams();
+        if (gclid) params.set("gclid", gclid);
+        if (previewUid) params.set("previewUid", previewUid);
+        const url = params.toString() ? `${base}?${params.toString()}` : base;
         window.location.replace(url);
       };
 
