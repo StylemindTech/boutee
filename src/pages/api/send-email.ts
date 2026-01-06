@@ -9,6 +9,8 @@ interface FormData {
   website: string;
   instagram: string;
   message: string;
+  phone?: string;
+  heardAboutUs?: string;
 }
 
 export const POST: APIRoute = async ({ request }) => {
@@ -55,6 +57,7 @@ export const POST: APIRoute = async ({ request }) => {
     const notificationEmail = {
       From: 'info@boutee.co.uk',
       To: 'ethan@boutee.co.uk',
+      ReplyTo: data.email,
       Subject: `New Jeweller Application: ${data.brandName}`,
       HtmlBody: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -64,8 +67,10 @@ export const POST: APIRoute = async ({ request }) => {
             <p style="margin: 0 0 8px 0;"><strong>Name:</strong> ${data.name}</p>
             <p style="margin: 0 0 8px 0;"><strong>Brand Name:</strong> ${data.brandName}</p>
             <p style="margin: 0 0 8px 0;"><strong>Email:</strong> ${data.email}</p>
+            ${data.phone ? `<p style="margin: 0 0 8px 0;"><strong>Phone:</strong> ${data.phone}</p>` : ''}
             <p style="margin: 0 0 8px 0;"><strong>Website:</strong> ${data.website || 'Not provided'}</p>
             <p style="margin: 0 0 8px 0;"><strong>Instagram:</strong> ${data.instagram || 'Not provided'}</p>
+            ${data.heardAboutUs ? `<p style="margin: 0 0 8px 0;"><strong>How they heard about us:</strong> ${data.heardAboutUs}</p>` : ''}
           </div>
           
           ${data.message ? `
@@ -82,8 +87,9 @@ New Jeweller Application
 Name: ${data.name}
 Brand Name: ${data.brandName}
 Email: ${data.email}
-Website: ${data.website || 'Not provided'}
+${data.phone ? `Phone: ${data.phone}\n` : ''}Website: ${data.website || 'Not provided'}
 Instagram: ${data.instagram || 'Not provided'}
+${data.heardAboutUs ? `How they heard about us: ${data.heardAboutUs}\n` : ''}
 
 ${data.message ? `Message:\n${data.message}` : ''}
       `,
@@ -121,7 +127,9 @@ ${data.message ? `Message:\n${data.message}` : ''}
               <strong>Your application details:</strong><br/>
               Brand: ${data.brandName}<br/>
               ${data.website ? `Website: ${data.website}<br/>` : ''}
-              ${data.instagram ? `Instagram: ${data.instagram}` : ''}
+              ${data.instagram ? `Instagram: ${data.instagram}<br/>` : ''}
+              ${data.phone ? `Phone: ${data.phone}<br/>` : ''}
+              ${data.heardAboutUs ? `How you heard about us: ${data.heardAboutUs}` : ''}
             </p>
           </div>
           
@@ -150,6 +158,8 @@ Your application details:
 Brand: ${data.brandName}
 ${data.website ? `Website: ${data.website}` : ''}
 ${data.instagram ? `Instagram: ${data.instagram}` : ''}
+${data.phone ? `\nPhone: ${data.phone}` : ''}
+${data.heardAboutUs ? `\nHow you heard about us: ${data.heardAboutUs}` : ''}
 
 Best regards,
 The Boutee Team
