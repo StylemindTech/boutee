@@ -118,6 +118,10 @@ ${data.message ? `Message:\n${data.message}` : ''}
             We typically respond within 2-3 business days.
           </p>
           
+          <p style="color: #4b5563; line-height: 1.6; margin-bottom: 16px;">
+            Please keep an eye on your inbox (and spam) over the next few days for our reply.
+          </p>
+          
           <p style="color: #4b5563; line-height: 1.6; margin-bottom: 24px;">
             In the meantime, feel free to explore our platform and see the incredible community of jewellers we're building.
           </p>
@@ -151,6 +155,8 @@ Hi ${data.name},
 Thank you for introducing ${data.brandName} to our platform. We're excited to learn more about your work!
 
 Our partnerships team will review your application and be in touch shortly to discuss next steps. We typically respond within 2-3 business days.
+
+Please keep an eye on your inbox (and spam) over the next few days for our reply.
 
 In the meantime, feel free to explore our platform and see the incredible community of jewellers we're building.
 
