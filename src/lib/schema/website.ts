@@ -12,6 +12,7 @@ export function getWebSiteSchema() {
 
     url: SITE_URL,
     name: "Boutee",
+    alternateName: ["Boutee Jewellery", "Boutee UK"],
     description:
       "Boutee connects customers directly with independent UK jewellers to create bespoke engagement rings and fine jewellery.",
 
