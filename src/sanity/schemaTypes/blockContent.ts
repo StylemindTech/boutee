@@ -160,6 +160,22 @@ export const blockContentType = defineType({
           type: "string",
           title: "Alternative Text",
         },
+        {
+          name: "caption",
+          type: "array",
+          title: "Caption",
+          of: [
+            defineArrayMember({
+              type: "block",
+              styles: [{ title: "Normal", value: "normal" }],
+              lists: [],
+              marks: {
+                decorators: richTextDecorators,
+                annotations: richTextAnnotations,
+              },
+            }),
+          ],
+        },
       ],
     }),
     defineArrayMember({
